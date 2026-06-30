@@ -22,6 +22,7 @@ import {
   consumeKeycloakError,
   isKeycloakAuthenticated,
   loginWithKeycloak,
+  devLoginKeycloak,
 } from "@/utils/keycloak-auth";
 const astraLogo = "/astra-logo-sidebar.png";
 
@@ -33,6 +34,20 @@ export default function Landing() {
   const jiraOnly = useJiraOnlyWorkItems();
   const integrationName = jiraOnly ? "Jira" : "Azure DevOps";
   const signInLabel = isKeycloakAuthMode() ? "Sign In with Keycloak" : "Sign In with Microsoft";
+  const devLoginEnabled = ["1", "true", "yes"].includes(
+    String(import.meta.env.VITE_DEV_LOGIN || "").toLowerCase(),
+  );
+
+  const handleDevLogin = async () => {
+    try {
+      resetSessionExpired();
+      await devLoginKeycloak();
+      // Full reload so all auth state re-initializes from the stored token.
+      window.location.assign("/overview");
+    } catch (error: any) {
+      alert(`${error?.message || "Dev login failed."}`);
+    }
+  };
 
   const isOAuthCallback = useMemo(() => {
     if (typeof window === "undefined") return false;
@@ -230,6 +245,17 @@ export default function Landing() {
               >
                 {signInLabel}
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </Button>
+            )}
+            {devLoginEnabled && !canEnterApp && (
+              <Button
+                size="lg"
+                variant="outline"
+                className="gap-2"
+                data-testid="button-dev-login"
+                onClick={handleDevLogin}
+              >
+                Dev Login (local)
               </Button>
             )}
             {/* <Button size="lg" variant="outline" data-testid="button-view-demo" asChild>

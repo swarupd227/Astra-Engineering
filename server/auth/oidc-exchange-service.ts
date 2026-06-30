@@ -95,6 +95,50 @@ export async function exchangeOidcCode(body: OidcExchangeBody) {
   throw error;
 }
 
+/**
+ * Local "Dev Login": mint a session via the OIDC password grant (no browser
+ * redirect). Gated by DEVX_DEV_LOGIN — OFF by default, intended for local dev
+ * where the browser can't reach the IdP redirect URL. Never enable in prod.
+ */
+export function isDevLoginEnabled(): boolean {
+  const v = String(process.env.DEVX_DEV_LOGIN || "").toLowerCase();
+  return v === "1" || v === "true" || v === "yes";
+}
+
+export async function devLogin() {
+  assertOidcConfigured();
+  if (!isDevLoginEnabled()) {
+    const error = new Error("Dev login is disabled.");
+    (error as any).status = 404;
+    throw error;
+  }
+  const username = getFirstEnv("DEVX_DEV_LOGIN_USERNAME") || "dev";
+  const password = getFirstEnv("DEVX_DEV_LOGIN_PASSWORD") || "dev";
+  const form = new URLSearchParams({
+    grant_type: "password",
+    client_id: getOidcClientId(),
+    username,
+    password,
+    scope: "openid profile email",
+  });
+  const clientSecret = getOidcClientSecret();
+  if (clientSecret) form.set("client_secret", clientSecret);
+
+  const response = await fetch(await getTokenEndpoint(), {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: form,
+  });
+  const payload = await response.json().catch(() => null);
+  if (response.ok) return payload;
+
+  const message =
+    payload?.error_description || payload?.error || `Dev login failed (${response.status}).`;
+  const error = new Error(message);
+  (error as any).status = 401;
+  throw error;
+}
+
 export async function refreshOidcTokens(body: OidcRefreshBody) {
   assertOidcConfigured();
   const refreshToken = String(body.refreshToken || "").trim();

@@ -672,7 +672,7 @@ import { Server as SocketIOServer } from "socket.io";
 import { enqueueDesignPrompt } from "./platform/design-prompt-storage";
 import { getHostingConfigResponse } from "./platform/hosting";
 import { getMsalPublicConfig } from "./auth/msal-public-config";
-import { exchangeOidcCode, refreshOidcTokens } from "./auth/oidc-exchange-service";
+import { exchangeOidcCode, refreshOidcTokens, devLogin, isDevLoginEnabled } from "./auth/oidc-exchange-service";
 import {
   getFirstEnv,
   getOidcClientId,
@@ -2055,6 +2055,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
       return res.status(Number(error?.status || 500)).json({
         error: "OIDC token refresh failed",
         message: error?.message || "Unable to refresh OIDC session.",
+      });
+    }
+  });
+
+  app.get("/api/auth/oidc/dev-login-available", (_req: Request, res: Response) => {
+    res.json({ available: isDevLoginEnabled() });
+  });
+  app.post("/api/auth/oidc/dev-login", async (_req: Request, res: Response) => {
+    try {
+      return res.json(await devLogin());
+    } catch (error: any) {
+      return res.status(Number(error?.status || 500)).json({
+        error: "Dev login failed",
+        message: error?.message || "Unable to complete dev login.",
       });
     }
   });

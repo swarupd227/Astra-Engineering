@@ -60,6 +60,8 @@ services:
       # Auto-run the schema migrations on first boot (see docker-entrypoint.sh).
       RUN_DB_MIGRATIONS: "true"
       RUN_DB_SEED: "true"
+      # Enable the local "Dev Login" button (password-grant; never enable in prod).
+      DEVX_DEV_LOGIN: "1"
     extra_hosts:
       - "host.docker.internal:host-gateway"
     ports:

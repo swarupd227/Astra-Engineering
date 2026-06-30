@@ -52,6 +52,18 @@ import the `astra` realm → start the app, which runs the DB migrations
 - Log in via Keycloak with the seeded test user — **`dev` / `dev`**
 - Keycloak admin console (optional): http://localhost:8080 (`admin` / `admin`)
 
+## One-time host setup for Keycloak login
+The frontend redirects the browser to Keycloak at `host.docker.internal:8080`, but Docker
+Desktop maps `host.docker.internal` to your LAN IP, which doesn't expose the published port
+to the host browser. Point it at localhost instead (run **PowerShell as Administrator**):
+```powershell
+$h = "$env:windir\System32\drivers\etc\hosts"
+(Get-Content $h) -replace '^192\.168\.\d+\.\d+\s+host\.docker\.internal$','127.0.0.1 host.docker.internal' | Set-Content $h
+ipconfig /flushdns
+```
+Then log in at http://localhost:4000 (Keycloak → `dev`/`dev`). If Docker Desktop restarts and
+resets the line, re-run it.
+
 ## How the Anthropic wiring works
 Because `ANTHROPIC_AZURE_ENDPOINT` is **not** set, the LLM client auto-selects
 **direct Anthropic mode**: it calls `https://api.anthropic.com/v1/messages` with

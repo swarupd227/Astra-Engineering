@@ -416,6 +416,27 @@ export async function handleKeycloakRedirect(): Promise<KeycloakRedirectResult> 
   return { handled: true, bearerToken: tokenResponse.access_token || tokenResponse.id_token };
 }
 
+/**
+ * Local "Dev Login": ask the backend to mint a session via the OIDC password
+ * grant and store it like a normal login. Only works when the server has
+ * DEVX_DEV_LOGIN enabled (local dev). No browser redirect involved.
+ */
+export async function devLoginKeycloak(): Promise<void> {
+  const response = await fetch(getApiUrl("/api/auth/oidc/dev-login"), {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+  });
+  if (!response.ok) {
+    const error = await response.json().catch(() => null);
+    throw new Error(error?.message || `Dev login failed (${response.status}).`);
+  }
+  const tokenResponse = normalizeTokenResponse(
+    (await response.json()) as KeycloakTokenResponse & Record<string, unknown>,
+  );
+  writeStoredToken(tokenResponse);
+}
+
 export function storeKeycloakError(error: unknown): void {
   if (typeof window === "undefined") return;
   const message =

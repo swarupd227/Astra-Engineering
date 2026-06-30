@@ -74,6 +74,7 @@ jobs:
             VITE_OIDC_REDIRECT_URI=http://localhost:4000/
             VITE_OIDC_SCOPE=openid profile email
             VITE_OIDC_POST_LOGOUT_REDIRECT_URI=http://localhost:4000/
+            VITE_DEV_LOGIN=1
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
