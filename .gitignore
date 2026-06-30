@@ -6,8 +6,6 @@ vite.config.ts.*
 *.tar.gz
 .env
 .env.local
-.env.local.example
-package-lock.json
 .cache/
 
 # Stack modernization temp files (extracted uploads, session data)
