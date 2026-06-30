@@ -36,7 +36,13 @@ services:
     restart: unless-stopped
 
   app:
-    build: .
+    # Image is built by GitHub Actions (.github/workflows/build-local-image.yml) and
+    # published to GHCR, because this network blocks the package mirrors a local
+    # build needs. Pull it with: docker compose -f docker-compose.local.yml pull
+    # (If you have open egress + Docker proxy configured, you can instead build
+    #  locally from the Dockerfile — see LOCAL_DEV.md.)
+    image: ghcr.io/swarupd227/astra-engineering:local
+    pull_policy: always
     depends_on:
       mysql:
         condition: service_healthy
@@ -52,6 +58,8 @@ services:
       # Auto-run the schema migrations on first boot (see docker-entrypoint.sh).
       RUN_DB_MIGRATIONS: "true"
       RUN_DB_SEED: "true"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     ports:
       - "4000:4000"
     restart: unless-stopped

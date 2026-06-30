@@ -1,0 +1,84 @@
+# Builds the app image on GitHub's runners (open egress) and publishes it to
+# GitHub Container Registry (GHCR). Use this when your local network blocks the
+# package mirrors the Docker build needs (apt, GitHub release CDNs, etc.).
+#
+# After it runs, pull + run locally:
+#   docker compose -f docker-compose.local.yml pull
+#   docker compose -f docker-compose.local.yml up
+name: Build local-dev image
+
+on:
+  workflow_dispatch: {}
+  push:
+    branches: [main]
+    paths:
+      - "Dockerfile"
+      - "package.json"
+      - "package-lock.json"
+      - "client/**"
+      - "server/**"
+      - "shared/**"
+      - ".github/workflows/build-local-image.yml"
+
+concurrency:
+  group: build-local-image
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Free up runner disk
+        run: |
+          sudo rm -rf /usr/share/dotnet /opt/ghc /usr/local/lib/android /opt/hostedtoolcache/CodeQL || true
+          df -h
+
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # Image name must be lowercase for GHCR.
+      - name: Compute image name
+        id: img
+        run: echo "name=ghcr.io/${{ github.repository_owner }}/astra-engineering" | tr '[:upper:]' '[:lower:]' >> "$GITHUB_OUTPUT"
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ steps.img.outputs.name }}:local
+            ${{ steps.img.outputs.name }}:${{ github.sha }}
+          # VITE_* are baked into the frontend at build time. These match the local
+          # Keycloak stack; host.docker.internal makes the OIDC issuer resolve the
+          # same from the host browser and from inside the app container.
+          build-args: |
+            VITE_DEVX_HOSTING=azure
+            VITE_AUTH_MODE=keycloak
+            VITE_OIDC_ENABLED=true
+            VITE_OIDC_PROVIDER_ID=keycloak
+            VITE_OIDC_PROVIDER_NAME=Keycloak
+            VITE_OIDC_AUTHORITY=http://host.docker.internal:8080/realms/astra
+            VITE_OIDC_CLIENT_ID=astra-local
+            VITE_OIDC_REDIRECT_URI=http://localhost:4000/
+            VITE_OIDC_SCOPE=openid profile email
+            VITE_OIDC_POST_LOGOUT_REDIRECT_URI=http://localhost:4000/
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Summary
+        run: |
+          echo "### Image published" >> "$GITHUB_STEP_SUMMARY"
+          echo "- \`${{ steps.img.outputs.name }}:local\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "Pull locally: \`docker compose -f docker-compose.local.yml pull\`" >> "$GITHUB_STEP_SUMMARY"
