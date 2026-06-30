@@ -1,0 +1,155 @@
+{
+  "config": {
+    "organization": "InsurityPOC",
+    "project": "InsurityPOC",
+    "repository": "InsurityPocAIFigma",
+    "branch": "main",
+    "pat": "REDACTED_TOKEN"
+  },
+  "selectedItems": [
+    {
+      "type": "epic",
+      "id": "epic-1"
+    },
+    {
+      "type": "epic",
+      "id": "epic-2"
+    },
+    {
+      "type": "epic",
+      "id": "epic-3"
+    },
+    {
+      "type": "feature",
+      "id": "feature-1"
+    },
+    {
+      "type": "feature",
+      "id": "feature-2"
+    },
+    {
+      "type": "feature",
+      "id": "feature-3"
+    },
+    {
+      "type": "feature",
+      "id": "feature-4"
+    },
+    {
+      "type": "feature",
+      "id": "feature-5"
+    },
+    {
+      "type": "feature",
+      "id": "feature-6"
+    },
+    {
+      "type": "feature",
+      "id": "feature-7"
+    },
+    {
+      "type": "feature",
+      "id": "feature-8"
+    },
+    {
+      "type": "story",
+      "id": "story-1"
+    },
+    {
+      "type": "story",
+      "id": "story-2"
+    },
+    {
+      "type": "story",
+      "id": "story-3"
+    },
+    {
+      "type": "story",
+      "id": "story-4"
+    },
+    {
+      "type": "story",
+      "id": "story-5"
+    },
+    {
+      "type": "story",
+      "id": "story-6"
+    },
+    {
+      "type": "story",
+      "id": "story-7"
+    },
+    {
+      "type": "story",
+      "id": "story-8"
+    },
+    {
+      "type": "story",
+      "id": "story-9"
+    },
+    {
+      "type": "story",
+      "id": "story-10"
+    },
+    {
+      "type": "story",
+      "id": "story-11"
+    },
+    {
+      "type": "story",
+      "id": "story-12"
+    },
+    {
+      "type": "story",
+      "id": "story-13"
+    },
+    {
+      "type": "story",
+      "id": "story-14"
+    },
+    {
+      "type": "story",
+      "id": "story-15"
+    },
+    {
+      "type": "story",
+      "id": "story-16"
+    },
+    {
+      "type": "story",
+      "id": "story-17"
+    },
+    {
+      "type": "story",
+      "id": "story-18"
+    },
+    {
+      "type": "story",
+      "id": "story-19"
+    },
+    {
+      "type": "story",
+      "id": "story-20"
+    },
+    {
+      "type": "story",
+      "id": "story-21"
+    },
+    {
+      "type": "story",
+      "id": "story-22"
+    },
+    {
+      "type": "story",
+      "id": "story-23"
+    },
+    {
+      "type": "story",
+      "id": "story-24"
+    },
+    {
+      "type": "story",
+      "id": "story-25"
+    }
+  ]
+}

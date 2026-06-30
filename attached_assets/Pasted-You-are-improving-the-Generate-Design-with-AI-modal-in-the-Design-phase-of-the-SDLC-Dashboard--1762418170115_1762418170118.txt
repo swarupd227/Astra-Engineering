@@ -1,0 +1,46 @@
+You are improving the “Generate Design with AI” modal in the Design phase of the SDLC Dashboard.
+
+Currently, the modal opens correctly but shows a “Missing Information” error even after selecting a design type and pasting the document.
+
+✅ Fix and enhance it as follows:
+
+1. **State Management & Validation**
+   - Ensure both dropdown and text area values are stored in proper state variables:
+     - `designType` → stores selected dropdown option.
+     - `requirementDoc` → stores pasted text.
+   - On click of “Generate Design”, validate that both fields are not empty.
+   - If empty, show the existing toast message “Missing Information”.
+
+2. **Design Generation Logic**
+   - When valid, call a function `generateDesign(designType, requirementDoc)` that:
+     - Reads the selected design type.
+     - Creates a new preview card dynamically under the correct section:
+       - If `designType === "System Architecture"` → add under System Architecture.
+       - If `designType === "Database Design"` → add under Database Design.
+       - If `designType === "Component Design"` → add under Component Design.
+     - Each generated card must show:
+       - Title (e.g., “Generated System Architecture”)
+       - Short summary from the text (first few lines)
+       - Two buttons: “Preview” and “Download”.
+
+3. **UI Consistency**
+   - Match the dark theme of the dashboard.
+   - Keep the “View Checkpoint” button as-is.
+   - Place the “Generate with AI” button just below it.
+
+4. **Debug Logging**
+   - Before validation, log both field values:
+     ```js
+     console.log('DesignType:', designType, 'RequirementDoc:', requirementDoc);
+     ```
+     This ensures state updates are working.
+
+5. **Optional Enhancement**
+   - Add a short success toast: “Design generated successfully under [section name]”.
+   - Reset the modal after successful generation.
+
+The final behavior should:
+- Accept pasted document text.
+- Validate input.
+- Generate a small card inside the selected design section (System, DB, or Component).
+- Maintain all current UI layout and dark mode styling.

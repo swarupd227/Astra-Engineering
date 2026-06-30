@@ -1,0 +1,273 @@
+# ---------------------------------------------------------------------------
+# Standalone EKS pipeline ? register as a *new* pipeline pointing at this file.
+# (Same as feature/EKS-deploy; branch updated for AWS + Jira work.)
+# ---------------------------------------------------------------------------
+# Flow: Docker build ? push Amazon ECR ? aws eks update-kubeconfig ? Helm upgrade.
+#
+# AWS: cluster astra-eks, region ap-south-1, account 860829110416, ECR devx/backend
+#
+# Pipeline variables (set in ADO UI for this pipeline):
+#   AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY (secrets, required)
+#   AWS_SESSION_TOKEN (secret, required only when AWS_ACCESS_KEY_ID starts with ASIA)
+#   MYSQL_SECRET_NAME (optional; chart default devx-runtime-env)
+#   EKS_SA_ROLE_ARN (optional; overrides values.yaml serviceAccount.roleArn)
+# ---------------------------------------------------------------------------
+
+name: eks.$(Date:yyyyMMdd).$(Rev:r)
+
+trigger:
+  branches:
+    include:
+      - feature/AWS-Jira-EKS-deploy
+  paths:
+    include:
+      - azure-pipelines-eks.yml
+      - Dockerfile
+      - deploy/eks/**
+      - client/**
+      - server/**
+      - shared/**
+      - package.json
+      - package-lock.json
+      - migrations/**
+      - scripts/migration-lib.js
+      - scripts/run-container-migrations.js
+
+pr: none
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  - name: AWS_REGION
+    value: ap-south-1
+  - name: awsAccountId
+    value: '860829110416'
+  - name: awsEcrRepository
+    value: devx/backend
+  - name: EKS_CLUSTER_NAME
+    value: astra-eks
+  - name: EKS_NAMESPACE
+    value: devx
+  - name: HELM_RELEASE_NAME
+    value: devx
+  - name: EKS_INGRESS_ENABLED
+    value: 'true'
+  - name: EKS_HPA_ENABLED
+    value: 'false'
+  - name: MYSQL_SECRET_NAME
+    value: 'devx-runtime-env'
+  - name: EKS_SA_ROLE_ARN
+    value: 'arn:aws:iam::860829110416:role/Astra-DevX-EKS-TaskRole'
+  # Hosting mode: keep aws for Bedrock/Jira/Secrets Manager
+  - name: VITE_DEVX_HOSTING
+    value: 'aws'
+  # Auth mode: msal = direct Entra ID login (no Cognito); set DEVX_AUTH_MODE=msal in Secrets Manager too
+  - name: VITE_AUTH_MODE
+    value: 'msal'
+  # Azure AD / Entra ID app registration (SPA, single-tenant)
+  # Set VITE_AZURE_AD_CLIENT_ID and VITE_AZURE_AD_TENANT_ID as pipeline secret variables in ADO UI
+  - name: VITE_AZURE_AD_CLIENT_ID
+    value: ''
+  - name: VITE_AZURE_AD_TENANT_ID
+    value: ''
+  # Cognito vars kept for reference — not used when VITE_AUTH_MODE=msal
+  # - name: VITE_COGNITO_USER_POOL_ID
+  #   value: 'ap-south-1_dDAzwkcr3'
+  # - name: VITE_COGNITO_APP_CLIENT_ID
+  #   value: 't3g2a9vdmjprk2ho01n1iphmd'
+  # - name: VITE_COGNITO_REGION
+  #   value: 'ap-south-1'
+  # - name: VITE_COGNITO_DOMAIN
+  #   value: 'devx-platform'
+  - name: VITE_FEATURE_SDLC
+    value: 'true'
+  - name: VITE_FEATURE_QUICK_WORKFLOW
+    value: 'false'
+  - name: VITE_FEATURE_STACK_MODERNIZATION
+    value: 'false'
+
+stages:
+  - stage: EKS
+    displayName: ECR push and EKS Helm deploy
+    jobs:
+      - job: BuildPushHelm
+        displayName: Build push Helm
+        timeoutInMinutes: 120
+        steps:
+          - checkout: self
+
+          - script: |
+              set -euo pipefail
+              npm run check:lockfile
+            displayName: Validate package-lock.json sync
+
+          - script: |
+              set -euo pipefail
+              curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+              helm version
+            displayName: Install Helm 3
+
+          - script: |
+              set -euo pipefail
+              if [ "${AWS_SESSION_TOKEN:-}" = '$(AWS_SESSION_TOKEN)' ]; then
+                unset AWS_SESSION_TOKEN
+              fi
+              : "${AWS_ACCESS_KEY_ID:?Add secret pipeline variable AWS_ACCESS_KEY_ID}"
+              : "${AWS_SECRET_ACCESS_KEY:?Add secret pipeline variable AWS_SECRET_ACCESS_KEY}"
+              if [[ "${AWS_ACCESS_KEY_ID}" == ASIA* && -z "${AWS_SESSION_TOKEN:-}" ]]; then
+                echo "##vso[task.logissue type=error]AWS_ACCESS_KEY_ID is a temporary STS key, but AWS_SESSION_TOKEN is not set in the pipeline variables."
+                exit 1
+              fi
+
+              REGION="${AWS_REGION}"
+              ACCOUNT="${awsAccountId}"
+              REPO="${awsEcrRepository}"
+              TAG="${BUILD_BUILDID}"
+              REGISTRY="${ACCOUNT}.dkr.ecr.${REGION}.amazonaws.com"
+              IMAGE="${REGISTRY}/${REPO}:${TAG}"
+
+              echo "Ensure ECR repository exists (no-op if already there)..."
+              aws ecr describe-repositories --repository-names "${REPO}" --region "${REGION}" >/dev/null 2>&1 || \
+                aws ecr create-repository --repository-name "${REPO}" --region "${REGION}" >/dev/null
+
+              echo "ECR login..."
+              aws ecr get-login-password --region "${REGION}" | docker login --username AWS --password-stdin "${REGISTRY}"
+
+              echo "##vso[task.setvariable variable=EKS_IMAGE]${IMAGE}"
+              echo "Image for this run: ${IMAGE}"
+            displayName: ECR login
+            env:
+              AWS_ACCESS_KEY_ID: $(AWS_ACCESS_KEY_ID)
+              AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
+              AWS_SESSION_TOKEN: $(AWS_SESSION_TOKEN)
+              AWS_REGION: $(AWS_REGION)
+              AWS_DEFAULT_REGION: $(AWS_REGION)
+              awsAccountId: $(awsAccountId)
+              awsEcrRepository: $(awsEcrRepository)
+              BUILD_BUILDID: $(Build.BuildId)
+
+          - script: |
+              set -euo pipefail
+              export DOCKER_BUILDKIT=1
+              echo "Docker build $(EKS_IMAGE) (first run often 15-25 min; vite/esbuild warnings are usually OK)"
+              docker build --progress=plain -t "$(EKS_IMAGE)" -f Dockerfile . \
+                --build-arg "VITE_DEVX_HOSTING=${VITE_DEVX_HOSTING}" \
+                --build-arg "VITE_AUTH_MODE=${VITE_AUTH_MODE}" \
+                --build-arg "VITE_AZURE_AD_CLIENT_ID=${VITE_AZURE_AD_CLIENT_ID}" \
+                --build-arg "VITE_AZURE_AD_TENANT_ID=${VITE_AZURE_AD_TENANT_ID}" \
+                --build-arg "VITE_FEATURE_SDLC=${VITE_FEATURE_SDLC}" \
+                --build-arg "VITE_FEATURE_QUICK_WORKFLOW=${VITE_FEATURE_QUICK_WORKFLOW}" \
+                --build-arg "VITE_FEATURE_STACK_MODERNIZATION=${VITE_FEATURE_STACK_MODERNIZATION}" \
+                --build-arg "NODE_OPTIONS=--max-old-space-size=6144"
+            displayName: Docker build
+            env:
+              EKS_IMAGE: $(EKS_IMAGE)
+              VITE_DEVX_HOSTING: $(VITE_DEVX_HOSTING)
+              VITE_AUTH_MODE: $(VITE_AUTH_MODE)
+              VITE_AZURE_AD_CLIENT_ID: $(VITE_AZURE_AD_CLIENT_ID)
+              VITE_AZURE_AD_TENANT_ID: $(VITE_AZURE_AD_TENANT_ID)
+              VITE_FEATURE_SDLC: $(VITE_FEATURE_SDLC)
+              VITE_FEATURE_QUICK_WORKFLOW: $(VITE_FEATURE_QUICK_WORKFLOW)
+              VITE_FEATURE_STACK_MODERNIZATION: $(VITE_FEATURE_STACK_MODERNIZATION)
+
+          - script: |
+              set -euo pipefail
+              echo "Docker push $(EKS_IMAGE)"
+              docker push "$(EKS_IMAGE)"
+            displayName: Docker push to ECR
+            env:
+              EKS_IMAGE: $(EKS_IMAGE)
+
+          - script: |
+              set -euo pipefail
+              if [ "${AWS_SESSION_TOKEN:-}" = '$(AWS_SESSION_TOKEN)' ]; then
+                unset AWS_SESSION_TOKEN
+              fi
+              if [[ "${AWS_ACCESS_KEY_ID:-}" == ASIA* && -z "${AWS_SESSION_TOKEN:-}" ]]; then
+                echo "##vso[task.logissue type=error]AWS_ACCESS_KEY_ID is a temporary STS key, but AWS_SESSION_TOKEN is not set in the pipeline variables."
+                exit 1
+              fi
+              REGION="${AWS_REGION}"
+              ACCOUNT="${awsAccountId}"
+              REPO="${awsEcrRepository}"
+              CLUSTER="${EKS_CLUSTER_NAME}"
+              NS="${EKS_NAMESPACE}"
+              REL="${HELM_RELEASE_NAME}"
+              TAG="${BUILD_BUILDID}"
+              REGISTRY="${ACCOUNT}.dkr.ecr.${REGION}.amazonaws.com"
+
+              echo "kubectl for cluster ${CLUSTER}..."
+              aws eks update-kubeconfig --name "${CLUSTER}" --region "${REGION}"
+
+              if helm status "${REL}" -n "${NS}" 2>/dev/null | grep -qE 'STATUS: pending-(upgrade|install|rollback)'; then
+                echo "Clearing stuck Helm release (pending operation)..."
+                helm rollback "${REL}" -n "${NS}" --wait --timeout 10m || true
+              fi
+
+              CHART_DIR="${SYSTEM_DEFAULTWORKINGDIRECTORY}/deploy/eks/helm/devx"
+              test -d "${CHART_DIR}" || { echo "##vso[task.logissue type=error]Helm chart missing: ${CHART_DIR}"; exit 1; }
+
+              echo "Helm upgrade --install ${REL} namespace=${NS} image.tag=${TAG}"
+              HELM_SETS=( )
+              HELM_SETS+=( --set "image.repository=${REGISTRY}/${REPO}" )
+              HELM_SETS+=( --set "image.tag=${TAG}" )
+              if [ -n "${MYSQL_SECRET_NAME:-}" ]; then
+                HELM_SETS+=( --set "mysql.existingSecret=${MYSQL_SECRET_NAME}" )
+              fi
+              HELM_SETS+=( --set "env.devxHosting=aws" )
+              HELM_SETS+=( --set "env.awsRegion=${AWS_REGION}" )
+              HELM_SETS+=( --set "serviceAccount.name=devx" )
+              HELM_SETS+=( --set "serviceAccount.create=false" )
+              if [ "${EKS_INGRESS_ENABLED:-true}" = "true" ]; then
+                HELM_SETS+=( --set "ingress.enabled=true" )
+              else
+                HELM_SETS+=( --set "ingress.enabled=false" )
+              fi
+              if [ "${EKS_HPA_ENABLED:-false}" = "true" ]; then
+                HELM_SETS+=( --set "autoscaling.enabled=true" )
+              fi
+              set +e
+              helm upgrade --install "${REL}" "${CHART_DIR}" \
+                --namespace "${NS}" \
+                --create-namespace \
+                "${HELM_SETS[@]}" \
+                --wait --timeout 25m
+              HELM_RC=$?
+              set -e
+              if [ "${HELM_RC}" -ne 0 ]; then
+                echo "##vso[task.logissue type=warning]Helm wait returned ${HELM_RC} ? checking rollout anyway"
+                kubectl get pods,svc,events -n "${NS}" --sort-by='.lastTimestamp' | tail -80 || true
+              fi
+
+              echo "--- Post-deploy verification ---"
+              kubectl rollout status "deployment/${REL}" -n "${NS}" --timeout=15m
+              kubectl get deployment "${REL}" -n "${NS}" -o jsonpath='SA={.spec.template.spec.serviceAccountName}{"\n"}'
+              kubectl set env "deployment/${REL}" -n "${NS}" --list 2>/dev/null | grep -E 'DEVX_HOSTING|AWS_SECRET_NAME' || true
+              kubectl describe sa devx -n "${NS}" 2>/dev/null | grep 'role-arn' || true
+              kubectl logs -n "${NS}" -l "app.kubernetes.io/name=devx" --tail=30 2>/dev/null | grep -E 'DEVX_HOSTING|Cognito JWKS' || true
+              kubectl get pods,svc,ingress,hpa,pdb -n "${NS}" -o wide 2>/dev/null || kubectl get pods,svc -n "${NS}" -o wide
+              if [ "${EKS_INGRESS_ENABLED:-true}" = "true" ]; then
+                echo "--- Ingress ALB hostname ---"
+                kubectl get ingress "${REL}" -n "${NS}" -o jsonpath='{.status.loadBalancer.ingress[0].hostname}{"\n"}' 2>/dev/null || true
+                kubectl describe ingress "${REL}" -n "${NS}" 2>/dev/null | tail -25 || true
+              fi
+              echo "Deployed image: ${REGISTRY}/${REPO}:${TAG}"
+            displayName: Helm deploy to EKS
+            env:
+              AWS_ACCESS_KEY_ID: $(AWS_ACCESS_KEY_ID)
+              AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
+              AWS_SESSION_TOKEN: $(AWS_SESSION_TOKEN)
+              AWS_REGION: $(AWS_REGION)
+              AWS_DEFAULT_REGION: $(AWS_REGION)
+              awsAccountId: $(awsAccountId)
+              awsEcrRepository: $(awsEcrRepository)
+              EKS_CLUSTER_NAME: $(EKS_CLUSTER_NAME)
+              EKS_NAMESPACE: $(EKS_NAMESPACE)
+              HELM_RELEASE_NAME: $(HELM_RELEASE_NAME)
+              BUILD_BUILDID: $(Build.BuildId)
+              SYSTEM_DEFAULTWORKINGDIRECTORY: $(System.DefaultWorkingDirectory)
+              MYSQL_SECRET_NAME: $(MYSQL_SECRET_NAME)
+              EKS_SA_ROLE_ARN: $(EKS_SA_ROLE_ARN)
+              EKS_INGRESS_ENABLED: $(EKS_INGRESS_ENABLED)
+              EKS_HPA_ENABLED: $(EKS_HPA_ENABLED)

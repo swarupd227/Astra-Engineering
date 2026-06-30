@@ -1,0 +1,46 @@
+version: "3.9"
+
+services:
+  nat-server:
+    build: .
+    ports:
+      - "4000:4000"
+    env_file: .env
+    environment:
+      - NODE_ENV=production
+      - PORT=4000
+      - AGENT_TOKEN=${AGENT_TOKEN}
+      - WS_AUTH_REQUIRED=${WS_AUTH_REQUIRED:-false}
+      - WS_ALLOWED_ORIGINS=${WS_ALLOWED_ORIGINS:-}
+      - CHROME_EXTENSION_ID=${CHROME_EXTENSION_ID:-}
+    restart: unless-stopped
+
+  nat-agent:
+    build: ./remote-agent
+    environment:
+      - SERVER_URL=ws://nat-server:4000/ws/execution-agent
+      - AGENT_TOKEN=${AGENT_TOKEN}
+      - AGENT_LABEL=pool-agent
+      - PLAYWRIGHT_IGNORE_HTTPS_ERRORS=${PLAYWRIGHT_IGNORE_HTTPS_ERRORS:-false}
+    depends_on:
+      - nat-server
+    deploy:
+      replicas: 3
+    restart: unless-stopped
+
+  caddy:
+    image: caddy:2-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - nat-server
+    restart: unless-stopped
+
+volumes:
+  caddy_data:
+  caddy_config:

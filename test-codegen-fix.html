@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeGen Page Fix Test</title>
+</head>
+<body>
+    <h1>CodeGen Page Fix Test</h1>
+    
+    <h2>Test Navigation Links</h2>
+    <p>Click these links to simulate coming from SDLC page:</p>
+    
+    <ul>
+        <li>
+            <a href="/sdlc/DevX-Platform/code-gen?organization=DevX-Platform&projectName=DevX-Platform&projectId=DevX-Platform&organizationUrl=https://dev.azure.com/DevX-Platform" target="_blank">
+                DevX-Platform Project
+            </a>
+        </li>
+        <li>
+            <a href="/sdlc/InsurityPOC/code-gen?organization=InsurityPOC&projectName=InsurityPOC&projectId=InsurityPOC&organizationUrl=https://dev.azure.com/InsurityPOC" target="_blank">
+                InsurityPOC Project
+            </a>
+        </li>
+        <li>
+            <a href="/sdlc/TestOrg/code-gen?organization=TestOrg&projectName=TestProject&projectId=test-project-123&organizationUrl=https://dev.azure.com/TestOrg" target="_blank">
+                Test Organization/Project
+            </a>
+        </li>
+    </ul>
+    
+    <h2>Expected Behavior</h2>
+    <ul>
+        <li>Organization field should be populated and disabled</li>
+        <li>Project field should be populated and disabled</li>
+        <li>Both fields should show a "From SDLC" badge</li>
+        <li>Success message should show "Pre-populated from SDLC workflow"</li>
+    </ul>
+    
+    <script>
+        // Test URL parameter extraction
+        function testUrlParams() {
+            const testUrl = "/sdlc/DevX-Platform/code-gen?organization=DevX-Platform&projectName=DevX-Platform&projectId=DevX-Platform&organizationUrl=https://dev.azure.com/DevX-Platform";
+            const url = new URL("http://localhost:3000" + testUrl);
+            const params = new URLSearchParams(url.search);
+            
+            console.log("Test URL:", testUrl);
+            console.log("Extracted params:", {
+                organization: params.get("organization"),
+                projectName: params.get("projectName"), 
+                projectId: params.get("projectId"),
+                organizationUrl: params.get("organizationUrl")
+            });
+        }
+        
+        testUrlParams();
+    </script>
+</body>
+</html>

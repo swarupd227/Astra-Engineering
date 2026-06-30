@@ -1,0 +1,187 @@
+You are an expert in database migration full-stack environments.
+
+## Goal
+Migrate the entire project’s database layer from **Neon PostgreSQL (Drizzle + Neon driver)** to **Azure MySQL**, ensuring:
+1. All tables are created automatically on startup.
+2. All existing data from Neon DB is migrated into Azure MySQL safely.
+
+---
+
+### Current Context
+- The project currently uses:
+  - `@neondatabase/serverless`
+  - `drizzle-orm/neon-serverless`
+  - PostgreSQL connection string via `DATABASE_URL`
+- Tables are defined in `@shared/schema` (Drizzle schema files).
+- The app runs on Replit, currently connecting to Neon DB.
+
+---
+
+### Target
+- Move all DB connectivity, ORM setup, and queries to **Azure MySQL**.
+- Use **Drizzle ORM for MySQL**.
+- Replace all imports of `@neondatabase/serverless` and `drizzle-orm/neon-serverless` with `mysql2` and `drizzle-orm/mysql2`.
+- Migrate all **existing Neon PostgreSQL data** to the new Azure MySQL tables.
+- Ensure the app connects to the following Azure MySQL instance:
+
+Host: devxserver.mysql.database.azure.com
+Port: 3306
+User: devxadmin
+Password: REDACTED_MYSQL_PASSWORD
+Database: devxdb
+
+
+---
+
+### Required Steps
+
+#### 1. Install Dependencies
+```bash
+npm install mysql2 drizzle-orm pg
+(Remove @neondatabase/serverless and drizzle-orm/neon-serverless)
+
+2. Create new MySQL config file (src/db/mysql-config.ts)
+
+import mysql from "mysql2/promise";
+import { drizzle } from "drizzle-orm/mysql2";
+import * as schema from "@shared/schema";
+
+export const connection = await mysql.createConnection({
+  host: "devxserver.mysql.database.azure.com",
+  user: "devxadmin",
+  password: "REDACTED_MYSQL_PASSWORD",
+  database: "devxdb",
+  port: 3306,
+  ssl: { rejectUnauthorized: true },
+});
+
+export const db = drizzle(connection, { schema });
+3. Create temporary Neon config (src/db/neon-config.ts)
+
+import { Pool, neonConfig } from "@neondatabase/serverless";
+import ws from "ws";
+import { drizzle } from "drizzle-orm/neon-serverless";
+import * as schema from "@shared/schema";
+
+neonConfig.webSocketConstructor = ws;
+
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+export const neonDb = drizzle({ client: pool, schema });
+4. Data Migration Script
+Create scripts/migrate-data.ts:
+
+import { neonDb } from "../src/db/neon-config";
+import { db as mysqlDb, connection } from "../src/db/mysql-config";
+import * as schema from "@shared/schema";
+
+async function migrate() {
+  console.log("🚀 Starting migration from Neon PostgreSQL → Azure MySQL...");
+
+  // Get all table names from schema
+  const tables = Object.keys(schema);
+  for (const tableName of tables) {
+    const table = (schema as any)[tableName];
+    console.log(`⏳ Migrating table: ${tableName}`);
+
+    // 1. Read all rows from Neon
+    const rows = await neonDb.select().from(table);
+    if (rows.length === 0) {
+      console.log(`⚠️ No data found in ${tableName}, skipping...`);
+      continue;
+    }
+
+    // 2. Insert into MySQL
+    for (const row of rows) {
+      await mysqlDb.insert(table).values(row);
+    }
+
+    console.log(`✅ ${rows.length} records migrated for table: ${tableName}`);
+  }
+
+  console.log("🎉 Migration completed successfully!");
+  await connection.end();
+  process.exit(0);
+}
+
+migrate().catch((err) => {
+  console.error("❌ Migration failed:", err);
+  process.exit(1);
+});
+5. Auto-create Tables in MySQL
+At startup or before migration, ensure tables exist:
+
+import { drizzle } from "drizzle-orm/mysql2";
+import { migrate } from "drizzle-orm/mysql2/migrator";
+import { connection } from "./mysql-config";
+
+await migrate(drizzle(connection), { migrationsFolder: "./drizzle" });
+Or, if no migrations exist, Drizzle will infer schema on first insert.
+
+6. Update Environment Variables
+.env
+
+ini
+Copy code
+MYSQL_HOST=devxserver.mysql.database.azure.com
+MYSQL_PORT=3306
+MYSQL_USER=devxadmin
+MYSQL_PASSWORD=REDACTED_MYSQL_PASSWORD
+MYSQL_DATABASE=devxdb
+DATABASE_URL=postgresql://<your-neon-credentials>
+7. Replace Imports Globally
+Replace:
+
+import { Pool, neonConfig } from '@neondatabase/serverless';
+import { drizzle } from 'drizzle-orm/neon-serverless';
+with:
+
+import mysql from 'mysql2/promise';
+import { drizzle } from 'drizzle-orm/mysql2';
+8. Run Migration
+Run this command in Replit shell:
+
+npx tsx scripts/migrate-data.ts
+It will:
+
+Connect to Neon PostgreSQL.
+
+Auto-create tables in Azure MySQL.
+
+Copy all data table by table.
+
+Print migration status.
+
+9. Verification
+After running migration:
+const [rows] = await connection.query("SELECT COUNT(*) FROM users;");
+console.log("Users in MySQL:", rows);
+✅ Deliverables
+Working Replit project using Azure MySQL as backend.
+
+All tables recreated automatically from schema.
+
+All data copied from Neon PostgreSQL to Azure MySQL.
+
+Connection tested and verified.
+
+No @neondatabase/serverless or neonConfig left in codebase.
+
+🧾 After Success
+Print in console:
+
+pgsql
+Copy code
+✅ Migration from Neon PostgreSQL to Azure MySQL completed successfully!
+✅ Tables and data verified in Azure MySQL.
+⚠️ Notes
+If using Prisma instead of Drizzle:
+
+Set provider = "mysql"
+
+Run npx prisma migrate deploy
+
+Then run a custom migration script similar to above using Prisma Client.
+
+If Drizzle migration folder doesn’t exist:
+
+Run npx drizzle-kit generate:mysql

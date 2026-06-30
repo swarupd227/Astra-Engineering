@@ -1,0 +1,315 @@
+{
+  "Code": 1,
+  "Message": "Success",
+  "EmployeesCount": "1",
+  "TotalEmployeeCount": "1",
+  "Employees": [
+    {
+      "EmployeeCode": "NST241869",
+      "EmployeeID": "35252",
+      "Salutation": "Mr.",
+      "EmployeeName": "Chandra Mouli",
+      "FirstName": "Chandra",
+      "LastName": "Mouli",
+      "MiddleName": "",
+      "FatherName": "I V Papayya Sastry  ",
+      "Email": "chandramouli@nousinfo.com",
+      "PersonalEmail": "ivcmouli@yahoo.cpom",
+      "Gender": "Male",
+      "Mobile": "9158925082",
+      "DateofBirth": "01 Jul 1978",
+      "DateofJoining": "05 Feb 2024",
+      "DateofConfirmation": "24 May 2024",
+      "DateOfLeaving": "",
+      "EmployeeStatus": "Existing",
+      "Age": "Year: 47 And Month:7",
+      "PAN": "AAQPI1854A",
+      "UAN": "",
+      "AadhaarNumber": "563585843141",
+      "PFAccountNumber": "PYBOM20734030000011910",
+      "ESICAccountNumber": "",
+      "ReportingManagerName": "Swarup Dutta",
+      "ReportingManagerCode": "NST221162",
+      "ReportingManagerEmail": "swarupd@nousinfo.com",
+      "ReportingManagerEmail2": "maheshp@nousinfo.com",
+      "LastModified": "31 Dec 2025 10:34:05",
+      "ReportingManagerName2": "Mahesh Prabhu",
+      "ReportingManagercode2": "NSM231460",
+      "EmploymentStatus": "Active",
+      "ConfirmationStatus": "Confirmed",
+      "CreatedDate": "05 Feb 2024 07:35:01",
+      "EmpFlag": "M",
+      "DateofResignation": "",
+      "ExitDate": "",
+      "GroupDOJ": "05 Feb 2024",
+      "ExitTypeName": "",
+      "ExitReason1": "",
+      "ExitReason2": "",
+      "DomainID": "",
+      "PaymentDescription": "Bank Transfer",
+      "PTApplicable": "1",
+      "PFApplicable": "1",
+      "ESICApplicable": "0",
+      "LwfApplicable": "1",
+      "PfDenotion": "R",
+      "EmploymentType": "Full Time",
+      "FNFProcessedMonth": "",
+      "NetPay": "",
+      "FNFStatus": "",
+      "RecoveryStatus": "",
+      "EcodeGeneratedBy": "NSM21807",
+      "OfferLetterReferenceNo": "",
+      "AttendanceManagerStatus": "Existing",
+      "AlternateMobileNo": "",
+      "OldEmployeeCode": "",
+      "Nationality": "Indian",
+      "MaritalStatus": "Married",
+      "DateofMarriage": "17 Feb 2005",
+      "IsPanAadharLinked": "Yes",
+      "Attributes": [
+        {
+          "AttributeTypeID": "42",
+          "AttributeTypeDesc": "Designation",
+          "AttributeTypeCode": "Designation",
+          "AttributeTypeUnitID": "2292",
+          "AttributeTypeUnitDesc": "General Manager - Testree",
+          "AttributeTypeUnitCode": "General",
+          "EffectiveDate": "01 Apr 2025"
+        },
+        {
+          "AttributeTypeID": "68",
+          "AttributeTypeDesc": "Employment Status",
+          "AttributeTypeCode": "EmploymentStatus",
+          "AttributeTypeUnitID": "2055",
+          "AttributeTypeUnitDesc": "Confirmed",
+          "AttributeTypeUnitCode": "Confirmed",
+          "EffectiveDate": "24 May 2024"
+        },
+        {
+          "AttributeTypeID": "66",
+          "AttributeTypeDesc": "PMS Policy",
+          "AttributeTypeCode": "PMSPolicy",
+          "AttributeTypeUnitID": "1920",
+          "AttributeTypeUnitDesc": "COC Head",
+          "AttributeTypeUnitCode": "COCHead",
+          "EffectiveDate": "12 Feb 2025"
+        },
+        {
+          "AttributeTypeID": "48",
+          "AttributeTypeDesc": "Legal Entity",
+          "AttributeTypeCode": "Legal Entity",
+          "AttributeTypeUnitID": "1083",
+          "AttributeTypeUnitDesc": "Nous Infosolutions LLP",
+          "AttributeTypeUnitCode": "NousInfosolutionsLLP",
+          "EffectiveDate": "12 Apr 2024"
+        },
+        {
+          "AttributeTypeID": "49",
+          "AttributeTypeDesc": "Location",
+          "AttributeTypeCode": "Location",
+          "AttributeTypeUnitID": "1085",
+          "AttributeTypeUnitDesc": "Bangalore",
+          "AttributeTypeUnitCode": "Bangalore",
+          "EffectiveDate": "12 Apr 2024"
+        },
+        {
+          "AttributeTypeID": "53",
+          "AttributeTypeDesc": "Base Group",
+          "AttributeTypeCode": "BaseGroup",
+          "AttributeTypeUnitID": "1432",
+          "AttributeTypeUnitDesc": "Testree-Program Management",
+          "AttributeTypeUnitCode": "Testree-ProgramManagement",
+          "EffectiveDate": "02 Oct 2024"
+        },
+        {
+          "AttributeTypeID": "44",
+          "AttributeTypeDesc": "Band",
+          "AttributeTypeCode": "Band",
+          "AttributeTypeUnitID": "1310",
+          "AttributeTypeUnitDesc": "Band B",
+          "AttributeTypeUnitCode": "BandB",
+          "EffectiveDate": "01 Jun 2024"
+        },
+        {
+          "AttributeTypeID": "50",
+          "AttributeTypeDesc": "Work Level",
+          "AttributeTypeCode": "WorkLevel",
+          "AttributeTypeUnitID": "2052",
+          "AttributeTypeUnitDesc": "SM 2",
+          "AttributeTypeUnitCode": "SM2",
+          "EffectiveDate": "01 Jun 2024"
+        },
+        {
+          "AttributeTypeID": "32",
+          "AttributeTypeDesc": "Leave Group",
+          "AttributeTypeCode": "Leave Group",
+          "AttributeTypeUnitID": "2384",
+          "AttributeTypeUnitDesc": "Common Blr",
+          "AttributeTypeUnitCode": "Common Blr",
+          "EffectiveDate": "31 Dec 2025"
+        },
+        {
+          "AttributeTypeID": "30",
+          "AttributeTypeDesc": "Employee Group",
+          "AttributeTypeCode": "Employee Group",
+          "AttributeTypeUnitID": "345",
+          "AttributeTypeUnitDesc": "Common",
+          "AttributeTypeUnitCode": "Common",
+          "EffectiveDate": "05 Feb 2024"
+        },
+        {
+          "AttributeTypeID": "31",
+          "AttributeTypeDesc": "Attendance Group",
+          "AttributeTypeCode": "Attendance Group",
+          "AttributeTypeUnitID": "346",
+          "AttributeTypeUnitDesc": "Common",
+          "AttributeTypeUnitCode": "Common",
+          "EffectiveDate": "05 Feb 2024"
+        },
+        {
+          "AttributeTypeID": "33",
+          "AttributeTypeDesc": "Calendar Group",
+          "AttributeTypeCode": "Calendar Group",
+          "AttributeTypeUnitID": "1333",
+          "AttributeTypeUnitDesc": "Bangalore",
+          "AttributeTypeUnitCode": "Bangalore",
+          "EffectiveDate": "05 Feb 2024"
+        },
+        {
+          "AttributeTypeID": "38",
+          "AttributeTypeDesc": "Attendance Mode Group",
+          "AttributeTypeCode": "Attendance Mode Group",
+          "AttributeTypeUnitID": "993",
+          "AttributeTypeUnitDesc": "Common",
+          "AttributeTypeUnitCode": "Common",
+          "EffectiveDate": "05 Feb 2024"
+        },
+        {
+          "AttributeTypeID": "39",
+          "AttributeTypeDesc": "Attendance Rule Group",
+          "AttributeTypeCode": "Attendance Rule Group",
+          "AttributeTypeUnitID": "997",
+          "AttributeTypeUnitDesc": "Common",
+          "AttributeTypeUnitCode": "Common",
+          "EffectiveDate": "05 Feb 2024"
+        },
+        {
+          "AttributeTypeID": "43",
+          "AttributeTypeDesc": "Department",
+          "AttributeTypeCode": "Department",
+          "AttributeTypeUnitID": "1117",
+          "AttributeTypeUnitDesc": "Technical",
+          "AttributeTypeUnitCode": "Technical",
+          "EffectiveDate": "05 Feb 2024"
+        },
+        {
+          "AttributeTypeID": "46",
+          "AttributeTypeDesc": "Division",
+          "AttributeTypeCode": "Division",
+          "AttributeTypeUnitID": "1088",
+          "AttributeTypeUnitDesc": "Testree",
+          "AttributeTypeUnitCode": "Testree",
+          "EffectiveDate": "05 Feb 2024"
+        },
+        {
+          "AttributeTypeID": "54",
+          "AttributeTypeDesc": "Holiday Process",
+          "AttributeTypeCode": "HolidayProcess",
+          "AttributeTypeUnitID": "1436",
+          "AttributeTypeUnitDesc": "Bangalore",
+          "AttributeTypeUnitCode": "Bangalore",
+          "EffectiveDate": "05 Feb 2024"
+        },
+        {
+          "AttributeTypeID": "55",
+          "AttributeTypeDesc": "Attendance Scheme",
+          "AttributeTypeCode": "AttendanceScheme",
+          "AttributeTypeUnitID": "1953",
+          "AttributeTypeUnitDesc": "General Shift (9:15AM to 6:15PM)",
+          "AttributeTypeUnitCode": "GeneralShift(9:15AMto6:15PM)",
+          "EffectiveDate": "05 Feb 2024"
+        }
+      ],
+      "Addresses": [
+        {
+          "Type": "EMERGENCYContact",
+          "Address": "",
+          "Country": "",
+          "State": "",
+          "City": "",
+          "PinCode": ""
+        },
+        {
+          "Type": "PermanentContact",
+          "Address": "B103, Srivari abhilasha, balgere road, varthur, ",
+          "Country": "India",
+          "State": "Karnataka",
+          "City": "Bangalore",
+          "PinCode": "560064"
+        },
+        {
+          "Type": "PresentContact",
+          "Address": "c2 903, Ramky One North, Doddballapur road, avalahalli yalahanka",
+          "Country": "India",
+          "State": "Karnataka",
+          "City": "Bangalore",
+          "PinCode": "560064"
+        }
+      ],
+      "BankDetails": [
+        {
+          "AccountType": "SAVING",
+          "AccountHolderName": "Mr. Chandra  Mouli",
+          "BankName": "HDFC Bank",
+          "BranchName": "",
+          "OperationType": "SALARY",
+          "AccountNo": "50100178397731",
+          "IFSCCode": "HDFC0000240",
+          "IBANNumber": ""
+        },
+        {
+          "AccountType": "SAVING",
+          "AccountHolderName": "Mr. Chandra  Mouli",
+          "BankName": "HDFC Bank",
+          "BranchName": "",
+          "OperationType": "SALARY",
+          "AccountNo": "50100178397731",
+          "IFSCCode": "HDFC0000240",
+          "IBANNumber": ""
+        },
+        {
+          "AccountType": "SAVING",
+          "AccountHolderName": "Mr. Chandra  Mouli",
+          "BankName": "HDFC Bank",
+          "BranchName": "",
+          "OperationType": "SALARY",
+          "AccountNo": "50100178397731",
+          "IFSCCode": "HDFC0000240",
+          "IBANNumber": ""
+        }
+      ],
+      "SkillsDetails": [
+        {
+          "SkillsName": "Project delivery",
+          "Level": "Expert",
+          "LastUsedMonth": "Present",
+          "LastUsedYear": "Present",
+          "FromMonth": "1",
+          "FromYear": "2006",
+          "ToMonth": "2",
+          "ToYear": "2024"
+        }
+      ],
+      "CardCodeDetails": [
+        {
+          "CardCodeNumber": "NST241869",
+          "AttendanceMode": "Biometric"
+        },
+        {
+          "CardCodeNumber": "NST241869",
+          "AttendanceMode": "PunchIN"
+        }
+      ]
+    }
+  ]
+}

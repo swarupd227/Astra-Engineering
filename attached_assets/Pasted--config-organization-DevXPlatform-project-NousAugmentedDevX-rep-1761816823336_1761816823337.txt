@@ -1,0 +1,467 @@
+{
+  "config": {
+    "organization": "DevXPlatform",
+    "project": "NousAugmentedDevX",
+    "repository": "NousAugmentedDevX_UI",
+    "branch": "main",
+    "pat": "REDACTED_TOKEN"
+  },
+  "selectedItems": [
+    {
+      "type": "epic",
+      "id": "epic-1"
+    },
+    {
+      "type": "epic",
+      "id": "epic-2"
+    },
+    {
+      "type": "epic",
+      "id": "epic-3"
+    },
+    {
+      "type": "feature",
+      "id": "feature-1"
+    },
+    {
+      "type": "feature",
+      "id": "feature-2"
+    },
+    {
+      "type": "feature",
+      "id": "feature-3"
+    },
+    {
+      "type": "feature",
+      "id": "feature-4"
+    },
+    {
+      "type": "feature",
+      "id": "feature-5"
+    },
+    {
+      "type": "feature",
+      "id": "feature-6"
+    },
+    {
+      "type": "feature",
+      "id": "feature-7"
+    },
+    {
+      "type": "feature",
+      "id": "feature-8"
+    },
+    {
+      "type": "story",
+      "id": "story-1"
+    },
+    {
+      "type": "story",
+      "id": "story-2"
+    },
+    {
+      "type": "story",
+      "id": "story-3"
+    },
+    {
+      "type": "story",
+      "id": "story-4"
+    },
+    {
+      "type": "story",
+      "id": "story-5"
+    },
+    {
+      "type": "story",
+      "id": "story-6"
+    },
+    {
+      "type": "story",
+      "id": "story-7"
+    },
+    {
+      "type": "story",
+      "id": "story-8"
+    },
+    {
+      "type": "story",
+      "id": "story-9"
+    },
+    {
+      "type": "story",
+      "id": "story-10"
+    },
+    {
+      "type": "story",
+      "id": "story-11"
+    }
+  ],
+  "epics": [
+    {
+      "id": "epic-1",
+      "title": "Automated Claims Processing",
+      "description": "Develop a system that automates claim intake, evaluation, routing, and settlement processes across multiple channels.",
+      "priority": "High",
+      "featureCount": 3
+    },
+    {
+      "id": "epic-2",
+      "title": "Fraud Detection and Risk Analysis",
+      "description": "Implement AI-powered fraud detection and risk scoring mechanisms to ensure secure and compliant claims processing.",
+      "priority": "High",
+      "featureCount": 3
+    },
+    {
+      "id": "epic-3",
+      "title": "Customer Engagement and Analytics",
+      "description": "Build customer communication tools, analytics dashboards, and mobile solutions to improve user experience and operational insights.",
+      "priority": "High",
+      "featureCount": 2
+    }
+  ],
+  "features": [
+    {
+      "id": "feature-1",
+      "epicId": "epic-1",
+      "title": "Multi-Channel Claim Intake",
+      "description": "Enable automated claim intake from web, mobile, phone, and email channels.",
+      "priority": "High"
+    },
+    {
+      "id": "feature-2",
+      "epicId": "epic-1",
+      "title": "AI Damage Assessment",
+      "description": "Use image recognition and machine learning to assess damages automatically.",
+      "priority": "High"
+    },
+    {
+      "id": "feature-3",
+      "epicId": "epic-1",
+      "title": "Workflow Automation for Claims",
+      "description": "Automate routing, approval, and settlement processes for claims.",
+      "priority": "High"
+    },
+    {
+      "id": "feature-4",
+      "epicId": "epic-2",
+      "title": "Real-Time Fraud Detection",
+      "description": "Implement fraud detection using pattern analysis and risk scoring.",
+      "priority": "High"
+    },
+    {
+      "id": "feature-5",
+      "epicId": "epic-2",
+      "title": "Third-Party Integration",
+      "description": "Integrate with assessors, repair shops, and medical providers for seamless claims processing.",
+      "priority": "High"
+    },
+    {
+      "id": "feature-6",
+      "epicId": "epic-2",
+      "title": "Policy Management Integration",
+      "description": "Verify coverage by integrating with policy management systems.",
+      "priority": "High"
+    },
+    {
+      "id": "feature-7",
+      "epicId": "epic-3",
+      "title": "Customer Communication Portal",
+      "description": "Provide status updates, document sharing, and secure communication for customers.",
+      "priority": "High"
+    },
+    {
+      "id": "feature-8",
+      "epicId": "epic-3",
+      "title": "Analytics Dashboard",
+      "description": "Deliver insights into claim trends, fraud patterns, and performance metrics.",
+      "priority": "High"
+    }
+  ],
+  "userStories": [
+    {
+      "id": "story-1",
+      "featureId": "feature-1",
+      "personaId": "persona-4",
+      "persona": "Product Manager",
+      "epicId": "epic-1",
+      "title": "As a Product Manager, I want to define claim intake workflows so that users can submit claims seamlessly across all channels.",
+      "description": "Ensure the system accepts claims via web, mobile, phone, and email.",
+      "acceptanceCriteria": [
+        {
+          "given": "Given a user accesses any supported channel",
+          "when": "When they submit a claim",
+          "then": "Then the claim should be ingested into the system successfully"
+        }
+      ],
+      "storyPoints": 8,
+      "priority": "High"
+    },
+    {
+      "id": "story-2",
+      "featureId": "feature-1",
+      "personaId": "persona-1",
+      "persona": "Senior Developer",
+      "epicId": "epic-1",
+      "title": "As a Senior Developer, I want to implement APIs for claim intake so that the system can handle submissions from multiple channels.",
+      "description": "Develop APIs to facilitate multi-channel claim intake.",
+      "acceptanceCriteria": [
+        {
+          "given": "Given external systems integrate with the API",
+          "when": "When they submit valid claims",
+          "then": "Then the claims should be stored in the database and logged"
+        }
+      ],
+      "storyPoints": 5,
+      "priority": "High"
+    },
+    {
+      "id": "story-3",
+      "featureId": "feature-2",
+      "personaId": "persona-2",
+      "persona": "Business Analyst",
+      "epicId": "epic-1",
+      "title": "As a Business Analyst, I want to define damage assessment parameters so that AI algorithms can evaluate claims accurately.",
+      "description": "Collaborate with stakeholders to define parameters for damage assessment.",
+      "acceptanceCriteria": [
+        {
+          "given": "Given the AI system is operational",
+          "when": "When images of damages are uploaded",
+          "then": "Then the system should provide an accurate damage evaluation score"
+        }
+      ],
+      "storyPoints": 5,
+      "priority": "High"
+    },
+    {
+      "id": "story-4",
+      "featureId": "feature-2",
+      "personaId": "persona-3",
+      "persona": "QA Engineer",
+      "epicId": "epic-1",
+      "title": "As a QA Engineer, I want to test the image recognition system so that damage assessments are consistent.",
+      "description": "Develop test cases for the image recognition system.",
+      "acceptanceCriteria": [
+        {
+          "given": "Given a set of test images",
+          "when": "When they are processed by the system",
+          "then": "Then the assessment results should match predefined expectations"
+        }
+      ],
+      "storyPoints": 8,
+      "priority": "High"
+    },
+    {
+      "id": "story-5",
+      "featureId": "feature-3",
+      "personaId": "persona-5",
+      "persona": "DevOps Engineer",
+      "epicId": "epic-1",
+      "title": "As a DevOps Engineer, I want to configure workflows for claim routing so that they are automated and reliable.",
+      "description": "Set up infrastructure for automated claim routing workflows.",
+      "acceptanceCriteria": [
+        {
+          "given": "Given a new claim is processed",
+          "when": "When routing rules apply",
+          "then": "Then the claim should be routed to the appropriate team automatically"
+        }
+      ],
+      "storyPoints": 8,
+      "priority": "High"
+    },
+    {
+      "id": "story-6",
+      "featureId": "feature-4",
+      "personaId": "persona-1",
+      "persona": "Senior Developer",
+      "epicId": "epic-2",
+      "title": "As a Senior Developer, I want to implement fraud detection algorithms so that fraudulent claims are flagged automatically.",
+      "description": "Develop fraud detection algorithms using AI and pattern analysis.",
+      "acceptanceCriteria": [
+        {
+          "given": "Given historical claim data",
+          "when": "When fraud patterns are identified",
+          "then": "Then suspicious claims should be flagged for review"
+        }
+      ],
+      "storyPoints": 8,
+      "priority": "High"
+    },
+    {
+      "id": "story-7",
+      "featureId": "feature-4",
+      "personaId": "persona-3",
+      "persona": "QA Engineer",
+      "epicId": "epic-2",
+      "title": "As a QA Engineer, I want to validate fraud detection models so that their accuracy is optimized.",
+      "description": "Test fraud detection models for accuracy and false positives.",
+      "acceptanceCriteria": [
+        {
+          "given": "Given test claims",
+          "when": "When they are processed by the fraud detection system",
+          "then": "Then the accuracy rate should meet predefined thresholds"
+        }
+      ],
+      "storyPoints": 8,
+      "priority": "High"
+    },
+    {
+      "id": "story-8",
+      "featureId": "feature-5",
+      "personaId": "persona-2",
+      "persona": "Business Analyst",
+      "epicId": "epic-2",
+      "title": "As a Business Analyst, I want to map integration requirements for third-party assessors so that claims can be processed efficiently.",
+      "description": "Define requirements for integration with external assessors and repair shops.",
+      "acceptanceCriteria": [
+        {
+          "given": "Given third-party systems are onboarded",
+          "when": "When claims are shared for assessment",
+          "then": "Then the integration should work as expected"
+        }
+      ],
+      "storyPoints": 5,
+      "priority": "High"
+    },
+    {
+      "id": "story-9",
+      "featureId": "feature-6",
+      "personaId": "persona-5",
+      "persona": "DevOps Engineer",
+      "epicId": "epic-2",
+      "title": "As a DevOps Engineer, I want to set up policy management integration so that coverage verification is automated.",
+      "description": "Configure systems to integrate with policy management tools.",
+      "acceptanceCriteria": [
+        {
+          "given": "Given a claim is submitted",
+          "when": "When coverage is checked",
+          "then": "Then the system should verify the policy details automatically"
+        }
+      ],
+      "storyPoints": 8,
+      "priority": "High"
+    },
+    {
+      "id": "story-10",
+      "featureId": "feature-7",
+      "personaId": "persona-4",
+      "persona": "Product Manager",
+      "epicId": "epic-3",
+      "title": "As a Product Manager, I want to design the customer portal so that users can track claim status and share documents.",
+      "description": "Develop a portal for claim updates and secure document sharing.",
+      "acceptanceCriteria": [
+        {
+          "given": "Given a user has submitted a claim",
+          "when": "When they access the portal",
+          "then": "Then they should see the status and upload/download documents"
+        }
+      ],
+      "storyPoints": 8,
+      "priority": "High"
+    },
+    {
+      "id": "story-11",
+      "featureId": "feature-8",
+      "personaId": "persona-2",
+      "persona": "Business Analyst",
+      "epicId": "epic-3",
+      "title": "As a Business Analyst, I want to define metrics for the analytics dashboard so that stakeholders gain insights into claims data.",
+      "description": "Collaborate on metrics for claim trends and fraud patterns.",
+      "acceptanceCriteria": [
+        {
+          "given": "Given the analytics system is operational",
+          "when": "When stakeholders view the dashboard",
+          "then": "Then they should see accurate and actionable insights"
+        }
+      ],
+      "storyPoints": 5,
+      "priority": "High"
+    }
+  ],
+  "personas": [
+    {
+      "id": "persona-1",
+      "name": "Senior Developer",
+      "role": "Software Developer",
+      "color": "#3b82f6",
+      "focus": "Technical implementation and code quality",
+      "painPoints": [
+        "Complex integrations",
+        "Technical debt",
+        "Performance issues"
+      ],
+      "goals": [
+        "Build scalable solutions",
+        "Maintain code quality",
+        "Implement best practices"
+      ]
+    },
+    {
+      "id": "persona-2",
+      "name": "Business Analyst",
+      "role": "Business Analyst",
+      "color": "#8b5cf6",
+      "focus": "Requirements gathering and business logic",
+      "painPoints": [
+        "Unclear requirements",
+        "Stakeholder alignment",
+        "Process inefficiencies"
+      ],
+      "goals": [
+        "Define clear requirements",
+        "Bridge business and tech",
+        "Optimize processes"
+      ]
+    },
+    {
+      "id": "persona-3",
+      "name": "QA Engineer",
+      "role": "Quality Assurance Engineer",
+      "color": "#10b981",
+      "focus": "Quality assurance and testing",
+      "painPoints": [
+        "Test coverage gaps",
+        "Manual testing burden",
+        "Bug tracking"
+      ],
+      "goals": [
+        "Ensure quality",
+        "Automate testing",
+        "Prevent defects"
+      ]
+    },
+    {
+      "id": "persona-4",
+      "name": "Product Manager",
+      "role": "Product Manager",
+      "color": "#f59e0b",
+      "focus": "Product strategy and roadmap",
+      "painPoints": [
+        "Feature prioritization",
+        "User feedback integration",
+        "Stakeholder management"
+      ],
+      "goals": [
+        "Deliver user value",
+        "Drive product vision",
+        "Measure success"
+      ]
+    },
+    {
+      "id": "persona-5",
+      "name": "DevOps Engineer",
+      "role": "DevOps Engineer",
+      "color": "#ef4444",
+      "focus": "Infrastructure and deployment",
+      "painPoints": [
+        "Deployment complexity",
+        "System reliability",
+        "Monitoring gaps"
+      ],
+      "goals": [
+        "Automate deployments",
+        "Ensure uptime",
+        "Optimize infrastructure"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,699 @@
+
+
+now when we click on any card then load all the content of that repo call the api and render it in nested page 
+
+
+take the reference of below code 
+
+import axios from 'axios';
+
+class GitService {
+  constructor() {
+    this.config = null;
+    this.repositoryId = null;
+    this.currentBranch = null; // Will be set dynamically
+    this.baseCommitId = null;
+    this.webSocket = null;
+    this.webhookEndpoint = null;
+    this.client = null;
+    this.initialized = false;
+  }
+
+  initialize() {
+    // Get config from context - this will be called from component
+    console.log('GitService initialized');
+  }
+
+  setConfig(config) {
+    this.config = config;
+    this.webhookEndpoint = `${window.location.origin}/api/git/webhook`;
+    
+    // Ensure the desired repository is loaded by default
+    // If repository is not provided or is set to the old default, use 'DOC'
+    if (!this.config.repository || this.config.repository === 'NousAugmentedDevX_UI') {
+      this.config.repository = 'DOC';
+    }
+    
+    // Initialize axios client similar to other services
+    const isDevelopment = process.env.NODE_ENV === 'development';
+    const apiBaseURL = isDevelopment ? '/api/ado' : `${config.organization}_apis`;
+    
+    this.client = axios.create({
+      baseURL: apiBaseURL,
+      headers: {
+        'Authorization': `Basic ${btoa(`:${config.token}`)}`,
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      timeout: 30000
+    });
+
+    this.initialized = true;
+    console.log('Git Service initialized with config:', {
+      project: config.project,
+      repository: config.repository,
+      apiBaseURL: apiBaseURL
+    });
+  }
+
+  // Get repository ID from repository name
+  async getRepositoryId() {
+    if (!this.initialized || !this.client) {
+      throw new Error('Git Service not initialized');
+    }
+
+    try {
+      const response = await this.client.get(`/${this.config.project}/_apis/git/repositories?api-version=${this.config.apiVersion}`);
+
+      const repo = response.data.value.find(r => r.name === this.config.repository);
+      
+      if (!repo) {
+        throw new Error(`Repository '${this.config.repository}' not found`);
+      }
+
+      this.repositoryId = repo.id;
+      return this.repositoryId;
+    } catch (error) {
+      console.error('Error getting repository ID:', error);
+      throw error;
+    }
+  }
+
+  // Get latest commit hash for a branch
+  async getLatestCommit(branchName = null) {
+    if (!this.repositoryId) {
+      await this.getRepositoryId();
+    }
+
+    // If no branch specified, get the default branch
+    if (!branchName) {
+      branchName = await this.getDefaultBranch();
+    }
+
+    try {
+      const response = await this.client.get(`/${this.config.project}/_apis/git/repositories/${this.repositoryId}/refs?filter=${branchName}&api-version=${this.config.apiVersion}`);
+
+      const branchRef = response.data.value.find(ref => ref.name === `refs/heads/${branchName}`);
+      
+      if (!branchRef) {
+        // If the requested branch doesn't exist, try to find any available branch
+        console.warn(`Branch '${branchName}' not found, looking for any available branch...`);
+        const allRefsResponse = await this.client.get(`/${this.config.project}/_apis/git/repositories/${this.repositoryId}/refs?filter=heads&api-version=${this.config.apiVersion}`);
+        
+        if (allRefsResponse.data.value.length > 0) {
+          const availableBranch = allRefsResponse.data.value[0];
+          const availableBranchName = availableBranch.name.replace('refs/heads/', '');
+          console.log(`Using available branch: ${availableBranchName}`);
+          
+          // Update current branch to the available one
+          this.currentBranch = availableBranchName;
+          return availableBranch.objectId;
+        }
+        
+        throw new Error(`Branch '${branchName}' not found and no branches available`);
+      }
+
+      return branchRef.objectId;
+    } catch (error) {
+      console.error('Error getting latest commit:', error);
+      throw error;
+    }
+  }
+
+  // Get the default branch for the repository
+  async getDefaultBranch() {
+    if (!this.repositoryId) {
+      await this.getRepositoryId();
+    }
+
+    try {
+      // First try to get repository info to find default branch
+      const repoResponse = await this.client.get(`/${this.config.project}/_apis/git/repositories/${this.repositoryId}?api-version=${this.config.apiVersion}`);
+      
+      if (repoResponse.data.defaultBranch) {
+        const defaultBranchName = repoResponse.data.defaultBranch.replace('refs/heads/', '');
+        console.log(`Repository reports default branch: ${defaultBranchName}`);
+        
+        // Verify this branch actually exists
+        const refsResponse = await this.client.get(`/${this.config.project}/_apis/git/repositories/${this.repositoryId}/refs?filter=${defaultBranchName}&api-version=${this.config.apiVersion}`);
+        
+        if (refsResponse.data.value.length > 0) {
+          this.currentBranch = defaultBranchName;
+          console.log(`Using repository default branch: ${defaultBranchName}`);
+          return defaultBranchName;
+        } else {
+          console.warn(`Repository default branch '${defaultBranchName}' not found in refs`);
+        }
+      }
+
+      // Fallback: get all branches and use the first one
+      console.log('Falling back to first available branch...');
+      const allRefsResponse = await this.client.get(`/${this.config.project}/_apis/git/repositories/${this.repositoryId}/refs?filter=heads&api-version=${this.config.apiVersion}`);
+      
+      console.log(`Found ${allRefsResponse.data.value.length} branches:`, allRefsResponse.data.value.map(ref => ref.name));
+      
+      if (allRefsResponse.data.value.length > 0) {
+        const defaultBranch = allRefsResponse.data.value[0];
+        const defaultBranchName = defaultBranch.name.replace('refs/heads/', '');
+        this.currentBranch = defaultBranchName;
+        console.log(`Using first available branch as default: ${defaultBranchName}`);
+        return defaultBranchName;
+      }
+      
+      throw new Error('No branches found in repository');
+    } catch (error) {
+      console.error('Error getting default branch:', error);
+      throw error;
+    }
+  }
+
+  // Get file content from repository
+  async getFileContent(filePath, branchName = null) {
+    if (!this.repositoryId) {
+      await this.getRepositoryId();
+    }
+
+    try {
+      // Use current branch if no branch specified
+      if (!branchName) {
+        branchName = this.currentBranch || await this.getDefaultBranch();
+      }
+
+      const latestCommit = await this.getLatestCommit(branchName);
+      
+      const response = await this.client.get(`/${this.config.project}/_apis/git/repositories/${this.repositoryId}/items?path=${encodeURIComponent(filePath)}&includeContent=true&versionDescriptor.version=${branchName}&api-version=7.1`);
+
+      return {
+        content: response.data.content,
+        commitId: response.data.objectId || latestCommit,
+        path: filePath,
+        size: response.data.size
+      };
+    } catch (error) {
+      if (error.response?.status === 404) {
+        return null; // File doesn't exist
+      }
+      console.error('Error getting file content:', error);
+      throw error;
+    }
+  }
+
+  // Get repository file tree
+  async getFileTree(branchName = null, path = '/') {
+    if (!this.repositoryId) {
+      await this.getRepositoryId();
+    }
+
+    try {
+      // Use current branch if no branch specified
+      if (!branchName) {
+        branchName = this.currentBranch || await this.getDefaultBranch();
+      }
+
+      const latestCommit = await this.getLatestCommit(branchName);
+      
+      const response = await this.client.get(`/${this.config.project}/_apis/git/repositories/${this.repositoryId}/items?path=${encodeURIComponent(path)}&version=${latestCommit}&recursionLevel=OneLevel&api-version=${this.config.apiVersion}`);
+
+      return response.data.children?.map(item => ({
+        name: item.path.split('/').pop(),
+        path: item.path,
+        type: item.isFolder ? 'folder' : 'file',
+        size: item.size,
+        commitId: item.commitId
+      })) || [];
+    } catch (error) {
+      console.error('Error getting file tree:', error);
+      throw error;
+    }
+  }
+
+  // Build hierarchical file tree structure
+  buildFileTree(items) {
+    console.log('Building file tree from items:', items);
+    const tree = [];
+    const pathMap = new Map();
+
+    // First pass: create all nodes
+    items.forEach(item => {
+      const pathParts = item.path.split('/').filter(part => part !== '');
+      const node = {
+        name: pathParts[pathParts.length - 1] || item.path,
+        path: item.path,
+        type: item.isFolder ? 'folder' : 'file',
+        size: item.size || 0,
+        commitId: item.objectId,
+        children: item.isFolder ? [] : undefined,
+        isExpanded: false
+      };
+      
+      console.log('Created node:', node);
+      pathMap.set(item.path, node);
+    });
+
+    // Second pass: build hierarchy
+    items.forEach(item => {
+      const node = pathMap.get(item.path);
+      const pathParts = item.path.split('/').filter(part => part !== '');
+      
+      if (pathParts.length === 1) {
+        // Root level item
+        console.log('Adding root level item:', node.name);
+        tree.push(node);
+      } else {
+        // Find parent folder - build parent path correctly
+        const parentPathParts = pathParts.slice(0, -1);
+        const parentPath = '/' + parentPathParts.join('/');
+        
+        let parent = pathMap.get(parentPath);
+        
+        console.log('Looking for parent:', parentPath, 'for child:', node.path, 'found:', parent);
+        if (parent && parent.children) {
+          console.log('Adding child', node.name, 'to parent', parent.name);
+          parent.children.push(node);
+        } else {
+          console.log('Parent not found for:', node.path, 'parentPath:', parentPath);
+        }
+      }
+    });
+
+    // Sort folders first, then files
+    const sortItems = (items) => {
+      items.sort((a, b) => {
+        if (a.type === 'folder' && b.type === 'file') return -1;
+        if (a.type === 'file' && b.type === 'folder') return 1;
+        return a.name.localeCompare(b.name);
+      });
+      
+      items.forEach(item => {
+        if (item.children) {
+          sortItems(item.children);
+        }
+      });
+    };
+
+    sortItems(tree);
+    console.log('Final tree structure:', JSON.stringify(tree, null, 2));
+    return tree;
+  }
+
+  // Get all files recursively from repository
+  async getAllFiles(branchName = null, path = '/') {
+    if (!this.repositoryId) {
+      await this.getRepositoryId();
+    }
+
+    try {
+      // Use current branch if no branch specified
+      if (!branchName) {
+        branchName = this.currentBranch || await this.getDefaultBranch();
+      }
+
+      const latestCommit = await this.getLatestCommit(branchName);
+      
+      // Try different API approaches for getting files
+      try {
+        // First try: Get items with recursionLevel=Full using versionDescriptor
+        const response = await this.client.get(`/${this.config.project}/_apis/git/repositories/${this.repositoryId}/items?recursionLevel=Full&versionDescriptor.version=${branchName}&api-version=7.1`);
+
+        // Create hierarchical structure with both folders and files
+        if (response.data.value) {
+          console.log(`Found ${response.data.value.length} items via Full recursion`);
+          return this.buildFileTree(response.data.value);
+        }
+      } catch (firstError) {
+        console.warn('Full recursion failed, trying OneLevel:', firstError.message);
+        
+        try {
+          // Second try: Get items with recursionLevel=OneLevel using versionDescriptor
+          const response = await this.client.get(`/${this.config.project}/_apis/git/repositories/${this.repositoryId}/items?recursionLevel=OneLevel&versionDescriptor.version=${branchName}&api-version=7.1`);
+          
+          if (response.data.value) {
+            console.log(`Found ${response.data.value.length} items via OneLevel recursion`);
+            return this.buildFileTree(response.data.value);
+          }
+        } catch (secondError) {
+          console.warn('OneLevel recursion failed, trying commits approach:', secondError.message);
+          
+          try {
+            // Third try: Get files from commits
+            const commitsResponse = await this.client.get(`/${this.config.project}/_apis/git/repositories/${this.repositoryId}/commits/${latestCommit}/changes?api-version=${this.config.apiVersion}`);
+            
+            if (commitsResponse.data.changeCounts) {
+              console.log('Found files via commit changes:', Object.keys(commitsResponse.data.changeCounts));
+              // Return a simplified file list based on commit changes
+              return Object.keys(commitsResponse.data.changeCounts).map(filePath => ({
+                name: filePath.split('/').pop(),
+                path: filePath,
+                type: 'file',
+                size: 0,
+                commitId: latestCommit
+              }));
+            }
+          } catch (thirdError) {
+            console.warn('Commits approach failed, trying tree approach:', thirdError.message);
+            
+            try {
+              // Fourth try: Get tree items
+              const treeResponse = await this.client.get(`/${this.config.project}/_apis/git/repositories/${this.repositoryId}/trees/${latestCommit}?api-version=${this.config.apiVersion}`);
+              
+              if (treeResponse.data.treeEntries) {
+                console.log('Found files via tree entries:', treeResponse.data.treeEntries.length);
+                return treeResponse.data.treeEntries
+                  .filter(item => item.gitObjectType === 'blob')
+                  .map(item => ({
+                    name: item.relativePath.split('/').pop(),
+                    path: item.relativePath,
+                    type: 'file',
+                    size: item.size || 0,
+                    commitId: latestCommit
+                  }));
+              }
+            } catch (fourthError) {
+              console.warn('Tree approach failed, trying commits approach:', fourthError.message);
+              
+              // Fifth try: Get files from recent commits
+              try {
+                const filesFromCommits = await this.getFilesFromCommits(branchName, 3);
+                if (filesFromCommits.length > 0) {
+                  console.log('Found files via commits approach');
+                  return filesFromCommits;
+                }
+              } catch (fifthError) {
+                console.warn('Commits approach failed:', fifthError.message);
+              }
+            }
+          }
+        }
+      }
+      
+      // If all API approaches fail, return some sample files for demonstration
+      console.warn('All file retrieval methods failed, returning sample files for demonstration');
+      return [
+        { name: 'README.md', path: '/README.md', type: 'file', size: 1024, commitId: latestCommit },
+        { name: 'package.json', path: '/package.json', type: 'file', size: 512, commitId: latestCommit },
+        { name: 'index.js', path: '/index.js', type: 'file', size: 2048, commitId: latestCommit }
+      ];
+    } catch (error) {
+      console.error('Error getting all files:', error);
+      // Return sample files even on complete failure
+      return [
+        { name: 'README.md', path: '/README.md', type: 'file', size: 1024, commitId: 'sample' },
+        { name: 'package.json', path: '/package.json', type: 'file', size: 512, commitId: 'sample' },
+        { name: 'index.js', path: '/index.js', type: 'file', size: 2048, commitId: 'sample' }
+      ];
+    }
+  }
+
+  // Push changes to repository
+  async pushChanges(filePath, content, commitMessage, branchName = null) {
+    if (!this.repositoryId) {
+      await this.getRepositoryId();
+    }
+
+    try {
+      // Use current branch if no branch specified
+      if (!branchName) {
+        branchName = this.currentBranch || await this.getDefaultBranch();
+      }
+
+      // Get current commit ID
+      const currentCommitId = await this.getLatestCommit(branchName);
+      
+      // Create push payload
+      const pushPayload = {
+        refUpdates: [{
+          name: `refs/heads/${branchName}`,
+          oldObjectId: currentCommitId
+        }],
+        commits: [{
+          comment: commitMessage,
+          changes: [{
+            changeType: 'edit',
+            item: {
+              path: filePath
+            },
+            newContent: {
+              content: content,
+              contentType: 'rawtext'
+            }
+          }]
+        }]
+      };
+
+      const response = await this.client.post(`/${this.config.project}/_apis/git/repositories/${this.repositoryId}/pushes?api-version=${this.config.apiVersion}`, pushPayload);
+
+      this.baseCommitId = response.data.refUpdates[0].newObjectId;
+      
+      return {
+        success: true,
+        commitId: response.data.refUpdates[0].newObjectId,
+        pushId: response.data.pushId
+      };
+    } catch (error) {
+      if (error.response?.status === 409) {
+        // Conflict detected
+        throw new Error(`CONFLICT: ${error.response.data.message || 'Merge conflict detected'}`);
+      }
+      console.error('Error pushing changes:', error);
+      throw error;
+    }
+  }
+
+  // Detect merge conflicts
+  async detectConflicts(filePath, branchName = null) {
+    try {
+      // Use current branch if no branch specified
+      if (!branchName) {
+        branchName = this.currentBranch || await this.getDefaultBranch();
+      }
+
+      const currentCommitId = await this.getLatestCommit(branchName);
+      
+      // If base commit differs from current commit, there might be conflicts
+      if (this.baseCommitId && this.baseCommitId !== currentCommitId) {
+        return {
+          hasConflicts: true,
+          currentCommitId,
+          baseCommitId: this.baseCommitId,
+          message: 'Branch has been updated by another user'
+        };
+      }
+      
+      return { hasConflicts: false };
+    } catch (error) {
+      console.error('Error detecting conflicts:', error);
+      throw error;
+    }
+  }
+
+  // Get commit history
+  async getCommitHistory(branchName = null, top = 10) {
+    if (!this.repositoryId) {
+      await this.getRepositoryId();
+    }
+
+    try {
+      // Use current branch if no branch specified
+      if (!branchName) {
+        branchName = this.currentBranch || await this.getDefaultBranch();
+      }
+
+      const response = await this.client.get(`/${this.config.project}/_apis/git/repositories/${this.repositoryId}/commits?searchCriteria.itemVersion.version=${branchName}&searchCriteria.$top=${top}&api-version=${this.config.apiVersion}`);
+
+      return response.data.value.map(commit => ({
+        commitId: commit.commitId,
+        author: commit.author.name,
+        email: commit.author.email,
+        date: commit.author.date,
+        message: commit.comment,
+        url: commit.url
+      }));
+    } catch (error) {
+      console.error('Error getting commit history:', error);
+      throw error;
+    }
+  }
+
+  // Get files from recent commits (alternative approach)
+  async getFilesFromCommits(branchName = null, maxCommits = 5) {
+    if (!this.repositoryId) {
+      await this.getRepositoryId();
+    }
+
+    try {
+      if (!branchName) {
+        branchName = this.currentBranch || await this.getDefaultBranch();
+      }
+
+      // Get recent commits
+      const commitsResponse = await this.client.get(`/${this.config.project}/_apis/git/repositories/${this.repositoryId}/commits?searchCriteria.itemVersion.version=${branchName}&searchCriteria.$top=${maxCommits}&api-version=${this.config.apiVersion}`);
+      
+      const allFiles = new Set();
+      
+      // Get files from each commit
+      for (const commit of commitsResponse.data.value) {
+        try {
+          const changesResponse = await this.client.get(`/${this.config.project}/_apis/git/repositories/${this.repositoryId}/commits/${commit.commitId}/changes?api-version=${this.config.apiVersion}`);
+          
+          if (changesResponse.data.changeCounts) {
+            Object.keys(changesResponse.data.changeCounts).forEach(filePath => {
+              allFiles.add(filePath);
+            });
+          }
+        } catch (changeError) {
+          console.warn(`Failed to get changes for commit ${commit.commitId}:`, changeError.message);
+        }
+      }
+      
+      console.log(`Found ${allFiles.size} unique files from recent commits`);
+      return Array.from(allFiles).map(filePath => ({
+        name: filePath.split('/').pop(),
+        path: filePath,
+        type: 'file',
+        size: 0,
+        commitId: commitsResponse.data.value[0]?.commitId || 'unknown'
+      }));
+    } catch (error) {
+      console.error('Error getting files from commits:', error);
+      return [];
+    }
+  }
+
+  // Get branches
+  async getBranches() {
+    if (!this.repositoryId) {
+      await this.getRepositoryId();
+    }
+
+    try {
+      const response = await this.client.get(`/${this.config.project}/_apis/git/repositories/${this.repositoryId}/refs?filter=heads&api-version=${this.config.apiVersion}`);
+
+      const branches = response.data.value.map(ref => ({
+        name: ref.name.replace('refs/heads/', ''),
+        objectId: ref.objectId,
+        url: ref.url
+      }));
+      
+      console.log(`Found ${branches.length} branches:`, branches.map(b => b.name));
+      return branches;
+    } catch (error) {
+      console.error('Error getting branches:', error);
+      throw error;
+    }
+  }
+
+  // Setup webhook for live updates
+  async setupWebhook() {
+    if (!this.repositoryId) {
+      await this.getRepositoryId();
+    }
+
+    try {
+      const webhookPayload = {
+        publisherId: 'tfs',
+        eventType: 'git.push',
+        resourceVersion: '1.0',
+        consumerId: 'webHooks',
+        consumerActionId: 'httpRequest',
+        consumerInputs: {
+          url: this.webhookEndpoint
+        },
+        resourceFilters: [{
+          repository: this.repositoryId
+        }]
+      };
+
+      const response = await this.client.post(`/${this.config.project}/_apis/hooks/subscriptions?api-version=${this.config.apiVersion}`, webhookPayload);
+
+      console.log('Webhook setup successful:', response.data);
+      return response.data;
+    } catch (error) {
+      console.warn('Webhook setup failed (this is optional):', error.message);
+      // Don't throw error for webhook failures - it's optional functionality
+      return null;
+    }
+  }
+
+  // Connect to WebSocket for live updates
+  connectWebSocket(onUpdate) {
+    try {
+      const wsUrl = `ws://${window.location.hostname}:3001`;
+      this.webSocket = new WebSocket(wsUrl);
+      
+      this.webSocket.onopen = () => {
+        console.log('WebSocket connected for Git updates');
+        // Subscribe to repository updates
+        this.webSocket.send(JSON.stringify({
+          type: 'subscribe',
+          repositoryId: this.repositoryId
+        }));
+      };
+      
+      this.webSocket.onmessage = (event) => {
+        try {
+          const data = JSON.parse(event.data);
+          if (data.type === 'git.push' && data.repositoryId === this.repositoryId) {
+            onUpdate(data);
+          }
+        } catch (error) {
+          console.error('Error parsing WebSocket message:', error);
+        }
+      };
+      
+      this.webSocket.onclose = () => {
+        console.log('WebSocket disconnected');
+        // Attempt to reconnect after 5 seconds
+        setTimeout(() => {
+          if (this.webSocket.readyState === WebSocket.CLOSED) {
+            this.connectWebSocket(onUpdate);
+          }
+        }, 5000);
+      };
+      
+      this.webSocket.onerror = (error) => {
+        console.error('WebSocket error:', error);
+      };
+    } catch (error) {
+      console.error('Error connecting to WebSocket:', error);
+    }
+  }
+
+  // Disconnect WebSocket
+  disconnectWebSocket() {
+    if (this.webSocket) {
+      this.webSocket.close();
+      this.webSocket = null;
+    }
+  }
+
+  // Test connection
+  async testConnection() {
+    try {
+      console.log('Testing Git service connection...');
+      await this.getRepositoryId();
+      console.log('Repository ID obtained:', this.repositoryId);
+      
+      // Get default branch first
+      const defaultBranch = await this.getDefaultBranch();
+      console.log('Default branch determined:', defaultBranch);
+      
+      await this.getLatestCommit();
+      console.log('Latest commit obtained for branch:', this.currentBranch);
+      
+      return { 
+        success: true, 
+        message: `Git service connection successful. Using branch: ${this.currentBranch}` 
+      };
+    } catch (error) {
+      console.error('Git service connection test failed:', error);
+      return { success: false, message: error.message };
+    }
+  }
+}
+
+const gitService = new GitService();
+export default gitService;
+
+
+
+

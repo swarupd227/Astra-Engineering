@@ -1,0 +1,42 @@
+Previewing repository: insurance-claims-management
+injected.js:27 🎨 Rendering starterCode tab: {isStarterLoading: false, hasError: false, hasTree: true, childrenCount: 11, children: Array(11)}
+injected.js:27 ✅ Rendering 11 framework folders
+injected.js:27 📁 Rendering root folder: compliance, expanded: true, children: 3
+injected.js:27 📁 Rendering root folder: data, expanded: true, children: 1
+injected.js:27 📁 Rendering root folder: deployment, expanded: true, children: 1
+injected.js:27 📁 Rendering root folder: docs, expanded: true, children: 3
+injected.js:27 📁 Rendering root folder: requirements, expanded: true, children: 3
+injected.js:27 📁 Rendering root folder: src, expanded: true, children: 2
+keyboard-shortcuts.js:214 Extension keyboard shortcuts loaded. Available shortcuts:
+keyboard-shortcuts.js:215 - Alt+C: Toggle Copy Mode
+keyboard-shortcuts.js:216 - Alt+A: Toggle Absolute Mode
+keyboard-shortcuts.js:217 - Alt+O: Trigger OCR Mode
+injected.js:27 🐛 Render state: {activeTab: 'repository', isStarterLoading: false, hasStarterCodeTree: true, starterCodeChildren: 11, starterCodeError: 'none'}
+injected.js:27 🎨 Rendering starterCode tab: {isStarterLoading: false, hasError: false, hasTree: true, childrenCount: 11, children: Array(11)}
+injected.js:27 ✅ Rendering 11 framework folders
+injected.js:27 📁 Rendering root folder: compliance, expanded: true, children: 3
+injected.js:27 📁 Rendering root folder: data, expanded: true, children: 1
+injected.js:27 📁 Rendering root folder: deployment, expanded: true, children: 1
+injected.js:27 📁 Rendering root folder: docs, expanded: true, children: 3
+injected.js:27 📁 Rendering root folder: requirements, expanded: true, children: 3
+injected.js:27 📁 Rendering root folder: src, expanded: true, children: 2
+injected.js:27 🎨 Rendering starterCode tab: {isStarterLoading: false, hasError: false, hasTree: true, childrenCount: 11, children: Array(11)}
+injected.js:27 ✅ Rendering 11 framework folders
+injected.js:27 📁 Rendering root folder: compliance, expanded: true, children: 3
+injected.js:27 📁 Rendering root folder: data, expanded: true, children: 1
+injected.js:27 📁 Rendering root folder: deployment, expanded: true, children: 1
+injected.js:27 📁 Rendering root folder: docs, expanded: true, children: 3
+injected.js:27 📁 Rendering root folder: requirements, expanded: true, children: 3
+injected.js:27 📁 Rendering root folder: src, expanded: true, children: 2
+injected.js:27 🐛 Render state: {activeTab: 'starterCode', isStarterLoading: false, hasStarterCodeTree: true, starterCodeChildren: 11, starterCodeError: 'none'}
+injected.js:27 📁 Rendering root folder: Angular_starter_code, expanded: true, children: 12
+injected.js:27 📁 Rendering root folder: Django_starter_code, expanded: true, children: 12
+injected.js:27 📁 Rendering root folder: Dotnet_starter_code, expanded: true, children: 5
+injected.js:27 📁 Rendering root folder: FastAPI_starter_code, expanded: true, children: 7
+injected.js:27 📁 Rendering root folder: Flask_starter_code, expanded: true, children: 8
+injected.js:27 📁 Rendering root folder: Flutter_starter_code, expanded: true, children: 6
+injected.js:27 📁 Rendering root folder: Java_starter_code, expanded: true, children: 6
+injected.js:27 📁 Rendering root folder: NextJs_starter_code, expanded: true, children: 8
+injected.js:27 📁 Rendering root folder: Nodejs_starter_code, expanded: true, children: 8
+injected.js:27 📁 Rendering root folder: React_native_starter_code, expanded: true, children: 7
+injected.js:27 📁 Rendering root folder: React_starter_code, expanded: true, children: 12

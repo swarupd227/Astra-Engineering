@@ -1,0 +1,40 @@
+You are enhancing the “Design Phase” of the SDLC dashboard.
+
+All UI elements (buttons, dropdowns, and modal) already exist.
+
+Your task:
+Make the **Generate Design** workflow fully functional and connected to Azure DevOps (ADO).
+
+Workflow:
+1. When the user clicks **Generate Design**, the modal opens with a dropdown (System Architecture, Database Design, Component Design) and a document input field.
+2. When the user submits:
+   - Fetch the requirement/analysis document details directly from Azure DevOps (ADO) if available.
+   - If ADO documents are not accessible, allow the user to paste their own doc into the prompt box.
+3. Based on the selected dropdown option:
+   - “System Architecture” → Generate architectural layout and update it inside the **System Architecture** section.
+   - “Database Design” → Generate ERD details, tables, and normalization info inside the **Database Design** section.
+   - “Component Design” → Generate module/component structure and update it inside the **Component Design** section.
+4. Each generated item should be displayed as a small card with:
+   - Preview button (shows summary)
+   - Download button (exports as file)
+5. Automatically store all generated outputs within the Design Phase so they persist even after reload.
+6. Keep the existing UI structure, cards, and progress tracker untouched.
+7. If connected to ADO:
+   - Pull requirement artifacts or documentation for the active project.
+   - Use them as input for generating each design section dynamically.
+   - Sync updates back to the corresponding ADO work item or wiki page.
+
+Behavior expectations:
+✅ Maintain the dark modern UI.  
+✅ Do not replace or rearrange existing elements.  
+✅ Ensure all generated designs appear in the correct sections.  
+✅ Reflect fetched ADO document names or IDs when data is sourced from ADO.  
+✅ Allow manual input if ADO connection is not established.  
+✅ Maintain smooth transitions when new content is added.
+
+End goal:
+When a project is connected to Azure DevOps, the **Generate Design** button should:
+- Detect available documentation from ADO,
+- Generate detailed design content (system, database, or component),
+- Place it in the appropriate section with preview/download options,
+- And persist it locally for review under the Design Phase.

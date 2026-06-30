@@ -1,0 +1,101 @@
+Design and implement an interactive Development Phase card that automates code setup and confirmation flow.
+The phase should simulate backend logic for creating repositories, generating code, tracking commits, and progressing toward build readiness.
+
+🧩 Functional Flow
+
+Step 1 — “Create Repo” Button
+
+On click:
+
+Auto-create a new repository named after the current project (e.g., project-name-repo).
+
+Display repo name and link in the panel.
+
+Initialize two branches:
+
+main (stable branch)
+
+dev (development branch)
+
+Pull approved design assets from the Golden Repo.
+
+Auto-generate initial code and push to the dev branch.
+
+Log the first commit with timestamp and summary.
+
+Update the Development Phase dashboard:
+
+🔗 Repository: project-name-repo
+
+🌿 Branches: main, dev
+
+💾 Commits: 1 (auto-generated)
+
+📁 Code: Generated and pushed to dev
+
+👁️ Preview: Show “Local Preview” link with generated output summary.
+
+Step 2 — Progress Tracker
+
+Display a dynamic progress bar updating as each sub-step completes:
+
+Repo created → 20%
+
+Branches created → 20%
+
+Code generated → 30%
+
+Commit logged → 20%
+
+Preview ready → 10%
+
+Progress label example: Development Progress: 90%.
+
+Step 3 — “View Checkpoint” Button
+
+When clicked:
+
+Open a modal showing a Development Summary View:
+
+Repository: project-name-repo
+Branches: [main, dev]
+Commits: 3
+Code: Pushed to dev branch
+Local Preview: Active
+
+
+Display confirmation checklist for reviewers (Business / Technical / QA).
+
+Include “Ready to Build” button to finalize confirmation.
+
+Step 4 — “Ready to Build” Button
+
+When clicked:
+
+Validates if all 3 confirmations are received.
+
+Marks Development Phase as ✅ Complete.
+
+Triggers automated transition to Integration Phase.
+
+Displays message: “Development confirmed — proceeding to Integration setup.”
+
+🧠 Additional Logic & Display
+
+Each action (repo creation, branch setup, commit, preview) should log a timestamp.
+
+Sync all updates with ADO work items and Golden Repo metadata.
+
+Show overall Development Phase summary in structured format:
+
+{
+  "phase": "Development",
+  "repository": "project-name-repo",
+  "branches": ["main", "dev"],
+  "commits": 3,
+  "preview": "active",
+  "status": "Ready to Build"
+}
+
+
+⚙️ Goal: Enable one-click automation from repo creation to build readiness, ensuring full visibility, traceability, and confirmation before Integration Phase.

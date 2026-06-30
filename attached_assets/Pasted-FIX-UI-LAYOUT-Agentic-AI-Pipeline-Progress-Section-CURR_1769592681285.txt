@@ -1,0 +1,38 @@
+FIX UI LAYOUT: Agentic AI Pipeline Progress Section
+
+CURRENT ISSUE:
+The "Agentic AI Pipeline" progress card has too much black/empty space on the left and right sides. The agent workflow icons (Orchi → Story Analy → Planr → Gene → QA Refin → Scrip Gene) are cramped in a narrow container while there's wasted space on both sides.
+
+REQUIRED CHANGES:
+
+1. EXPAND THE PIPELINE CONTAINER WIDTH:
+   - Change the pipeline card container from max-w-2xl or max-w-3xl to max-w-6xl or max-w-7xl
+   - Or use w-full with appropriate padding (px-4 or px-6)
+   - The container should utilize at least 85-90% of the available screen width
+
+2. SPREAD THE AGENT ICONS HORIZONTALLY:
+   - The 6 agent icons (Orchestrator, Story Analyzer, Planner, Generator, QA Refiner, Script Generator) should be evenly distributed across the full width
+   - Use flex with justify-between or grid with grid-cols-6 for equal spacing
+   - Each agent card should have more breathing room
+
+3. REDUCE OUTER MARGINS:
+   - Reduce the left and right margins/padding on the parent container
+   - Change mx-auto with narrow max-width to a wider layout
+   - Keep minimal padding (px-4 to px-8) but maximize usable width
+
+4. MAKE IT RESPONSIVE:
+   - On large screens (lg/xl): Show all 6 agents in a single row with good spacing
+   - On medium screens (md): Can still show all 6 but slightly smaller
+   - On small screens (sm): Allow horizontal scroll or 2 rows of 3
+
+LOOK FOR THESE CSS CLASSES TO MODIFY:
+- Container classes: max-w-2xl, max-w-3xl, max-w-4xl → change to max-w-6xl or max-w-7xl
+- Margin classes: mx-8, mx-12, mx-auto → reduce to mx-4 or mx-auto with wider max-width
+- The pipeline card wrapper and the agent icons grid/flex container
+
+EXPECTED RESULT:
+- Pipeline progress card spans wider across the screen
+- All 6 agent icons are clearly visible with proper spacing between them
+- No wasted black space on left and right sides
+- Agent status labels (Processing, Done, Pending) and timing info (~5s, ~15s) are easily readable
+- The Orchestrator and Planner detail cards below should also expand to match the wider layout

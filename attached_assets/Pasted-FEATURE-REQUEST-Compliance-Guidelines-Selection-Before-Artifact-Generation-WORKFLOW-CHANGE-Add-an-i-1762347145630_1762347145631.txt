@@ -1,0 +1,101 @@
+FEATURE REQUEST: Compliance Guidelines Selection Before Artifact Generation
+WORKFLOW CHANGE
+Add an intermediate step in the Workflow page where users can select compliance guideline files from their Golden Repository before starting the conversation.
+Current Flow:
+Golden Repo → SDLC Page → Click Workflow → Start Conversation → Generate Artifacts
+New Flow:
+Golden Repo → SDLC Page → Click Workflow → Select Guidelines Modal → Start Conversation → Generate Artifacts (with compliance)
+
+REQUIREMENTS
+1. Pass ADO Credentials Through Navigation
+When user clicks "Create SDLC Project" from Golden Repo, pass these credentials to SDLC page and then to Workflow page:
+
+PAT Token
+Organization URL
+Project Name
+Repository ID
+
+2. Compliance Guidelines Selection Modal
+When user lands on Workflow page, automatically show a modal with:
+Left Panel: Repository Tree Structure
+
+Fetch and display folder/file tree from Azure DevOps repository using provided credentials
+API: GET {orgUrl}/{project}/_apis/git/repositories/{repoId}/items?scopePath=/&recursionLevel=Full&api-version=7.0
+Show only .md (Markdown) files as selectable
+Display folders as expandable/collapsible
+Support multi-select with checkboxes
+
+Right Panel: Selected Files List
+
+Show selected files with name and path
+Allow removing selected files
+Display count of selected files
+
+Modal Actions:
+
+"Skip" button - Close modal and start conversation without guidelines
+"Apply Guidelines ({count})" button - Disabled if no files selected
+Fetch content of selected files from ADO
+API: GET {orgUrl}/{project}/_apis/git/repositories/{repoId}/items?path={filePath}&api-version=7.0
+
+3. Display Selected Guidelines
+After modal closes with guidelines selected:
+
+Show selected guidelines as chips/tags below Tia Bot welcome message
+Add "Edit Guidelines" button in header to reopen modal
+Show count: "3 Compliance Guidelines Active"
+
+4. Inject Guidelines into OpenAI Prompt
+When generating artifacts, add this to system prompt:
+COMPLIANCE REQUIREMENTS:
+
+You must strictly follow these ${count} compliance guideline documents from the organization's Golden Repository:
+
+${guidelines.map(g => `
+=== ${g.name} ===
+${g.content}
+===================
+`).join('\n')}
+
+All generated epics, user stories, and subtasks MUST:
+- Adhere to requirements specified in these guidelines
+- Include compliance validation in acceptance criteria
+- Reference guidelines when applicable (e.g., "As per Security Guidelines...")
+- Include compliance-related subtasks
+
+Validate all artifacts against these guidelines before finalizing.
+5. Error Handling
+Display appropriate error messages for:
+
+Invalid/missing ADO credentials → "Please select a Golden Repository first"
+Authentication failures (401) → "Invalid PAT token"
+Repository not found (404) → "Repository not found"
+Permission denied (403) → "PAT token needs Code (Read) permission"
+Network errors → "Failed to load repository. Please try again"
+Files too large → "Maximum 10 files, 500KB each, 2MB total"
+
+6. Optional Enhancements
+
+Search/filter files by name in tree
+File preview pane showing markdown content
+Persist selected guidelines in session for page refreshes
+Loading spinners during API calls
+
+
+ACCEPTANCE CRITERIA
+
+ ADO credentials pass from Golden Repo → SDLC → Workflow pages
+ Modal opens automatically on Workflow page load (if credentials exist)
+ Repository tree structure displays with folders and .md files
+ User can select multiple markdown files
+ Selected files show in right panel with remove option
+ "Apply Guidelines" fetches file contents from ADO
+ Selected guidelines display as chips/tags in Workflow UI
+ User can edit guidelines anytime via button
+ Guidelines content is injected into OpenAI system prompt
+ Generated artifacts reflect compliance requirements
+ All error scenarios handled with user-friendly messages
+ Works responsively on desktop and mobile
+
+
+Goal: Generated artifacts (epics, features, user stories, subtasks) automatically follow the compliance guidelines and standards documented in the selected markdown files from the Golden Repository.

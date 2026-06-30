@@ -1,0 +1,15 @@
+# Optional remote state — copy to backend.tf for teams sharing one AWS account.
+# Replace bucket, key, region, and DynamoDB table with values in YOUR account.
+#
+#   cp backend.tf.example backend.tf
+#   terraform init -migrate-state
+
+# terraform {
+#   backend "s3" {
+#     bucket         = "your-org-terraform-state"
+#     key            = "devx/eks/terraform.tfstate"
+#     region         = "us-east-1"
+#     dynamodb_table = "terraform-locks"
+#     encrypt        = true
+#   }
+# }

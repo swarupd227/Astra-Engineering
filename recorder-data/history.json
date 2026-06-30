@@ -1,0 +1,31 @@
+[
+  {
+    "id": "run-1778735944007-xrufi",
+    "testId": "1778735904192-2vkti7",
+    "testName": "Click on \"ServicesDigital Product EngineeringTransforming ou",
+    "status": "failed",
+    "duration": 2542,
+    "environment": "default",
+    "errorMessage": "    Error: browserType.launch: Executable doesn't exist at C:\\Users\\dishabl.NOUSINFO\\AppData\\Local\\ms-playwright\\chromium-1217\\chrome-win64\\chrome.exe",
+    "runAt": 1778735944007
+  },
+  {
+    "id": "run-1778736828037-h712n",
+    "testId": "1778735904192-2vkti7",
+    "testName": "Click on \"ServicesDigital Product EngineeringTransforming ou",
+    "status": "failed",
+    "duration": 6429,
+    "environment": "default",
+    "errorMessage": "    Error: browserType.launch: Executable doesn't exist at C:\\Users\\dishabl.NOUSINFO\\AppData\\Local\\ms-playwright\\chromium-1217\\chrome-win64\\chrome.exe",
+    "runAt": 1778736828037
+  },
+  {
+    "id": "run-1778737019940-6xjwl",
+    "testId": "1778735904192-2vkti7",
+    "testName": "Click on \"ServicesDigital Product EngineeringTransforming ou",
+    "status": "passed",
+    "duration": 19949,
+    "environment": "default",
+    "runAt": 1778737019940
+  }
+]

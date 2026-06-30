@@ -1,0 +1,52 @@
+# DevPlatform - Multi-Tenant Web Development Platform
+
+## Overview
+
+DevPlatform is a multi-tenant web development platform inspired by Linear, GitHub, and GitLab, designed to streamline development processes and enhance collaboration. It manages organizations, projects, and golden repository templates, featuring an AI-powered SDLC workflow system that transforms requirements into agile artifacts and generates design guidelines. The platform integrates with cloud DevOps and includes a comprehensive Hub for artifact management, integrations, knowledge base, persona management, and an AI-powered prompt library.
+
+## User Preferences
+
+Preferred communication style: Simple, everyday language.
+
+## System Architecture
+
+### UI/UX Decisions
+The frontend is a React SPA built with `shadcn/ui` (New York style) on Radix UI, styled with Tailwind CSS. It offers an enterprise-grade aesthetic with dark mode, Inter font for UI, JetBrains Mono for code, and is responsive for mobile and desktop with a collapsible sidebar.
+
+### Centralized Settings Management
+A session-based settings cache using React Context (`SettingsProvider`) fetches all settings tables once on app load and maintains them in memory, eliminating redundant API calls and providing instant access. Settings include ADO, Golden Repo, Artifact, Conversational UI, Workflow, and SDLC configurations.
+
+### Technical Implementations
+The frontend uses React 18.2.0, TypeScript, Vite, and Wouter for routing. State management is handled by React Context API and TanStack Query. The backend is an Express.js and TypeScript application using ESM, providing RESTful API endpoints and JSON-based communication.
+
+### Feature Specifications
+- **Multi-Tenancy:** Supports Organizations → Projects → Repositories hierarchy with tenant-based data isolation.
+- **AI Integration:** Utilizes Azure OpenAI for an Interactive Agile Story Assistant (Tia Bot) and an SDLC Workflow AI. The Conversational UI (Tia Bot) has dedicated Azure DevOps configuration separate from main ADO settings, allowing users to configure a specific organization and project for the chat agent. Features include intelligent Azure DevOps integration via OpenAI function calling, dynamic querying of ADO data, approval workflows for artifact creation, and real-time context updates. The system includes comprehensive Azure DevOps Context Awareness: (1) ADO settings automatically saved after successful DevOps Push, storing organization URL, project name, repository, and branch for future API reference, (2) `/api/ado-settings/backlog` endpoint fetches and groups existing backlog items (epics, features, user stories, tasks, bugs), (3) workflow AI service dynamically fetches backlog context and injects it into system prompt for duplicate detection, instructing the AI to avoid creating duplicate items and suggest building upon existing work. Work item creation follows a mandatory approval flow with smart context awareness: (1) gather information one question at a time, avoiding re-asking already provided info, (2) collect all metadata (Priority, Assignee, Story Points) before generation, (3) generate and show full story, (4) ask for user approval, (5) regenerate complete story if user adds information or requests changes, (6) show "Create in ADO" button only when user approves final version, (7) create when button is clicked. Content is properly separated into appropriate ADO fields (Description, Acceptance Criteria, Story Points, Priority, Assignee, Tags) with HTML formatting.
+- **Dynamic Work Item Management:** SDLC work items (Epics, User Stories, Requirements, Backlog, Documentation) are dynamically fetched from the DevPlatform database with phase-aware data fetching, real-time updates, and comprehensive states.
+- **Cloud DevOps Integration:** Full integration with Azure DevOps via its REST API for hierarchical work item creation and golden repository management.
+- **Golden Repository Management:** Supports 5 business domains with single repository selection, preview, live ADO integration, production-ready streaming download as ZIP, and comprehensive Azure DevOps repository forking.
+- **SDLC Phase Management:** A streamlined 6-phase system (Requirement & Analysis, Design, Development, Build & Testing, Deployment, Maintenance) with AI-powered documentation generation and CRUD for design assets. Phase 1 (Requirement & Analysis) features notification-style count badges showing item counts for User Stories, Requirements, and Documents. Design Phase (Phase 2) features 4 interactive design elements displayed as cards matching the Design Assets pattern: System Architecture, Database Design, UI/UX Design, and Component Design. Each design element has Preview and Download buttons (except UI/UX Design which only has View Figma button). The Design phase includes AI-powered design generation via "Generate with AI" button with enhanced Azure DevOps integration: (1) "Fetch from ADO" button retrieves Requirements, User Stories, and Tasks from Azure DevOps with comprehensive details (Description, Acceptance Criteria, Assigned To, Tags, Area Path, State), (2) intelligent fallback logic first attempts DevXPlatform/NousAugmentedDevX with ADO_PAT environment variable, automatically falling back to database ADO settings (NOUSBLR/GSS-COC-DEVX-FOCUS) on authentication failure, (3) fetched work items populate a dropdown for easy selection, auto-filling the requirement document textarea with formatted work item details, (4) supports both string and object formats for assignee fields from Azure DevOps API, (5) users can then generate comprehensive design documentation (System Architecture, Database Design, Component Design) from requirement documents using tailored AI prompts. Generated content is automatically stored in sdlcDesignAssets table and displayed with preview/download functionality. Development Phase (Phase 3) features: (1) prominent "Create Repo" button for easy repository creation, (2) AI-powered code generation from Azure DevOps user stories using Replit AI Integrations (gpt-5 model), (3) automated code commits to selected Azure DevOps repository branches via Git Push API, (4) commit tracking with branch information displayed in Commits section with branch badges, (5) stepwise progress tracking showing completed commits per branch.
+- **SDLC Phase Locking System:** Enforces sequential phase progression, with phases 2-6 unlocking automatically when the previous phase reaches 80% progress. Automatic progress calculation and phase unlocking based on category completion (Issues, Epics, Requirements, Backlog, Documentation) with visual indicators.
+- **AI Description Enhancement:** Work item edit dialogs include an "AI Enhance" button that uses OpenAI API to improve descriptions for user stories, requirements, and other work items. Requires OPENAI_API_KEY environment variable to be configured.
+- **Settings Page:** Comprehensive settings interface with tabs for Golden Repository, SDLC, Conversational UI, Workflow, and Hub Artifacts, all supporting multi-organization and CRUD operations with encrypted PAT token storage. The Conversational UI settings tab allows users to configure dedicated Azure DevOps integration (organization name, project name, PAT, API version) specifically for the Tia Bot chat agent, independent from the main ADO configuration.
+- **Hub Features:** Centralized navigation hub with Artifacts (live Azure DevOps integration for projects and hierarchical work items), Integrations, Knowledge Base, Persona Manager, and Prompt Library. Hub Artifacts provides real-time integration with Azure DevOps for project and work item display, including linking capabilities and detailed views.
+- **Wiki Documentation Generation:** AI-powered comprehensive Wiki documentation generation system integrated into the SDLC workflow, generating 12 distinct page types with session-based tracking, download options, full-page preview, and Azure DevOps Wiki-ready markdown formatting.
+- **Artifact Generation Optimization:** The AI system creates optimized sets of epics, features, and user stories with detailed descriptions, acceptance criteria, and subtasks, handling large AI responses reliably.
+- **Compliance Guidelines Selection:** Interactive workflow feature allowing users to select markdown files from their Golden Repository as compliance guidelines, which are injected into the AI system prompt during artifact generation to ensure adherence to organizational standards.
+
+### System Design Choices
+- **Data Storage:** Azure MySQL with Drizzle ORM, SSL-enabled. Settings infrastructure includes 5 dedicated tables (`ado_settings`, `golden_repo_organizations`, `conversational_ui_settings`, `workflow_settings`, `sdlc_settings`).
+- **Authentication:** Session-based authentication with MySQL-backed sessions.
+- **Design System:** Leverages `shadcn/ui` components and custom components, managed with Tailwind CSS, CSS custom properties, HSL color system, and an elevation system.
+- **Security Validation:** Comprehensive input validation using Zod schemas for all Design phase features, with client-side and server-side validation. All PAT tokens are encrypted using AES-256-GCM via `PAT_ENCRYPTION_KEY` environment variable. API routes sanitize responses to expose only `patConfigured` boolean flags.
+- **AI Service Architecture:** Implements separation of concerns with dedicated AI service files: `server/workflow-ai-service.ts` for SDLC workflow requirement gathering, `server/ai-service.ts` for general conversational UI and design guideline generation with Azure DevOps backlog context awareness, and `server/azure-devops-service.ts` for fetching backlog items.
+
+## External Dependencies
+
+- **UI Frameworks & Libraries:** React, React DOM, Wouter, Radix UI, shadcn/ui, Lucide React, React Icons.
+- **Build & Styling:** Vite, Tailwind CSS, tailwind-merge, clsx, class-variance-authority.
+- **Backend Framework:** Express.js.
+- **Database & ORM:** mysql2, drizzle-orm (MySQL dialect).
+- **State & Data Management:** @tanstack/react-query, react-hook-form, @hookform/resolvers, zod.
+- **AI/DevOps Integrations:** Azure OpenAI API, Azure DevOps REST API.
+- **Utilities:** nanoid, date-fns.

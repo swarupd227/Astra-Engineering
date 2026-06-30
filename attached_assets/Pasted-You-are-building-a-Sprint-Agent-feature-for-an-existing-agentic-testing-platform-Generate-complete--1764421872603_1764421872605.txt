@@ -1,0 +1,172 @@
+You are building a Sprint Agent feature for an existing agentic testing platform. Generate complete, production-ready code for the following functionality:
+
+## Core Requirements:
+
+### Project Management Page:
+- Create a page where users can create new projects by providing:
+  * Domain (dropdown or input field)
+  * Project context (text area for description)
+- Display all created projects in a list/grid view with:
+  * Project name
+  * Domain
+  * Creation date
+  * Action buttons (View, Edit, Delete)
+
+### Project Detail View:
+After selecting a project, provide TWO main options (implement as tabs or dropdown selector):
+
+---
+
+## OPTION 1: Azure DevOps Integration
+
+### Functionality:
+1. **ADO Connection Setup:**
+   - Allow user to configure Azure DevOps credentials (Organization URL, Personal Access Token, Project Name)
+   - Store credentials securely
+   - Test connection before saving
+
+2. **Sprint Selection:**
+   - Fetch and display available sprints from Azure DevOps
+   - Allow user to select a specific sprint
+   - Pull all user stories from the selected sprint
+
+3. **ADO Wiki Integration:**
+   - Provide option to connect to Azure DevOps Wiki
+   - Allow user to select relevant wiki pages for project context
+   - Use wiki content to enhance AI understanding of project domain
+
+4. **User Story Review & Test Case Generation:**
+   - Display fetched user stories with:
+     * Title
+     * Description
+     * Acceptance criteria
+   - For each user story, generate test cases in these categories:
+     * Functional test cases
+     * Edge case test cases
+     * Negative test cases
+     * Security test cases
+     * Accessibility test cases
+   - Use AI/LLM to analyze acceptance criteria and wiki context to generate relevant test cases
+
+5. **Data Storage & Retrieval:**
+   - Store in database with this hierarchy:
+     * Project → Sprint → User Story → Test Cases (categorized)
+   - Build APIs for:
+     * Creating/updating projects
+     * Storing sprint data from ADO
+     * Storing user stories
+     * Storing generated test cases with categories
+     * Fetching test cases by: Project, Sprint, User Story, Category
+
+6. **UI for Retrieval:**
+   - Hierarchical navigation: Project → Sprint → User Story → Test Cases
+   - Filters for test case categories
+   - Search functionality
+   - Export options (CSV, JSON, Excel)
+
+---
+
+## OPTION 2: Manual User Story Input
+
+### Functionality:
+1. **User Story Input Interface:**
+   - Left panel: Text area for pasting user story
+   - Include fields for:
+     * User story title
+     * User story description
+     * Acceptance criteria (multiple items)
+   - Right panel: Generated test cases display
+
+2. **Test Case Generation:**
+   - Analyze pasted user story and acceptance criteria
+   - Generate test cases in these categories:
+     * Functional test cases
+     * Edge case test cases
+     * Negative test cases
+     * Security test cases
+     * Accessibility test cases
+   - Display generated test cases with ability to edit before saving
+
+3. **Data Storage & Retrieval:**
+   - Store in database with this hierarchy:
+     * Project → Sprint (user can create manual sprint) → User Story → Test Cases (categorized)
+   - Build APIs for:
+     * Creating manual sprints
+     * Storing manually entered user stories
+     * Storing generated test cases with categories
+     * Fetching test cases by: Project, Sprint, User Story, Category
+
+4. **History & Retrieval UI:**
+   - Same hierarchical navigation as Option 1
+   - View history of all manually created user stories
+   - Filters and search functionality
+   - Export options
+
+---
+
+## Database Schema Requirements:
+
+Design and implement tables/collections for:
+1. **Projects** (id, name, domain, context, created_at, updated_at)
+2. **Sprints** (id, project_id, sprint_name, source [ADO/Manual], ado_sprint_id, start_date, end_date)
+3. **UserStories** (id, sprint_id, title, description, acceptance_criteria, source [ADO/Manual], ado_work_item_id)
+4. **TestCases** (id, user_story_id, category [functional/edge/negative/security/accessibility], title, description, steps, expected_result, created_at)
+5. **ADOCredentials** (id, project_id, organization_url, pat_token_encrypted, project_name, wiki_enabled)
+
+---
+
+## API Endpoints to Develop:
+
+### Projects:
+- POST /api/projects - Create project
+- GET /api/projects - List all projects
+- GET /api/projects/:id - Get project details
+- PUT /api/projects/:id - Update project
+- DELETE /api/projects/:id - Delete project
+
+### Azure DevOps Integration:
+- POST /api/ado/configure - Save ADO credentials
+- POST /api/ado/test-connection - Test ADO connection
+- GET /api/ado/sprints - Fetch sprints from ADO
+- POST /api/ado/pull-user-stories - Pull user stories from selected sprint
+- GET /api/ado/wiki-pages - Fetch wiki pages
+- POST /api/ado/connect-wiki - Link wiki pages to project
+
+### Test Case Generation:
+- POST /api/test-cases/generate-from-ado - Generate test cases for ADO user stories
+- POST /api/test-cases/generate-manual - Generate test cases for manual user story
+- GET /api/test-cases - Get test cases with filters (project_id, sprint_id, user_story_id, category)
+- PUT /api/test-cases/:id - Update test case
+- DELETE /api/test-cases/:id - Delete test case
+
+### Data Retrieval:
+- GET /api/projects/:project_id/sprints - Get sprints for project
+- GET /api/sprints/:sprint_id/user-stories - Get user stories for sprint
+- GET /api/user-stories/:user_story_id/test-cases - Get test cases for user story
+
+---
+
+## Technology Stack to Use:
+- Backend: Node.js with Express or Python with FastAPI
+- Database: PostgreSQL or MongoDB (choose appropriate)
+- Frontend: React with modern UI library (Material-UI or Ant Design)
+- AI Integration: OpenAI API or Anthropic Claude API for test case generation
+- ADO Integration: azure-devops-node-api library or REST API calls
+
+---
+
+## Additional Requirements:
+- Implement proper error handling and validation
+- Add loading states and progress indicators
+- Implement authentication and authorization
+- Add data encryption for sensitive credentials
+- Include comprehensive logging
+- Build responsive UI that works on desktop and tablet
+- Add confirmation dialogs for delete operations
+- Implement pagination for large datasets
+- Add toast notifications for user actions
+- Include unit tests for critical API endpoints
+
+---
+
+Generate complete, working code with all files, database migrations, API implementations, frontend components, and integration logic. Include setup instructions and environment variable configuration.

@@ -1,0 +1,27 @@
+{
+  "name": "nat20-remote-agent",
+  "version": "1.0.0",
+  "description": "NAT 2.0 Remote Playwright Execution Agent",
+  "type": "module",
+  "scripts": {
+    "start": "tsx agent.ts",
+    "start:headless": "HEADLESS=true tsx agent.ts",
+    "build:windows": "node scripts/build-windows.mjs",
+    "clean": "rimraf dist"
+  },
+  "dependencies": {
+    "playwright": "^1.40.0",
+    "socket.io-client": "^4.8.3",
+    "ws": "^8.14.0"
+  },
+  "devDependencies": {
+    "@types/ws": "^8.5.10",
+    "@types/node": "^20.0.0",
+    "adm-zip": "^0.5.10",
+    "esbuild": "^0.20.0",
+    "node-fetch": "^3.3.0",
+    "rimraf": "^5.0.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.0"
+  }
+}

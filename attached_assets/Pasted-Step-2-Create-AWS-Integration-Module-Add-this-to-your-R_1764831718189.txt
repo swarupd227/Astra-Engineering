@@ -1,0 +1,224 @@
+Step 2: Create AWS Integration Module
+Add this to your Replit project:
+python# aws_prompt_manager.py
+
+import boto3
+import json
+import os
+from typing import Dict, Any
+
+class AWSPromptManager:
+    def __init__(self):
+        self.bedrock_client = boto3.client(
+            service_name='bedrock-runtime',
+            region_name=os.getenv('AWS_REGION', 'us-east-1'),
+            aws_access_key_id=os.getenv('AWS_ACCESS_KEY_ID'),
+            aws_secret_access_key=os.getenv('AWS_SECRET_ACCESS_KEY')
+        )
+        
+        # Store your prompt ARNs
+        self.prompts = {
+            'web_analyzer': os.getenv('PROMPT_ARN_WEB_ANALYZER'),
+            'functional_test_gen': os.getenv('PROMPT_ARN_FUNCTIONAL_TEST'),
+            'test_optimizer': os.getenv('PROMPT_ARN_TEST_OPTIMIZER'),
+            'story_analyzer': os.getenv('PROMPT_ARN_STORY_ANALYZER'),
+            'sprint_test_gen': os.getenv('PROMPT_ARN_SPRINT_TEST'),
+            'azure_mapper': os.getenv('PROMPT_ARN_AZURE_MAPPER')
+        }
+    
+    def invoke_prompt(self, prompt_name: str, variables: Dict[str, str]) -> Dict[str, Any]:
+        """
+        Invoke a stored prompt with variables
+        """
+        try:
+            prompt_arn = self.prompts.get(prompt_name)
+            if not prompt_arn:
+                raise ValueError(f"Prompt {prompt_name} not found")
+            
+            # Format variables for AWS Bedrock
+            prompt_variables = {
+                key: {"text": value} 
+                for key, value in variables.items()
+            }
+            
+            response = self.bedrock_client.converse(
+                modelId=prompt_arn,
+                promptVariables=prompt_variables
+            )
+            
+            # Extract response text
+            result_text = response['output']['message']['content'][0]['text']
+            
+            # Try to parse as JSON, fallback to raw text
+            try:
+                return json.loads(result_text)
+            except json.JSONDecodeError:
+                return {"response": result_text}
+                
+        except Exception as e:
+            print(f"Error invoking prompt {prompt_name}: {str(e)}")
+            raise
+    
+    def analyze_webpage(self, page_url: str, page_title: str, 
+                       html_content: str, interactive_elements: str,
+                       domain_type: str) -> Dict[str, Any]:
+        """
+        Analyze web page for functional testing
+        """
+        return self.invoke_prompt('web_analyzer', {
+            'page_url': page_url,
+            'page_title': page_title,
+            'html_content': html_content[:10000],  # Limit size
+            'interactive_elements': interactive_elements,
+            'domain_type': domain_type
+        })
+    
+    def generate_functional_tests(self, page_url: str, interactions: str,
+                                  workflows: str, domain_type: str) -> Dict[str, Any]:
+        """
+        Generate functional test cases
+        """
+        return self.invoke_prompt('functional_test_gen', {
+            'page_url': page_url,
+            'interactions': interactions,
+            'workflows': workflows,
+            'domain_type': domain_type
+        })
+    
+    def optimize_tests(self, generated_tests: str) -> Dict[str, Any]:
+        """
+        Optimize generated test cases
+        """
+        return self.invoke_prompt('test_optimizer', {
+            'generated_tests': generated_tests
+        })
+    
+    def analyze_user_story(self, story_title: str, story_description: str,
+                          acceptance_criteria: str, story_points: str,
+                          priority: str, sprint_name: str,
+                          domain_type: str) -> Dict[str, Any]:
+        """
+        Analyze user story for test generation
+        """
+        return self.invoke_prompt('story_analyzer', {
+            'story_title': story_title,
+            'story_description': story_description,
+            'acceptance_criteria': acceptance_criteria,
+            'story_points': story_points,
+            'priority': priority,
+            'sprint_name': sprint_name,
+            'domain_type': domain_type
+        })
+    
+    def generate_sprint_tests(self, story_analysis: str, 
+                             sprint_name: str, domain_type: str) -> Dict[str, Any]:
+        """
+        Generate test cases for sprint user story
+        """
+        return self.invoke_prompt('sprint_test_gen', {
+            'story_analysis': json.dumps(story_analysis),
+            'sprint_name': sprint_name,
+            'domain_type': domain_type
+        })
+    
+    def map_to_azure_devops(self, generated_test_cases: str,
+                           project_name: str, sprint_name: str,
+                           test_suite_name: str) -> Dict[str, Any]:
+        """
+        Map test cases to Azure DevOps format
+        """
+        return self.invoke_prompt('azure_mapper', {
+            'generated_test_cases': generated_test_cases,
+            'project_name': project_name,
+            'sprint_name': sprint_name,
+            'test_suite_name': test_suite_name
+        })
+Step 3: Integration Points in Your Existing Code
+For Functional Testing Module:
+python# In your existing web crawler/functional testing code
+from aws_prompt_manager import AWSPromptManager
+
+aws_pm = AWSPromptManager()
+
+# After crawling a page:
+def process_crawled_page(page_data):
+    # Step 1: Analyze the page
+    analysis = aws_pm.analyze_webpage(
+        page_url=page_data['url'],
+        page_title=page_data['title'],
+        html_content=page_data['html'],
+        interactive_elements=page_data['elements'],
+        domain_type='Healthcare'  # or get from project settings
+    )
+    
+    # Step 2: Generate test cases
+    test_cases = aws_pm.generate_functional_tests(
+        page_url=page_data['url'],
+        interactions=json.dumps(analysis.get('interactions', [])),
+        workflows=json.dumps(analysis.get('workflows', [])),
+        domain_type='Healthcare'
+    )
+    
+    # Step 3: Optimize tests
+    optimized_tests = aws_pm.optimize_tests(
+        generated_tests=json.dumps(test_cases)
+    )
+    
+    # Store in your database
+    save_test_cases_to_db(optimized_tests)
+    
+    return optimized_tests
+For Sprint Agent Module:
+python# In your existing sprint/user story code
+from aws_prompt_manager import AWSPromptManager
+
+aws_pm = AWSPromptManager()
+
+# When user adds a story:
+def generate_tests_for_story(user_story):
+    # Step 1: Analyze user story
+    story_analysis = aws_pm.analyze_user_story(
+        story_title=user_story['title'],
+        story_description=user_story['description'],
+        acceptance_criteria=user_story['acceptance_criteria'],
+        story_points=str(user_story['points']),
+        priority=user_story['priority'],
+        sprint_name=user_story['sprint'],
+        domain_type=user_story['domain']
+    )
+    
+    # Step 2: Generate test cases
+    test_cases = aws_pm.generate_sprint_tests(
+        story_analysis=story_analysis,
+        sprint_name=user_story['sprint'],
+        domain_type=user_story['domain']
+    )
+    
+    # Step 3: Map to Azure DevOps format (for future integration)
+    azure_format = aws_pm.map_to_azure_devops(
+        generated_test_cases=json.dumps(test_cases),
+        project_name=user_story['project'],
+        sprint_name=user_story['sprint'],
+        test_suite_name=f"{user_story['sprint']}_TestSuite"
+    )
+    
+    # Store in database
+    save_sprint_tests_to_db(test_cases, azure_format)
+    
+    return test_cases
+```
+
+### **Step 4: Configure Replit Secrets**
+
+In your Replit project, add these secrets:
+```
+AWS_ACCESS_KEY_ID=your_aws_access_key
+AWS_SECRET_ACCESS_KEY=your_aws_secret_key
+AWS_REGION=us-east-1
+
+# Prompt ARNs from AWS Bedrock
+PROMPT_ARN_WEB_ANALYZER=arn:aws:bedrock:us-east-1:xxxxx:prompt/xxxxx
+PROMPT_ARN_FUNCTIONAL_TEST=arn:aws:bedrock:us-east-1:xxxxx:prompt/xxxxx
+PROMPT_ARN_TEST_OPTIMIZER=arn:aws:bedrock:us-east-1:xxxxx:prompt/xxxxx
+PROMPT_ARN_STORY_ANALYZER=arn:aws:bedrock:us-east-1:xxxxx:prompt/xxxxx
+PROMPT_ARN_SPRINT_TEST=arn:aws:bedrock:us-east-1:xxxxx:prompt/xxxxx

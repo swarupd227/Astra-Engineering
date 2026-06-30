@@ -1,0 +1,117 @@
+# EKS DevX — ALB (Ingress) path is the default for new deploys.
+# Prerequisite (one-time per cluster): AWS Load Balancer Controller + IngressClass "alb"
+#   https://kubernetes-sigs.github.io/aws-load-balancer-controller/
+replicaCount: 2
+
+image:
+  repository: ""
+  tag: latest
+  pullPolicy: Always
+
+containerPort: 8080
+
+# Runtime env (persisted every helm upgrade — matches manual kubectl set env).
+# envFrom secret still loads MYSQL_*, JIRA_*, etc.; these keys ensure AWS hosting + SM path.
+env:
+  devxHosting: aws
+  awsRegion: ap-south-1
+  awsSecretName: devx/platform/qa
+  nodeEnv: production
+  devxAllowAzureApis: "true"
+
+# IRSA: one-time eksctl iamserviceaccount (SA devx + Astra-DevX-EKS-TaskRole). Do not recreate via Helm.
+serviceAccount:
+  create: false
+  name: devx
+  # Only used when create: true — leave empty when eksctl already created the SA.
+  roleArn: ""
+
+deployment:
+  # Default K8s progress deadline is 600s; app startup (routes + DB) can exceed that.
+  progressDeadlineSeconds: 900
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+
+topologySpreadConstraints: []
+
+service:
+  # Ignored for type when ingress.enabled: chart forces ClusterIP + Ingress creates ALB.
+  type: LoadBalancer
+  port: 80
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
+
+ingress:
+  # When true: Service → ClusterIP; AWS LB Controller provisions an ALB for this Ingress.
+  enabled: true
+  className: alb
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/healthcheck-path: /healthz
+    # ALB front-door SG (alb-devx-public-sg). Override if your account uses another SG.
+    alb.ingress.kubernetes.io/security-groups: sg-0a59f03bd6c96cdd9
+    # Lets the controller add tight rules on the cluster/node SG so NodePort is not opened to 0.0.0.0/0.
+    # Set to "false" if your cluster does not support this and Ingress stays Pending.
+    alb.ingress.kubernetes.io/manage-backend-security-group-rules: "true"
+    # Sticky sessions when running 2+ replicas (WebSocket / in-memory session affinity).
+    alb.ingress.kubernetes.io/target-group-attributes: stickiness.enabled=true,stickiness.lb_cookie.duration_seconds=86400
+  hosts: []
+
+autoscaling:
+  enabled: false
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
+
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 1
+
+resources:
+  requests:
+    cpu: 250m
+    memory: 512Mi
+  limits:
+    cpu: "2"
+    memory: 2Gi
+
+# K8s secret with DB + optional extra keys (from Secrets Manager JSON).
+# Override via pipeline MYSQL_SECRET_NAME or --set mysql.existingSecret=...
+mysql:
+  existingSecret: devx-runtime-env
+
+# Database migrations — run inside the app container on pod start (client default).
+# docker-entrypoint.sh runs run-container-migrations.js before npm start when RUN_DB_MIGRATIONS=true.
+# MYSQL_* is loaded from AWS Secrets Manager (env.awsSecretName) when DEVX_HOSTING=aws — same as the app.
+# K8s secret mysql.existingSecret is optional fallback if SM is temporarily unreachable.
+# Alternative: migrations.runAsJob=true + runOnPodStart=false for a one-shot Helm pre-upgrade Job.
+migrations:
+  # Run migrations inside each app container via docker-entrypoint.sh before npm start.
+  runAsJob: false
+  runOnPodStart: true
+  seed: "true"
+  # true = exit 1 when any migration file fails (client default). Fix SQL in repo before enabling on broken DBs.
+  strict: "true"
+  mysqlSsl: "true"
+  # Allow time for baseline SQL on first pod start (startupProbe; skipped when runOnPodStart is false)
+  startupProbePeriodSeconds: 10
+  startupProbeFailureThreshold: 60
+  backoffLimit: 3
+  ttlSecondsAfterFinished: 600
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi

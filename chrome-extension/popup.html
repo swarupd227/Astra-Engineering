@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DevX QE Recorder</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      width: 320px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #0f172a;
+      color: #e2e8f0;
+      font-size: 13px;
+    }
+
+    /* Header */
+    .header {
+      background: linear-gradient(135deg, #1e3a5f 0%, #0f172a 100%);
+      padding: 14px 16px 12px;
+      border-bottom: 1px solid #1e293b;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .header-logo {
+      width: 28px;
+      height: 28px;
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      color: white;
+      flex-shrink: 0;
+    }
+    .header-text h1 {
+      font-size: 13px;
+      font-weight: 600;
+      color: #f1f5f9;
+      line-height: 1.2;
+    }
+    .header-text p {
+      font-size: 10px;
+      color: #64748b;
+      margin-top: 1px;
+    }
+
+    /* Status bar */
+    .status-bar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      background: #0f172a;
+      border-bottom: 1px solid #1e293b;
+      font-size: 11px;
+    }
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #ef4444;
+      flex-shrink: 0;
+    }
+    .status-dot.connected { background: #22c55e; }
+    .status-dot.recording { background: #f59e0b; animation: pulse 1s infinite; }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+    .status-label { color: #94a3b8; }
+
+    /* Content area */
+    .content { padding: 16px; }
+
+    /* Section */
+    .section { margin-bottom: 16px; }
+    .section-title {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #475569;
+      margin-bottom: 8px;
+    }
+
+    /* Session input */
+    .session-input-row {
+      display: flex;
+      gap: 6px;
+    }
+    .session-input {
+      flex: 1;
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 6px;
+      padding: 8px 10px;
+      color: #f1f5f9;
+      font-size: 14px;
+      font-family: 'Courier New', monospace;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .session-input:focus { border-color: #3b82f6; }
+    .session-input::placeholder { color: #475569; font-weight: 400; letter-spacing: normal; font-size: 12px; }
+    .session-input:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .btn-connect {
+      background: #3b82f6;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.15s;
+    }
+    .btn-connect:hover { background: #2563eb; }
+    .btn-connect:disabled { background: #1e3a5f; color: #475569; cursor: not-allowed; }
+
+    /* Session badge (when joined) */
+    .session-badge {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      background: #0f2d1a;
+      border: 1px solid #166534;
+      border-radius: 6px;
+      padding: 8px 12px;
+    }
+    .session-badge.visible { display: flex; }
+    .session-badge-code {
+      font-family: 'Courier New', monospace;
+      font-size: 16px;
+      font-weight: 700;
+      color: #4ade80;
+      letter-spacing: 0.1em;
+      flex: 1;
+    }
+    .btn-leave {
+      background: none;
+      border: 1px solid #374151;
+      color: #94a3b8;
+      border-radius: 4px;
+      padding: 3px 8px;
+      font-size: 11px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-leave:hover { border-color: #ef4444; color: #ef4444; }
+
+    /* Record button */
+    .btn-record {
+      width: 100%;
+      padding: 11px;
+      border-radius: 8px;
+      border: none;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.15s;
+    }
+    .btn-record.start {
+      background: linear-gradient(135deg, #16a34a, #15803d);
+      color: white;
+    }
+    .btn-record.start:hover { background: linear-gradient(135deg, #15803d, #166534); }
+    .btn-record.stop {
+      background: linear-gradient(135deg, #dc2626, #b91c1c);
+      color: white;
+      animation: record-glow 2s infinite;
+    }
+    @keyframes record-glow {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(220,38,38,0); }
+      50% { box-shadow: 0 0 12px 2px rgba(220,38,38,0.4); }
+    }
+    .btn-record:disabled {
+      background: #1e293b;
+      color: #475569;
+      cursor: not-allowed;
+      animation: none;
+    }
+    .record-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+    .btn-record.stop .record-dot { animation: pulse 0.8s infinite; }
+
+    /* Event counter */
+    .event-counter {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .counter-chip {
+      flex: 1;
+      background: #1e293b;
+      border-radius: 6px;
+      padding: 6px 8px;
+      text-align: center;
+    }
+    .counter-chip .num {
+      font-size: 18px;
+      font-weight: 700;
+      color: #60a5fa;
+      line-height: 1;
+    }
+    .counter-chip .lbl {
+      font-size: 9px;
+      color: #475569;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-top: 2px;
+    }
+
+    /* Recent events */
+    .event-feed {
+      margin-top: 12px;
+      background: #0a0f1a;
+      border: 1px solid #1e293b;
+      border-radius: 6px;
+      max-height: 140px;
+      overflow-y: auto;
+    }
+    .event-feed::-webkit-scrollbar { width: 3px; }
+    .event-feed::-webkit-scrollbar-thumb { background: #334155; border-radius: 2px; }
+    .event-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+      padding: 5px 8px;
+      border-bottom: 1px solid #0f172a;
+      font-size: 10px;
+      line-height: 1.4;
+    }
+    .event-item:last-child { border-bottom: none; }
+    .event-icon { font-size: 11px; flex-shrink: 0; margin-top: 1px; }
+    .event-desc { color: #94a3b8; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .event-type {
+      font-size: 9px;
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+    .event-type.click { background: #1e3a5f; color: #60a5fa; }
+    .event-type.input { background: #1a2e1a; color: #4ade80; }
+    .event-type.nav   { background: #2d1f1a; color: #fb923c; }
+    .event-type.api   { background: #1e1a2e; color: #a78bfa; }
+    .event-type.select { background: #1f1a2d; color: #c084fc; }
+
+    .empty-feed {
+      padding: 16px;
+      text-align: center;
+      color: #334155;
+      font-size: 11px;
+    }
+
+    /* Error / info messages */
+    .message-box {
+      padding: 8px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      margin-top: 8px;
+      display: none;
+    }
+    .message-box.visible { display: block; }
+    .message-box.error { background: #2d0f0f; border: 1px solid #7f1d1d; color: #fca5a5; }
+    .message-box.info  { background: #0f1f2d; border: 1px solid #1e3a5f; color: #93c5fd; }
+    .message-box.success { background: #0f1f14; border: 1px solid #166534; color: #86efac; }
+
+    /* Settings panel */
+    .settings-toggle {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 10px;
+      color: #475569;
+      cursor: pointer;
+      user-select: none;
+      padding: 2px 0;
+    }
+    .settings-toggle:hover { color: #94a3b8; }
+    .settings-toggle .arrow { transition: transform 0.2s; }
+    .settings-toggle.open .arrow { transform: rotate(90deg); }
+
+    .settings-panel {
+      display: none;
+      margin-top: 10px;
+      background: #0a0f1a;
+      border: 1px solid #1e293b;
+      border-radius: 6px;
+      padding: 10px 12px;
+    }
+    .settings-panel.visible { display: block; }
+
+    .settings-row {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+    .settings-label {
+      font-size: 10px;
+      color: #475569;
+      margin-bottom: 5px;
+    }
+    .server-url-input {
+      flex: 1;
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 5px;
+      padding: 6px 8px;
+      color: #f1f5f9;
+      font-size: 11px;
+      font-family: 'Courier New', monospace;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .server-url-input:focus { border-color: #3b82f6; }
+    .btn-save-url {
+      background: #1e3a5f;
+      color: #60a5fa;
+      border: 1px solid #2d5f9f;
+      border-radius: 5px;
+      padding: 6px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.15s;
+    }
+    .btn-save-url:hover { background: #2563eb; color: white; }
+
+    /* Footer */
+    .footer {
+      padding: 8px 16px;
+      border-top: 1px solid #1e293b;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .footer-link {
+      font-size: 10px;
+      color: #475569;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .footer-link:hover { color: #94a3b8; }
+    .footer-version { font-size: 10px; color: #334155; }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-logo">DX</div>
+    <div class="header-text">
+      <h1>DevX QE Recorder</h1>
+      <p>Autonomous Test Generation Platform</p>
+    </div>
+  </div>
+
+  <!-- Status bar -->
+  <div class="status-bar">
+    <div class="status-dot" id="statusDot"></div>
+    <span class="status-label" id="statusLabel">Connecting to server...</span>
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+
+    <!-- Step 1: Session -->
+    <div class="section" id="sectionSession">
+      <div class="section-title">Step 1 — Enter Session Code from DevX QE</div>
+
+      <!-- Input row (when not joined) -->
+      <div class="session-input-row" id="sessionInputRow">
+        <input
+          type="text"
+          class="session-input"
+          id="sessionInput"
+          placeholder="e.g. ABC-4821"
+          maxlength="10"
+        />
+        <button class="btn-connect" id="btnJoin">Join</button>
+      </div>
+
+      <!-- Badge (when joined) -->
+      <div class="session-badge" id="sessionBadge">
+        <span class="session-badge-code" id="badgeCode"></span>
+        <button class="btn-leave" id="btnLeave">Leave</button>
+      </div>
+
+      <div class="message-box" id="sessionMessage"></div>
+    </div>
+
+    <!-- Settings -->
+    <div class="section" id="sectionSettings">
+      <div class="settings-toggle" id="settingsToggle">
+        <span class="arrow">▶</span>
+        <span>Server Settings</span>
+      </div>
+      <div class="settings-panel" id="settingsPanel">
+        <div class="settings-label">DevX QE Server URL</div>
+        <div class="settings-row">
+          <input
+            type="text"
+            class="server-url-input"
+            id="serverUrlInput"
+            placeholder="ws://localhost:4000"
+          />
+          <button class="btn-save-url" id="btnSaveUrl">Save</button>
+        </div>
+        <div class="message-box" id="settingsMessage"></div>
+      </div>
+    </div>
+
+    <!-- Step 2: Record -->
+    <div class="section" id="sectionRecord">
+      <div class="section-title">Step 2 — Control Recording</div>
+      <button class="btn-record start" id="btnRecord" disabled>
+        <div class="record-dot"></div>
+        Start Recording
+      </button>
+
+      <!-- Event counters (visible while recording) -->
+      <div class="event-counter" id="eventCounter" style="display:none">
+        <div class="counter-chip">
+          <div class="num" id="countClicks">0</div>
+          <div class="lbl">Clicks</div>
+        </div>
+        <div class="counter-chip">
+          <div class="num" id="countInputs">0</div>
+          <div class="lbl">Inputs</div>
+        </div>
+        <div class="counter-chip">
+          <div class="num" id="countNavs">0</div>
+          <div class="lbl">Pages</div>
+        </div>
+        <div class="counter-chip">
+          <div class="num" id="countApis">0</div>
+          <div class="lbl">API Calls</div>
+        </div>
+      </div>
+
+      <!-- Recent events feed -->
+      <div class="event-feed" id="eventFeed" style="display:none">
+        <div class="empty-feed" id="emptyFeed">No events yet. Start interacting with the app.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <span class="footer-link" id="openNat20">Open DevX QE →</span>
+    <span class="footer-version">v1.0.0</span>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

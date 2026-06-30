@@ -1,0 +1,60 @@
+# Local development stack for Astra Engineering.
+#   docker compose -f docker-compose.local.yml up --build
+#
+# Brings up: MySQL 8 (app DB) + Keycloak (local OIDC auth) + the app.
+# Configure secrets/keys in .env.local (copy from .env.local.example first).
+#
+# This is a LOCAL-ONLY stack. Do not use these passwords anywhere real.
+services:
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: devxlocal
+      MYSQL_DATABASE: devxdb
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-pdevxlocal"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:25.0
+    command: ["start-dev", "--import-realm"]
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+      KC_HTTP_PORT: "8080"
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./keycloak/astra-realm.json:/opt/keycloak/data/import/astra-realm.json:ro
+    restart: unless-stopped
+
+  app:
+    build: .
+    depends_on:
+      mysql:
+        condition: service_healthy
+      keycloak:
+        condition: service_started
+    env_file: .env.local
+    environment:
+      NODE_ENV: production
+      PORT: "4000"
+      # App connects to the mysql service by name on the compose network.
+      MYSQL_HOST: mysql
+      MYSQL_PORT: "3306"
+      # Auto-run the schema migrations on first boot (see docker-entrypoint.sh).
+      RUN_DB_MIGRATIONS: "true"
+      RUN_DB_SEED: "true"
+    ports:
+      - "4000:4000"
+    restart: unless-stopped
+
+volumes:
+  mysql_data:

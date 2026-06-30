@@ -1,0 +1,1754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>nsynth.ai - Insurance Test Data Generator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .main-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+        }
+        
+        .section-title {
+            font-size: 1.3em;
+            color: #667eea;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .file-upload {
+            border: 2px dashed #667eea;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            background: #f8f9fa;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .file-upload:hover {
+            background: #e3f2fd;
+            transform: scale(1.02);
+        }
+        
+        .file-upload.active {
+            background: #e8f5e8;
+            border-color: #4CAF50;
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .policy-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .policy-card {
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+        }
+        
+        .policy-card:hover {
+            border-color: #667eea;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+        }
+        
+        .policy-card.selected {
+            border-color: #4CAF50;
+            background: #e8f5e8;
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+        
+        .policy-icon {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .policy-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .policy-fields {
+            font-size: 0.9em;
+            color: #666;
+        }
+        
+        .controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .control-group label {
+            font-weight: 600;
+            color: #555;
+        }
+        
+        .control-group input {
+            padding: 12px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        
+        .control-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 30px 0;
+        }
+        
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(45deg, #28a745, #20c997);
+            color: white;
+        }
+        
+        .btn-demo {
+            background: linear-gradient(45deg, #ffc107, #ff8c00);
+            color: white;
+        }
+        
+        .field-preview {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .field-preview h4 {
+            color: #856404;
+            margin-bottom: 15px;
+        }
+        
+        .fields-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 8px;
+        }
+        
+        .field-item {
+            background: white;
+            padding: 6px 10px;
+            border-radius: 4px;
+            font-size: 13px;
+            border-left: 3px solid #ffc107;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .field-item:hover {
+            background: #f8f9fa;
+            transform: translateX(2px);
+        }
+        
+        .field-item input[type="checkbox"] {
+            width: auto;
+            cursor: pointer;
+        }
+        
+        .field-item label {
+            cursor: pointer;
+            margin: 0;
+            flex: 1;
+        }
+        
+        .results {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 25px;
+            margin-top: 20px;
+        }
+        
+        .results h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border-left: 4px solid #667eea;
+        }
+        
+        .stat-value {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .stat-label {
+            color: #666;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 13px;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .data-table th {
+            background: #667eea;
+            color: white;
+            padding: 12px 8px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .data-table td {
+            padding: 10px 8px;
+            border-bottom: 1px solid #e1e5e9;
+        }
+        
+        .data-table tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .export-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .export-buttons .btn {
+            padding: 10px 20px;
+            font-size: 14px;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 30px;
+            background: #e3f2fd;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .success-message {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        
+        .error-message {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        
+        @media (max-width: 768px) {
+            .controls {
+                grid-template-columns: 1fr;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            .policy-grid {
+                grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 nsynth.ai</h1>
+            <p>Insurance Test Data Generator for TeamFocus Insurance Group</p>
+        </div>
+        
+        <div class="main-card">
+            <!-- File Upload Section -->
+            <div class="section">
+                <div class="section-title">📊 Step 1: Upload Excel Template (Optional)</div>
+                <div class="file-upload" id="fileUpload">
+                    <input type="file" id="fileInput" class="file-input" accept=".xlsx,.xls,.csv">
+                    <div id="fileUploadContent">
+                        <div style="font-size: 3em; margin-bottom: 15px;">📂</div>
+                        <div style="font-size: 1.2em; margin-bottom: 10px;">Click to upload or drag & drop</div>
+                        <div style="color: #666;">Excel (.xlsx, .xls) or CSV files</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Policy Type Selection -->
+            <div class="section">
+                <div class="section-title">🎯 Step 2: Select Policy Type</div>
+                <div class="policy-grid">
+                    <div class="policy-card" data-type="auto">
+                        <div class="policy-icon">🚗</div>
+                        <div class="policy-name">Personal Auto</div>
+                        <div class="policy-fields">25+ Fields</div>
+                    </div>
+                    <div class="policy-card" data-type="commercial">
+                        <div class="policy-icon">🏢</div>
+                        <div class="policy-name">Commercial Property</div>
+                        <div class="policy-fields">30+ Fields</div>
+                    </div>
+                    <div class="policy-card" data-type="homeowner">
+                        <div class="policy-icon">🏠</div>
+                        <div class="policy-name">Homeowner</div>
+                        <div class="policy-fields">28+ Fields</div>
+                    </div>
+                    <div class="policy-card" data-type="dwelling">
+                        <div class="policy-icon">🔥</div>
+                        <div class="policy-name">Dwelling Fire</div>
+                        <div class="policy-fields">22+ Fields</div>
+                    </div>
+                    <div class="policy-card" data-type="condo">
+                        <div class="policy-icon">🏘️</div>
+                        <div class="policy-name">Condo</div>
+                        <div class="policy-fields">20+ Fields</div>
+                    </div>
+                    <div class="policy-card" data-type="mobile">
+                        <div class="policy-icon">🚐</div>
+                        <div class="policy-name">Mobile Home</div>
+                        <div class="policy-fields">24+ Fields</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Field Preview -->
+            <div class="field-preview" id="fieldPreview" style="display: none;">
+                <h4>📋 Fields to be Generated:</h4>
+                <div style="margin-bottom: 15px; padding: 10px; background: white; border-radius: 6px; border: 2px solid #667eea;">
+                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-weight: 600; color: #667eea;">
+                        <input type="checkbox" id="selectAllFields" style="width: auto; cursor: pointer;" checked>
+                        <span>Select All Fields (<span id="selectedFieldCount">0</span> selected)</span>
+                    </label>
+                </div>
+                <div class="fields-list" id="fieldsList"></div>
+            </div>
+            
+            <!-- Configuration -->
+            <div class="section">
+                <div class="section-title">⚙️ Step 3: Configuration</div>
+                <div class="controls">
+                    <div class="control-group">
+                        <label for="recordCount">Number of Records:</label>
+                        <input type="number" id="recordCount" value="100" min="1" max="50000" placeholder="Enter number (1-50000)">
+                    </div>
+                    <div class="control-group">
+                        <label for="dataPrefix">Data Prefix (Optional):</label>
+                        <input type="text" id="dataPrefix" placeholder="e.g., TEST, DEMO, QA" maxlength="10">
+                    </div>
+                    <div class="control-group">
+                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                            <input type="checkbox" id="enableMasking" style="width: auto; cursor: pointer;">
+                            <span>🎭 Enable Data Masking (Names, IDs, Emails)</span>
+                        </label>
+                        <div id="maskingInfo" style="display: none; font-size: 0.9em; color: #666; margin-top: 5px; padding: 8px; background: #fff3cd; border-radius: 4px; border-left: 3px solid #ffc107;">
+                            ℹ️ Sensitive fields will be masked with format preservation
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="button-group">
+                <button class="btn btn-primary" id="analyzeBtn" disabled>
+                    🔍 Analyze Excel File
+                </button>
+                <button class="btn btn-secondary" id="generateBtn" disabled>
+                    🎯 Generate Test Data
+                </button>
+                <button class="btn btn-demo" onclick="runDemo()">
+                    🎮 Demo Mode
+                </button>
+            </div>
+            
+            <!-- Loading -->
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <div id="loadingText">Processing...</div>
+            </div>
+            
+            <!-- Results -->
+            <div class="results" id="results" style="display: none;">
+                <h3>📊 Generated Test Data</h3>
+                <div id="resultsContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let uploadedFile = null;
+        let selectedPolicyType = null;
+        let generatedData = null;
+        let excelData = null;
+        
+        // Policy field definitions
+        const policyFields = {
+            auto: {
+                name: 'Personal Auto',
+                fields: [
+                    'Policy_Number', 'Insured_First_Name', 'Insured_Last_Name', 'Policy_Effective_Date',
+                    'Policy_Expiration_Date', 'Premium_Amount', 'Payment_Plan', 'Agent_Code',
+                    'VIN', 'Vehicle_Year', 'Vehicle_Make', 'Vehicle_Model', 'Vehicle_Usage',
+                    'Annual_Mileage', 'Garaging_Address', 'Bodily_Injury_Limit', 'Property_Damage_Limit',
+                    'Collision_Deductible', 'Comprehensive_Deductible', 'Driver_License_Number',
+                    'Driver_DOB', 'Years_Licensed', 'MVR_Score', 'Prior_Insurance_Carrier',
+                    'Claims_History_Count', 'Multi_Policy_Discount'
+                ]
+            },
+            commercial: {
+                name: 'Commercial Property',
+                fields: [
+                    'Policy_Number', 'Business_Name', 'Policy_Effective_Date', 'Policy_Expiration_Date',
+                    'Total_Premium', 'Producer_Code', 'Building_Address', 'Construction_Type',
+                    'Occupancy_Class', 'Year_Built', 'Total_Square_Footage', 'Number_Stories',
+                    'Sprinkler_System', 'Building_Coverage_Limit', 'BPP_Coverage_Limit',
+                    'Business_Income_Limit', 'Equipment_Breakdown_Limit', 'Protection_Class',
+                    'Fire_Station_Distance', 'Security_System', 'COPE_Construction', 'COPE_Occupancy',
+                    'COPE_Protection', 'COPE_Exposure', 'Deductible_Amount', 'Form_Number',
+                    'Territory_Code', 'SIC_Code', 'Risk_Classification', 'Building_Value',
+                    'Contents_Value', 'Loss_Payee'
+                ]
+            },
+            homeowner: {
+                name: 'Homeowner',
+                fields: [
+                    'Policy_Number', 'Insured_First_Name', 'Insured_Last_Name', 'Property_Address',
+                    'Policy_Form', 'Policy_Effective_Date', 'Policy_Expiration_Date', 'Premium_Amount',
+                    'Mortgage_Company', 'Year_Built', 'Square_Footage', 'Construction_Type',
+                    'Roof_Type', 'Roof_Age', 'Number_Stories', 'Basement_Type', 'Swimming_Pool',
+                    'Dwelling_Coverage_A', 'Other_Structures_B', 'Personal_Property_C',
+                    'Loss_of_Use_D', 'Personal_Liability_E', 'Medical_Payments_F',
+                    'AOP_Deductible', 'Wind_Hail_Deductible', 'Water_Backup_Coverage',
+                    'Home_Business_Coverage', 'Credit_Score', 'Protection_Class', 'Claims_Free_Years'
+                ]
+            },
+            dwelling: {
+                name: 'Dwelling Fire',
+                fields: [
+                    'Policy_Number', 'Named_Insured', 'Property_Address', 'Policy_Form',
+                    'Occupancy_Type', 'Policy_Effective_Date', 'Policy_Expiration_Date', 'Premium_Amount',
+                    'Construction_Type', 'Year_Built', 'Square_Footage', 'Number_Units',
+                    'Heating_Type', 'Electrical_Age', 'Plumbing_Type', 'Dwelling_Coverage',
+                    'Other_Structures_Coverage', 'Personal_Property_Coverage', 'Fair_Rental_Value',
+                    'Liability_Coverage', 'Fire_Department_Distance', 'Water_Source', 'Protection_Class',
+                    'Previous_Fire_Claims', 'Vacancy_Status', 'Deductible_Amount'
+                ]
+            },
+            condo: {
+                name: 'Condo',
+                fields: [
+                    'Policy_Number', 'Unit_Owner_Name', 'Unit_Address', 'Unit_Number',
+                    'Policy_Form', 'Policy_Effective_Date', 'Policy_Expiration_Date', 'HOA_Name',
+                    'Square_Footage', 'Floor_Level', 'Building_Year_Built', 'Construction_Type',
+                    'Master_Policy_Limit', 'Personal_Property_Coverage', 'Loss_Assessment_Coverage',
+                    'Additional_Living_Expenses', 'Personal_Liability_Coverage', 'Medical_Payments_Coverage',
+                    'Improvements_Betterments', 'Master_Policy_Deductible', 'Association_Bylaws_Type',
+                    'Unit_Improvements_Value'
+                ]
+            },
+            mobile: {
+                name: 'Mobile Home',
+                fields: [
+                    'Policy_Number', 'Named_Insured', 'Mobile_Home_Location', 'Policy_Form',
+                    'Policy_Effective_Date', 'Policy_Expiration_Date', 'Lienholder_Name',
+                    'Manufacturer', 'Model_Year', 'Serial_Number', 'HUD_Label', 'Length_Feet',
+                    'Width_Feet', 'Number_Sections', 'Foundation_Type', 'Tie_Down_System',
+                    'Setup_Type', 'Skirting_Type', 'Additions_Present', 'Mobile_Home_Coverage',
+                    'Personal_Property_Coverage', 'Additional_Living_Expenses', 'Personal_Liability',
+                    'Medical_Payments', 'Mobile_Home_Park', 'Flood_Zone', 'Wind_Zone_Rating', 'Distance_to_Coast'
+                ]
+            }
+        };
+        
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeFileUpload();
+            initializePolicySelection();
+            initializeButtons();
+            initializeMasking();
+            console.log('✅ nsynth.ai initialized successfully');
+        });
+        
+        // Initialize masking checkbox
+        function initializeMasking() {
+            const maskingCheckbox = document.getElementById('enableMasking');
+            const maskingInfo = document.getElementById('maskingInfo');
+            
+            if (maskingCheckbox && maskingInfo) {
+                maskingCheckbox.addEventListener('change', function() {
+                    maskingInfo.style.display = this.checked ? 'block' : 'none';
+                });
+            }
+        }
+        
+        // File upload initialization
+        function initializeFileUpload() {
+            const fileUpload = document.getElementById('fileUpload');
+            const fileInput = document.getElementById('fileInput');
+            
+            fileUpload.addEventListener('click', () => fileInput.click());
+            
+            fileUpload.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                fileUpload.style.background = '#e3f2fd';
+            });
+            
+            fileUpload.addEventListener('dragleave', () => {
+                fileUpload.style.background = '#f8f9fa';
+            });
+            
+            fileUpload.addEventListener('drop', (e) => {
+                e.preventDefault();
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    handleFileSelect(files[0]);
+                }
+            });
+            
+            fileInput.addEventListener('change', (e) => {
+                if (e.target.files.length > 0) {
+                    handleFileSelect(e.target.files[0]);
+                }
+            });
+        }
+        
+        // Handle file selection
+        function handleFileSelect(file) {
+            uploadedFile = file;
+            
+            const fileUpload = document.getElementById('fileUpload');
+            const fileUploadContent = document.getElementById('fileUploadContent');
+            
+            fileUpload.classList.add('active');
+            fileUploadContent.innerHTML = `
+                <div style="font-size: 2.5em; margin-bottom: 10px;">✅</div>
+                <div style="font-size: 1.2em; margin-bottom: 10px;"><strong>${file.name}</strong></div>
+                <div style="color: #666;">Size: ${(file.size / 1024).toFixed(2)} KB</div>
+            `;
+            
+            updateButtons();
+            console.log('📁 File uploaded:', file.name);
+        }
+        
+        // Policy selection initialization
+        function initializePolicySelection() {
+            const policyCards = document.querySelectorAll('.policy-card');
+            
+            policyCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    // Remove selection from all cards
+                    policyCards.forEach(c => c.classList.remove('selected'));
+                    
+                    // Select current card
+                    card.classList.add('selected');
+                    selectedPolicyType = card.dataset.type;
+                    
+                    showFieldPreview(selectedPolicyType);
+                    updateButtons();
+                    
+                    console.log('🎯 Policy type selected:', selectedPolicyType);
+                });
+            });
+        }
+        
+        // Show field preview
+        function showFieldPreview(policyType) {
+            const fieldPreview = document.getElementById('fieldPreview');
+            const fieldsList = document.getElementById('fieldsList');
+            
+            if (policyFields[policyType]) {
+                const fields = policyFields[policyType].fields;
+                
+                fieldsList.innerHTML = '';
+                fields.forEach((field, index) => {
+                    const fieldItem = document.createElement('div');
+                    fieldItem.className = 'field-item';
+                    
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.id = `field_${index}`;
+                    checkbox.value = field;
+                    checkbox.className = 'field-checkbox';
+                    checkbox.checked = true; // All selected by default
+                    
+                    const label = document.createElement('label');
+                    label.htmlFor = `field_${index}`;
+                    label.textContent = field.replace(/_/g, ' ');
+                    
+                    fieldItem.appendChild(checkbox);
+                    fieldItem.appendChild(label);
+                    fieldsList.appendChild(fieldItem);
+                    
+                    // Add change listener to individual checkbox
+                    checkbox.addEventListener('change', updateFieldSelection);
+                });
+                
+                fieldPreview.style.display = 'block';
+                updateFieldCount();
+                
+                // Setup select all checkbox
+                const selectAllCheckbox = document.getElementById('selectAllFields');
+                if (selectAllCheckbox) {
+                    selectAllCheckbox.checked = true;
+                    selectAllCheckbox.removeEventListener('change', toggleAllFields);
+                    selectAllCheckbox.addEventListener('change', toggleAllFields);
+                }
+            }
+        }
+        
+        // Toggle all fields
+        function toggleAllFields(event) {
+            const isChecked = event.target.checked;
+            const fieldCheckboxes = document.querySelectorAll('.field-checkbox');
+            
+            fieldCheckboxes.forEach(checkbox => {
+                checkbox.checked = isChecked;
+            });
+            
+            updateFieldCount();
+        }
+        
+        // Update field selection
+        function updateFieldSelection() {
+            const fieldCheckboxes = document.querySelectorAll('.field-checkbox');
+            const checkedCount = Array.from(fieldCheckboxes).filter(cb => cb.checked).length;
+            const totalCount = fieldCheckboxes.length;
+            
+            // Update "Select All" checkbox state
+            const selectAllCheckbox = document.getElementById('selectAllFields');
+            if (selectAllCheckbox) {
+                selectAllCheckbox.checked = checkedCount === totalCount;
+                selectAllCheckbox.indeterminate = checkedCount > 0 && checkedCount < totalCount;
+            }
+            
+            updateFieldCount();
+        }
+        
+        // Update field count display
+        function updateFieldCount() {
+            const fieldCheckboxes = document.querySelectorAll('.field-checkbox');
+            const checkedCount = Array.from(fieldCheckboxes).filter(cb => cb.checked).length;
+            const totalCount = fieldCheckboxes.length;
+            
+            const countDisplay = document.getElementById('selectedFieldCount');
+            if (countDisplay) {
+                countDisplay.textContent = `${checkedCount}/${totalCount}`;
+            }
+        }
+        
+        // Get selected fields
+        function getSelectedFields() {
+            const fieldCheckboxes = document.querySelectorAll('.field-checkbox:checked');
+            return Array.from(fieldCheckboxes).map(cb => cb.value);
+        }
+        
+        // Button initialization
+        function initializeButtons() {
+            const analyzeBtn = document.getElementById('analyzeBtn');
+            const generateBtn = document.getElementById('generateBtn');
+            
+            analyzeBtn.addEventListener('click', analyzeFile);
+            generateBtn.addEventListener('click', generateData);
+            
+            updateButtons();
+        }
+        
+        // Update button states
+        function updateButtons() {
+            const analyzeBtn = document.getElementById('analyzeBtn');
+            const generateBtn = document.getElementById('generateBtn');
+            
+            // Analyze button: enabled when file is uploaded
+            if (uploadedFile) {
+                analyzeBtn.disabled = false;
+                analyzeBtn.textContent = '🔍 Analyze Excel File';
+            } else {
+                analyzeBtn.disabled = true;
+                analyzeBtn.textContent = '🔍 Upload File First';
+            }
+            
+            // Generate button: enabled when policy type is selected OR Excel file is analyzed
+            if (selectedPolicyType || excelData) {
+                generateBtn.disabled = false;
+                if (excelData && !selectedPolicyType) {
+                    generateBtn.textContent = '🎯 Generate Test Data (Excel Format)';
+                } else if (selectedPolicyType && excelData) {
+                    generateBtn.textContent = '🎯 Generate Test Data (Combined)';
+                } else {
+                    generateBtn.textContent = '🎯 Generate Test Data';
+                }
+            } else {
+                generateBtn.disabled = true;
+                generateBtn.textContent = '🎯 Select Policy Type or Analyze Excel';
+            }
+        }
+        
+        // Analyze file function
+        async function analyzeFile() {
+            if (!uploadedFile) {
+                showError('Please upload a file first');
+                return;
+            }
+            
+            showLoading('Analyzing Excel file structure...');
+            
+            try {
+                const arrayBuffer = await uploadedFile.arrayBuffer();
+                const workbook = XLSX.read(arrayBuffer, { type: 'array' });
+                const sheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[sheetName];
+                const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+                
+                if (jsonData.length > 0) {
+                    excelData = {
+                        headers: jsonData[0],
+                        sampleData: jsonData.slice(1, 6),
+                        totalRows: jsonData.length - 1
+                    };
+                    
+                    showAnalysisResults(excelData);
+                    updateButtons(); // Update buttons after analysis
+                } else {
+                    throw new Error('Excel file appears to be empty');
+                }
+            } catch (error) {
+                showError('Failed to analyze file: ' + error.message);
+            } finally {
+                hideLoading();
+            }
+        }
+        
+        // Show analysis results
+        function showAnalysisResults(data) {
+            const results = document.getElementById('results');
+            const resultsContent = document.getElementById('resultsContent');
+            
+            let html = `
+                <div class="stats">
+                    <div class="stat-card">
+                        <div class="stat-value">${data.headers.length}</div>
+                        <div class="stat-label">Columns Found</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${data.totalRows}</div>
+                        <div class="stat-label">Sample Rows</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">✅</div>
+                        <div class="stat-label">Status</div>
+                    </div>
+                </div>
+                
+                <h4>📋 Detected Column Structure:</h4>
+                <div style="overflow-x: auto; max-width: 100%; border: 1px solid #e1e5e9; border-radius: 8px;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>${data.headers.map(h => `<th style="white-space: nowrap; min-width: 120px;">${h}</th>`).join('')}</tr>
+                        </thead>
+                        <tbody>
+                            ${data.sampleData.map(row => 
+                                `<tr>${row.map(cell => `<td style="white-space: nowrap;">${cell || ''}</td>`).join('')}</tr>`
+                            ).join('')}
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="success-message">
+                    <strong>✅ Analysis Complete!</strong> Your Excel file structure has been analyzed successfully.
+                    ${selectedPolicyType ? 
+                        '<br>💡 <strong>Tip:</strong> Generate button will combine Excel columns with selected policy type fields.' : 
+                        '<br>💡 <strong>Ready to Generate:</strong> Click "Generate Test Data" to create data with your Excel format, or select a policy type to add more fields.'
+                    }
+                </div>
+            `;
+            
+            resultsContent.innerHTML = html;
+            results.style.display = 'block';
+        }
+        
+        // Generate test data
+        async function generateData() {
+            // Check if we have either a policy type or Excel data
+            if (!selectedPolicyType && !excelData) {
+                showError('Please select a policy type or analyze an Excel file first');
+                return;
+            }
+            
+            const recordCount = parseInt(document.getElementById('recordCount').value);
+            const dataPrefix = document.getElementById('dataPrefix').value;
+            
+            if (isNaN(recordCount) || recordCount < 1 || recordCount > 50000) {
+                showError('Please enter a valid number of records (1-50000)');
+                return;
+            }
+            
+            showLoading('Generating synthetic test data...');
+            
+            try {
+                const startTime = Date.now();
+                
+                // Simulate processing delay
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                
+                // Generate the data - use 'auto' as default if no policy type selected
+                const policyTypeToUse = selectedPolicyType || 'auto';
+                generatedData = createSyntheticData(policyTypeToUse, recordCount, dataPrefix);
+                
+                const endTime = Date.now();
+                const processingTime = ((endTime - startTime) / 1000).toFixed(2);
+                
+                showGeneratedResults(generatedData, processingTime);
+                
+            } catch (error) {
+                showError('Failed to generate data: ' + error.message);
+            } finally {
+                hideLoading();
+            }
+        }
+        
+        // Create synthetic data
+        function createSyntheticData(policyType, recordCount, prefix) {
+            const fields = policyFields[policyType].fields;
+            const data = [];
+            
+            // Determine which fields to use based on what the user has done
+            let allFields;
+            let dataSource;
+            
+            if (excelData && excelData.headers && excelData.headers.length > 0 && !selectedPolicyType) {
+                // Scenario 1: ONLY Excel analyzed, NO policy type selected
+                allFields = excelData.headers;
+                dataSource = 'Excel Template';
+            } else if (selectedPolicyType && !excelData) {
+                // Scenario 2: ONLY policy type selected, NO Excel file
+                // Check if user has selected specific fields
+                const selectedFields = getSelectedFields();
+                if (selectedFields.length > 0 && selectedFields.length < fields.length) {
+                    // User selected specific fields only
+                    allFields = selectedFields;
+                    dataSource = 'Policy Type (Custom Selection)';
+                } else {
+                    // All fields selected or none selected (default to all)
+                    allFields = fields;
+                    dataSource = 'Policy Type';
+                }
+            } else if (selectedPolicyType && excelData && excelData.headers) {
+                // Scenario 3: BOTH Excel AND policy type selected
+                const selectedFields = getSelectedFields();
+                if (selectedFields.length > 0 && selectedFields.length < fields.length) {
+                    // Merge Excel fields with selected policy fields only
+                    allFields = [...new Set([...excelData.headers, ...selectedFields])];
+                    dataSource = 'Combined (Custom Selection)';
+                } else {
+                    // Merge all
+                    allFields = [...new Set([...excelData.headers, ...fields])];
+                    dataSource = 'Combined';
+                }
+            } else {
+                // Fallback
+                allFields = fields;
+                dataSource = 'Policy Type';
+            }
+            
+            for (let i = 1; i <= recordCount; i++) {
+                const record = {};
+                allFields.forEach(field => {
+                    record[field] = generateFieldValueWithMasking(field, i, prefix, policyType);
+                });
+                data.push(record);
+            }
+            
+            return {
+                records: data,
+                fields: allFields,
+                metadata: {
+                    policyType: policyType,
+                    recordCount: recordCount,
+                    generatedAt: new Date().toISOString(),
+                    prefix: prefix,
+                    source: dataSource
+                }
+            };
+        }
+        
+        // Mask field value if masking is enabled
+        function maskFieldValue(fieldName, originalValue, recordIndex) {
+            const maskingEnabled = document.getElementById('enableMasking')?.checked;
+            if (!maskingEnabled || !originalValue) return originalValue;
+            
+            const lowerField = fieldName.toLowerCase();
+            const valueStr = originalValue.toString();
+            
+            // Create deterministic seed from recordIndex and value
+            const seed = recordIndex + valueStr.length;
+            
+            // Mask names
+            if (lowerField.includes('name') && !lowerField.includes('business') && !lowerField.includes('company')) {
+                if (lowerField.includes('first')) {
+                    const maskedNames = ['Alex', 'Jordan', 'Morgan', 'Casey', 'Taylor', 'Riley', 'Quinn', 'Avery'];
+                    return maskedNames[seed % maskedNames.length];
+                }
+                if (lowerField.includes('last')) {
+                    const maskedNames = ['Anderson', 'Thompson', 'Parker', 'Mitchell', 'Carter', 'Cooper', 'Bennett', 'Reed'];
+                    return maskedNames[seed % maskedNames.length];
+                }
+                // Full names
+                if (!lowerField.includes('first') && !lowerField.includes('last')) {
+                    const firstNames = ['Alex', 'Jordan', 'Morgan', 'Casey'];
+                    const lastNames = ['Anderson', 'Thompson', 'Parker', 'Mitchell'];
+                    return `${firstNames[seed % firstNames.length]} ${lastNames[(seed + 1) % lastNames.length]}`;
+                }
+            }
+            
+            // Mask SSN and License numbers (keep format, change digits)
+            if (lowerField.includes('license') || lowerField.includes('ssn') || 
+                (lowerField.includes('driver') && lowerField.includes('number'))) {
+                // Keep format, replace numbers
+                return valueStr.replace(/\d/g, (digit, index) => {
+                    return ((parseInt(digit) + seed + index) % 10).toString();
+                });
+            }
+            
+            // Mask email addresses (keep domain)
+            if (lowerField.includes('email')) {
+                if (valueStr.includes('@')) {
+                    const maskedUsers = ['user.a', 'user.b', 'user.c', 'user.d', 'user.e', 'test.user'];
+                    const parts = valueStr.split('@');
+                    return `${maskedUsers[seed % maskedUsers.length]}@${parts[1]}`;
+                }
+            }
+            
+            return originalValue;
+        }
+        
+        // Generate field values
+        function generateFieldValue(fieldName, recordIndex, prefix, policyType) {
+            const lowerField = fieldName.toLowerCase();
+            
+            // === SPECIFIC CHECKS FIRST (before general patterns) ===
+            
+            // Vehicle usage - MUST be before general "usage" check
+            if (lowerField.includes('vehicle') && lowerField.includes('usage')) {
+                const usageTypes = ['Pleasure', 'Commute', 'Business', 'Farm Use'];
+                return usageTypes[recordIndex % usageTypes.length];
+            }
+            
+            // Annual Mileage - MUST be before general "mileage" check
+            if (lowerField.includes('mileage')) {
+                const mileageTiers = [5000, 7500, 10000, 12000, 15000, 20000, 25000];
+                return mileageTiers[recordIndex % mileageTiers.length];
+            }
+            
+            // Policy Numbers
+            if (lowerField.includes('policy') && lowerField.includes('number')) {
+                const typePrefix = prefix || getPolicyPrefix(policyType);
+                const year = new Date().getFullYear().toString().substr(-2);
+                const sequence = recordIndex.toString().padStart(6, '0');
+                const checkDigit = (recordIndex * 7) % 10;
+                return `${typePrefix}-${year}-${sequence}-${checkDigit}`;
+            }
+            
+            // Names
+            if (lowerField.includes('first') && lowerField.includes('name')) {
+                const firstNames = ['John', 'Jane', 'Michael', 'Sarah', 'David', 'Lisa', 'Robert', 'Mary', 'William', 'Jennifer'];
+                return firstNames[recordIndex % firstNames.length];
+            }
+            
+            if (lowerField.includes('last') && lowerField.includes('name')) {
+                const lastNames = ['Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Garcia', 'Miller', 'Davis', 'Rodriguez', 'Martinez'];
+                return lastNames[recordIndex % lastNames.length];
+            }
+            
+            if (lowerField.includes('name') && !lowerField.includes('first') && !lowerField.includes('last') && !lowerField.includes('business')) {
+                const firstNames = ['John', 'Jane', 'Michael', 'Sarah', 'David', 'Lisa'];
+                const lastNames = ['Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Garcia'];
+                return `${firstNames[recordIndex % firstNames.length]} ${lastNames[(recordIndex + 3) % lastNames.length]}`;
+            }
+            
+            // Business names
+            if (lowerField.includes('business') || lowerField.includes('company')) {
+                const businessNames = ['Acme Corp', 'Global Industries', 'Metro Solutions', 'Premium Holdings', 'Elite Group'];
+                return businessNames[recordIndex % businessNames.length];
+            }
+            
+            // Prior Insurance Carrier
+            if (lowerField.includes('prior') && (lowerField.includes('insurance') || lowerField.includes('carrier'))) {
+                const carriers = ['State Farm', 'Allstate', 'GEICO', 'Progressive', 'Liberty Mutual', 'Farmers', 'USAA', 'Nationwide'];
+                return carriers[recordIndex % carriers.length];
+            }
+            
+            // Years Licensed
+            if (lowerField.includes('years') && lowerField.includes('licensed')) {
+                return Math.min(1 + (recordIndex % 45), 50);
+            }
+            
+            // MVR Score
+            if (lowerField.includes('mvr') && lowerField.includes('score')) {
+                return Math.max(500, 900 - (recordIndex % 400));
+            }
+            
+            // Claims History Count
+            if (lowerField.includes('claims') && (lowerField.includes('history') || lowerField.includes('count'))) {
+                return recordIndex % 6;
+            }
+            
+            // Multi Policy Discount
+            if (lowerField.includes('multi') && lowerField.includes('policy') && lowerField.includes('discount')) {
+                return recordIndex % 3 === 0 ? 'Yes' : 'No';
+            }
+            
+            // Dates
+            if (lowerField.includes('date') || lowerField.includes('effective') || lowerField.includes('expiration')) {
+                const baseDate = new Date();
+                
+                if (lowerField.includes('effective')) {
+                    // Effective dates: spread over past/future months
+                    const daysOffset = (recordIndex * 30) - 180; // -180 to +180 days range
+                    baseDate.setDate(baseDate.getDate() + daysOffset);
+                    return baseDate.toISOString().split('T')[0];
+                } 
+                else if (lowerField.includes('expiration')) {
+                    // Expiration dates: always 1 year after effective date
+                    // First calculate the effective date for this record
+                    const effectiveDate = new Date();
+                    const daysOffset = (recordIndex * 30) - 180;
+                    effectiveDate.setDate(effectiveDate.getDate() + daysOffset);
+                    
+                    // Add exactly 1 year to get expiration
+                    const expirationDate = new Date(effectiveDate);
+                    expirationDate.setFullYear(expirationDate.getFullYear() + 1);
+                    return expirationDate.toISOString().split('T')[0];
+                } 
+                else {
+                    // Other dates (created, modified, etc.)
+                    baseDate.setDate(baseDate.getDate() - (recordIndex * 10));
+                    return baseDate.toISOString().split('T')[0];
+                }
+            }
+            
+            // DOB
+            if (lowerField.includes('dob') || lowerField.includes('birth')) {
+                const currentYear = new Date().getFullYear();
+                const birthYear = currentYear - 25 - (recordIndex % 40);
+                const month = (recordIndex % 12) + 1;
+                const day = (recordIndex % 28) + 1;
+                return `${birthYear}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+            }
+            
+            // Premium amounts
+            if (lowerField.includes('premium')) {
+                const basePremium = policyType === 'auto' ? 1200 : policyType === 'commercial' ? 3500 : 1800;
+                const variation = (recordIndex * 123) % 800;
+                return (basePremium + variation).toFixed(2);
+            }
+            
+            // Coverage amounts
+            if (lowerField.includes('coverage') || lowerField.includes('limit')) {
+                if (lowerField.includes('liability')) {
+                    const limits = [100000, 300000, 500000, 1000000];
+                    return limits[recordIndex % limits.length];
+                } else {
+                    const limits = [50000, 100000, 250000, 500000];
+                    return limits[recordIndex % limits.length];
+                }
+            }
+            
+            // Addresses
+            if (lowerField.includes('address')) {
+                const streets = ['Main St', 'Oak Ave', 'First St', 'Park Blvd', 'Elm Dr'];
+                const cities = ['Miami', 'Orlando', 'Tampa', 'Jacksonville'];
+                const streetNum = 100 + (recordIndex * 17) % 9900;
+                const street = streets[recordIndex % streets.length];
+                const city = cities[recordIndex % cities.length];
+                return `${streetNum} ${street}, ${city}, FL`;
+            }
+            
+            // VIN
+            if (lowerField.includes('vin')) {
+                return `1HGBH41JX${recordIndex.toString().padStart(6, '0')}`;
+            }
+            
+            // Vehicle info
+            if (lowerField.includes('vehicle') && lowerField.includes('year')) {
+                return 2010 + (recordIndex % 14);
+            }
+            
+            if (lowerField.includes('vehicle') && lowerField.includes('make')) {
+                const makes = ['Toyota', 'Honda', 'Ford', 'Chevrolet', 'Nissan'];
+                return makes[recordIndex % makes.length];
+            }
+            
+            if (lowerField.includes('vehicle') && lowerField.includes('model')) {
+                const models = ['Camry', 'Accord', 'F-150', 'Silverado', 'Altima'];
+                return models[recordIndex % models.length];
+            }
+            
+            // License numbers
+            if (lowerField.includes('license') && lowerField.includes('number')) {
+                const licenseNum = (recordIndex * 1234567) % 100000000;
+                return `FL${licenseNum.toString().padStart(8, '0')}`;
+            }
+            
+            // Mobile Home specific fields
+            if (lowerField.includes('hud') && lowerField.includes('label')) {
+                return `HUD${(recordIndex + 1000000).toString()}FL`;
+            }
+            
+            if (lowerField.includes('length') && lowerField.includes('feet')) {
+                const lengths = [28, 32, 36, 40, 48, 52, 60];
+                return lengths[recordIndex % lengths.length];
+            }
+            
+            if (lowerField.includes('width') && lowerField.includes('feet')) {
+                const widths = [14, 16, 18, 20, 24, 28];
+                return widths[recordIndex % widths.length];
+            }
+            
+            if (lowerField.includes('number') && lowerField.includes('sections')) {
+                return [1, 2, 3, 4][recordIndex % 4];
+            }
+            
+            if (lowerField.includes('foundation') && lowerField.includes('type')) {
+                const types = ['Permanent Foundation', 'Slab on Grade', 'Crawl Space', 'Piers'];
+                return types[recordIndex % types.length];
+            }
+            
+            if (lowerField.includes('tie') && lowerField.includes('down')) {
+                const systems = ['Ground Anchors', 'Over-the-top Ties', 'Frame Ties'];
+                return systems[recordIndex % systems.length];
+            }
+            
+            if (lowerField.includes('setup') && lowerField.includes('type')) {
+                const setups = ['Permanent', 'Semi-Permanent', 'Temporary'];
+                return setups[recordIndex % setups.length];
+            }
+            
+            if (lowerField.includes('skirting') && lowerField.includes('type')) {
+                const skirting = ['Vinyl', 'Metal', 'Concrete Block', 'Brick'];
+                return skirting[recordIndex % skirting.length];
+            }
+            
+            // Construction types
+            if (lowerField.includes('construction') && lowerField.includes('type')) {
+                const types = ['Frame', 'Masonry', 'Fire Resistive'];
+                return types[recordIndex % types.length];
+            }
+            
+            // Year built
+            if (lowerField.includes('year') && lowerField.includes('built')) {
+                return 1980 + (recordIndex % 44);
+            }
+            
+            // Square footage
+            if (lowerField.includes('square') || lowerField.includes('footage')) {
+                return 1000 + (recordIndex * 37) % 3000;
+            }
+            
+            // Deductibles
+            if (lowerField.includes('deductible')) {
+                const deductibles = [250, 500, 1000, 2500, 5000];
+                return deductibles[recordIndex % deductibles.length];
+            }
+            
+            // Yes/No fields
+            if (lowerField.includes('pool') || lowerField.includes('sprinkler') || 
+                lowerField.includes('security') || lowerField.includes('present') ||
+                lowerField.includes('discount')) {
+                return recordIndex % 4 === 0 ? 'Yes' : 'No';
+            }
+            
+            // Default numeric values
+            if (lowerField.includes('score') || lowerField.includes('rating')) {
+                return 700 + (recordIndex % 150);
+            }
+            
+            // Payment plans
+            if (lowerField.includes('payment') && lowerField.includes('plan')) {
+                const paymentPlans = ['Annual', 'Semi-Annual', 'Quarterly', 'Monthly', '10-Pay'];
+                return paymentPlans[recordIndex % paymentPlans.length];
+            }
+            
+            // Agent codes
+            if (lowerField.includes('agent') && lowerField.includes('code')) {
+                return `AGT${String(1000 + (recordIndex * 13) % 9000).padStart(4, '0')}`;
+            }
+            
+            // Producer codes
+            if (lowerField.includes('producer') && lowerField.includes('code')) {
+                return `PROD${String(10000 + (recordIndex * 17) % 90000).padStart(5, '0')}`;
+            }
+            
+            // Territory codes
+            if (lowerField.includes('territory') && lowerField.includes('code')) {
+                return `T${String((recordIndex % 99) + 1).padStart(2, '0')}`;
+            }
+            
+            // Form numbers
+            if (lowerField.includes('form') && lowerField.includes('number')) {
+                if (policyType === 'homeowner') {
+                    const forms = ['HO-3', 'HO-5', 'HO-8'];
+                    return forms[recordIndex % forms.length];
+                } else if (policyType === 'dwelling') {
+                    const forms = ['DP-1', 'DP-2', 'DP-3'];
+                    return forms[recordIndex % forms.length];
+                } else if (policyType === 'condo') {
+                    return 'HO-6';
+                } else if (policyType === 'mobile') {
+                    const forms = ['MH-4', 'MH-7'];
+                    return forms[recordIndex % forms.length];
+                } else {
+                    return `FORM-${String(recordIndex % 20 + 1).padStart(3, '0')}`;
+                }
+            }
+            
+            // SIC codes (business classification)
+            if (lowerField.includes('sic') && lowerField.includes('code')) {
+                const sicCodes = ['1521', '5812', '7011', '6512', '8062', '5411', '5999', '7389'];
+                return sicCodes[recordIndex % sicCodes.length];
+            }
+            
+            // Policy forms
+            if (lowerField.includes('policy') && lowerField.includes('form')) {
+                if (policyType === 'homeowner') {
+                    const forms = ['HO-3', 'HO-5', 'HO-8'];
+                    return forms[recordIndex % forms.length];
+                } else if (policyType === 'dwelling') {
+                    const forms = ['DP-1', 'DP-2', 'DP-3'];
+                    return forms[recordIndex % forms.length];
+                } else if (policyType === 'condo') {
+                    return 'HO-6';
+                } else if (policyType === 'mobile') {
+                    const forms = ['MH-4', 'MH-7'];
+                    return forms[recordIndex % forms.length];
+                } else {
+                    return `CP-00-${String(recordIndex % 99 + 1).padStart(2, '0')}`;
+                }
+            }
+            
+            // Association/HOA names
+            if (lowerField.includes('hoa') || lowerField.includes('association')) {
+                const hoaNames = ['Sunset Ridge HOA', 'Parkview Community Association', 'Lakeside HOA', 
+                                 'Maple Grove Association', 'Riverside Community HOA', 'Oak Valley HOA',
+                                 'Heritage Park Association', 'Cedar Springs HOA'];
+                return hoaNames[recordIndex % hoaNames.length];
+            }
+            
+            // Mortgage companies
+            if (lowerField.includes('mortgage') && lowerField.includes('company')) {
+                const mortgageCompanies = ['Wells Fargo Home Mortgage', 'Bank of America', 'Chase Mortgage', 
+                                          'Quicken Loans', 'US Bank', 'PNC Mortgage', 'TD Bank', 'Citibank'];
+                return mortgageCompanies[recordIndex % mortgageCompanies.length];
+            }
+            
+            // Lienholder names
+            if (lowerField.includes('lienholder')) {
+                const lienholders = ['Wells Fargo Auto Finance', 'Chase Auto', 'Capital One Auto Finance',
+                                    'Bank of America Auto Loans', 'Ally Financial', 'Toyota Financial',
+                                    'Honda Financial', 'Ford Credit'];
+                return lienholders[recordIndex % lienholders.length];
+            }
+            
+            // Loss payee
+            if (lowerField.includes('loss') && lowerField.includes('payee')) {
+                const lossPayees = ['Wells Fargo Bank NA', 'Chase Bank', 'Bank of America NA',
+                                   'US Bank NA', 'PNC Bank', 'TD Bank NA', 'Fifth Third Bank'];
+                return lossPayees[recordIndex % lossPayees.length];
+            }
+            
+            // Unit numbers
+            if (lowerField.includes('unit') && lowerField.includes('number')) {
+                const buildingNum = String.fromCharCode(65 + (recordIndex % 10)); // A-J
+                const unitNum = String((recordIndex % 20) + 1).padStart(3, '0');
+                return `${buildingNum}-${unitNum}`;
+            }
+            
+            // Floor level
+            if (lowerField.includes('floor') && lowerField.includes('level')) {
+                return (recordIndex % 30) + 1; // Floors 1-30
+            }
+            
+            // Flood zones
+            if (lowerField.includes('flood') && lowerField.includes('zone')) {
+                const floodZones = ['X', 'AE', 'AH', 'A', 'VE', 'V', 'D'];
+                return floodZones[recordIndex % floodZones.length];
+            }
+            
+            // Wind zone ratings
+            if (lowerField.includes('wind') && lowerField.includes('zone')) {
+                const windZones = ['I', 'II', 'III', 'IV'];
+                return windZones[recordIndex % windZones.length];
+            }
+            
+            // Mobile home park
+            if (lowerField.includes('mobile') && lowerField.includes('park')) {
+                const parks = ['Sunny Acres Mobile Home Park', 'Palm Grove MHP', 'Countryside Estates',
+                              'River View Mobile Community', 'Oak Ridge MHP', 'Sunset Mobile Village',
+                              'Pine Valley Estates', 'Meadowbrook Mobile Park'];
+                return parks[recordIndex % parks.length];
+            }
+            
+            // Water source
+            if (lowerField.includes('water') && lowerField.includes('source')) {
+                const waterSources = ['Municipal Water', 'Private Well', 'Community Well', 'Cistern'];
+                return waterSources[recordIndex % waterSources.length];
+            }
+            
+            // Occupancy class (commercial)
+            if (lowerField.includes('occupancy') && lowerField.includes('class')) {
+                if (policyType === 'commercial') {
+                    const occupancies = ['Office Building', 'Retail Store', 'Warehouse', 'Manufacturing',
+                                        'Restaurant', 'Hotel/Motel', 'Shopping Center', 'Medical Office'];
+                    return occupancies[recordIndex % occupancies.length];
+                }
+            }
+            
+            // Risk classification
+            if (lowerField.includes('risk') && lowerField.includes('classification')) {
+                const riskClasses = ['Preferred', 'Standard', 'Standard Plus', 'Non-Standard', 'High Risk'];
+                return riskClasses[recordIndex % riskClasses.length];
+            }
+            
+            // Building value
+            if (lowerField.includes('building') && lowerField.includes('value')) {
+                const baseValue = 150000;
+                const variation = (recordIndex * 17391) % 350000;
+                return (baseValue + variation).toFixed(0);
+            }
+            
+            // Contents value
+            if (lowerField.includes('contents') && lowerField.includes('value')) {
+                const baseValue = 50000;
+                const variation = (recordIndex * 12347) % 100000;
+                return (baseValue + variation).toFixed(0);
+            }
+            
+            // BPP (Business Personal Property)
+            if (lowerField.includes('bpp')) {
+                const baseValue = 75000;
+                const variation = (recordIndex * 15487) % 175000;
+                return (baseValue + variation).toFixed(0);
+            }
+            
+            // Business income
+            if (lowerField.includes('business') && lowerField.includes('income')) {
+                const baseValue = 100000;
+                const variation = (recordIndex * 18923) % 400000;
+                return (baseValue + variation).toFixed(0);
+            }
+            
+            // Equipment breakdown
+            if (lowerField.includes('equipment') && lowerField.includes('breakdown')) {
+                const limits = [25000, 50000, 100000, 250000, 500000];
+                return limits[recordIndex % limits.length];
+            }
+            
+            // COPE fields
+            if (lowerField.includes('cope')) {
+                if (lowerField.includes('construction')) {
+                    const construction = ['Frame', 'Joisted Masonry', 'Non-Combustible', 'Masonry Non-Combustible', 
+                                        'Modified Fire Resistive', 'Fire Resistive'];
+                    return construction[recordIndex % construction.length];
+                } else if (lowerField.includes('occupancy')) {
+                    const occupancy = ['Office', 'Retail', 'Warehouse', 'Manufacturing', 'Restaurant', 'Hotel'];
+                    return occupancy[recordIndex % occupancy.length];
+                } else if (lowerField.includes('protection')) {
+                    const protection = ['Full Sprinkler', 'Partial Sprinkler', 'Alarm Only', 'No Protection'];
+                    return protection[recordIndex % protection.length];
+                } else if (lowerField.includes('exposure')) {
+                    const exposure = ['Low', 'Medium', 'High', 'Very High'];
+                    return exposure[recordIndex % exposure.length];
+                }
+            }
+            
+            // Association bylaws type
+            if (lowerField.includes('bylaws') && lowerField.includes('type')) {
+                const bylawsTypes = ['All-In', 'Bare Walls', 'Single Entity'];
+                return bylawsTypes[recordIndex % bylawsTypes.length];
+            }
+            
+            // Improvements and betterments value
+            if (lowerField.includes('improvements') && lowerField.includes('betterments')) {
+                const values = [5000, 10000, 15000, 20000, 25000, 30000, 50000];
+                return values[recordIndex % values.length];
+            }
+            
+            // Master policy details
+            if (lowerField.includes('master') && lowerField.includes('policy')) {
+                if (lowerField.includes('limit')) {
+                    const limits = [1000000, 2000000, 5000000, 10000000];
+                    return limits[recordIndex % limits.length];
+                } else if (lowerField.includes('deductible')) {
+                    const deductibles = [5000, 10000, 25000, 50000];
+                    return deductibles[recordIndex % deductibles.length];
+                }
+            }
+            
+            // Vacancy status
+            if (lowerField.includes('vacancy') && lowerField.includes('status')) {
+                const statuses = ['Occupied', 'Vacant', 'Seasonal', 'Under Construction'];
+                return statuses[recordIndex % statuses.length];
+            }
+            
+            // Previous fire claims
+            if (lowerField.includes('previous') && lowerField.includes('fire') && lowerField.includes('claims')) {
+                return recordIndex % 4; // 0-3 previous claims
+            }
+            
+            // Payment method
+            if (lowerField.includes('payment') && lowerField.includes('method')) {
+                const methods = ['Auto Pay - Bank Account', 'Credit Card', 'Check', 'Money Order', 'Wire Transfer'];
+                return methods[recordIndex % methods.length];
+            }
+            
+            // Status fields
+            if (lowerField.includes('status')) {
+                const statuses = ['Active', 'Pending', 'Cancelled', 'Expired', 'Renewed'];
+                return statuses[recordIndex % statuses.length];
+            }
+            
+            // Default for unhandled fields
+            return `Data_${recordIndex}`;
+        }
+        
+        // Apply masking wrapper to generation
+        function generateFieldValueWithMasking(fieldName, recordIndex, prefix, policyType) {
+            const originalValue = generateFieldValue(fieldName, recordIndex, prefix, policyType);
+            return maskFieldValue(fieldName, originalValue, recordIndex);
+        }
+        
+        // Get policy prefix
+        function getPolicyPrefix(policyType) {
+            const prefixes = {
+                auto: 'AUTO',
+                commercial: 'COMM',
+                homeowner: 'HO',
+                dwelling: 'DWL',
+                condo: 'CONDO',
+                mobile: 'MH'
+            };
+            return prefixes[policyType] || 'POL';
+        }
+        
+        // Show generated results
+        function showGeneratedResults(data, processingTime) {
+            const results = document.getElementById('results');
+            const resultsContent = document.getElementById('resultsContent');
+            
+            const previewRecords = data.records.slice(0, 5);
+            const maskingEnabled = document.getElementById('enableMasking')?.checked || false;
+            
+            // Safely get values with fallbacks
+            const recordCount = data.metadata?.recordCount || data.recordCount || data.records?.length || 0;
+            const fieldCount = data.fields?.length || 0;
+            const dataSource = data.metadata?.source || 'Standard';
+            
+            let html = `
+                <div class="success-message">
+                    <strong>✅ Generation Complete!</strong> Successfully generated ${recordCount} records using ML algorithms.
+                    ${maskingEnabled ? '<br>🎭 <strong>Data Masking Applied:</strong> Names, IDs, and Emails have been masked.' : ''}
+                    ${dataSource === 'Excel Template' ? '<br>📊 <strong>Excel Format:</strong> Generated data matches your uploaded Excel template structure.' : ''}
+                    ${dataSource === 'Combined' ? '<br>🔗 <strong>Combined Format:</strong> Generated data includes both Excel columns and policy type fields.' : ''}
+                    ${dataSource === 'Combined (Custom Selection)' ? '<br>🔗 <strong>Custom Combined:</strong> Generated with selected Excel columns and chosen policy fields.' : ''}
+                    ${dataSource === 'Policy Type' ? '<br>📋 <strong>Policy Format:</strong> Generated data includes all standard fields for the selected policy type.' : ''}
+                    ${dataSource === 'Policy Type (Custom Selection)' ? '<br>✅ <strong>Custom Fields:</strong> Generated data includes only your selected fields (' + fieldCount + ' fields).' : ''}
+                </div>
+                
+                <div class="stats">
+                    <div class="stat-card">
+                        <div class="stat-value">${recordCount}</div>
+                        <div class="stat-label">Records Generated</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${fieldCount}</div>
+                        <div class="stat-label">Fields per Record</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">98%</div>
+                        <div class="stat-label">Data Quality</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${processingTime}s</div>
+                        <div class="stat-label">Processing Time</div>
+                    </div>
+                </div>
+                
+                <h4>📊 Data Preview (First 5 records):</h4>
+                <div style="overflow-x: auto; max-width: 100%; border: 1px solid #e1e5e9; border-radius: 8px;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>${data.fields.map(field => `<th style="white-space: nowrap; min-width: 120px;">${field.replace(/_/g, ' ')}</th>`).join('')}</tr>
+                        </thead>
+                        <tbody>
+                            ${previewRecords.map(record => 
+                                `<tr>${data.fields.map(field => `<td style="white-space: nowrap;">${record[field] || ''}</td>`).join('')}</tr>`
+                            ).join('')}
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="export-buttons">
+                    <button class="btn btn-primary" onclick="exportToExcel()">📊 Export to Excel</button>
+                    <button class="btn btn-primary" onclick="exportToCSV()">📄 Export to CSV</button>
+                    <button class="btn btn-primary" onclick="exportToJSON()">📦 Export to JSON</button>
+                </div>
+            `;
+            
+            resultsContent.innerHTML = html;
+            results.style.display = 'block';
+        }
+        
+        // Export functions
+        function exportToExcel() {
+            if (!generatedData) return;
+            
+            const worksheet = XLSX.utils.json_to_sheet(generatedData.records);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, 'Generated Data');
+            
+            const fileName = `${generatedData.metadata.policyType}_test_data_${Date.now()}.xlsx`;
+            XLSX.writeFile(workbook, fileName);
+            
+            showSuccess('Excel file exported successfully!');
+        }
+        
+        function exportToCSV() {
+            if (!generatedData) return;
+            
+            const headers = generatedData.fields;
+            const csvContent = [
+                headers.join(','),
+                ...generatedData.records.map(record => 
+                    headers.map(field => `"${(record[field] || '').toString().replace(/"/g, '""')}"`).join(',')
+                )
+            ].join('\n');
+            
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${generatedData.metadata.policyType}_test_data_${Date.now()}.csv`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+            
+            showSuccess('CSV file exported successfully!');
+        }
+        
+        function exportToJSON() {
+            if (!generatedData) return;
+            
+            const jsonContent = JSON.stringify(generatedData, null, 2);
+            const blob = new Blob([jsonContent], { type: 'application/json' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${generatedData.metadata.policyType}_test_data_${Date.now()}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+            
+            showSuccess('JSON file exported successfully!');
+        }
+        
+        // Demo function
+        function runDemo() {
+            // Set demo file
+            const demoFile = new File([''], 'Demo_Template.xlsx', { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+            handleFileSelect(demoFile);
+            
+            // Select homeowner policy
+            setTimeout(() => {
+                const homeownerCard = document.querySelector('[data-type="homeowner"]');
+                if (homeownerCard) {
+                    homeownerCard.click();
+                }
+                
+                // Set demo values
+                document.getElementById('recordCount').value = '25';
+                document.getElementById('dataPrefix').value = 'DEMO';
+                
+                showSuccess('🎮 Demo mode activated! Ready to generate test data.');
+            }, 500);
+        }
+        
+        // Utility functions
+        function showLoading(message) {
+            const loading = document.getElementById('loading');
+            const loadingText = document.getElementById('loadingText');
+            loadingText.textContent = message;
+            loading.style.display = 'block';
+        }
+        
+        function hideLoading() {
+            document.getElementById('loading').style.display = 'none';
+        }
+        
+        function showSuccess(message) {
+            const successDiv = document.createElement('div');
+            successDiv.className = 'success-message';
+            successDiv.innerHTML = `<strong>✅ Success!</strong> ${message}`;
+            successDiv.style.position = 'fixed';
+            successDiv.style.top = '20px';
+            successDiv.style.right = '20px';
+            successDiv.style.zIndex = '1000';
+            successDiv.style.maxWidth = '400px';
+            successDiv.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
+            
+            document.body.appendChild(successDiv);
+            
+            setTimeout(() => {
+                if (document.body.contains(successDiv)) {
+                    document.body.removeChild(successDiv);
+                }
+            }, 3000);
+        }
+        
+        function showError(message) {
+            const results = document.getElementById('results');
+            const resultsContent = document.getElementById('resultsContent');
+            
+            resultsContent.innerHTML = `
+                <div class="error-message">
+                    <strong>❌ Error:</strong> ${message}
+                </div>
+            `;
+            
+            results.style.display = 'block';
+        }
+        
+        // Console logging for debugging
+        console.log('🚀 nsynth.ai Insurance Test Data Generator');
+        console.log('📊 Ready to generate comprehensive test data');
+        console.log('🎯 TeamFocus Insurance Group Integration Ready');
+    </script>
+</body>
+</html>

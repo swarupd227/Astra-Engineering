@@ -1,0 +1,105 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  labels:
+    {{- include "devx.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  {{- with .Values.deployment.progressDeadlineSeconds }}
+  progressDeadlineSeconds: {{ . }}
+  {{- end }}
+  strategy:
+    {{- toYaml .Values.deployment.strategy | nindent 4 }}
+  selector:
+    matchLabels:
+      {{- include "devx.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "devx.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- if .Values.serviceAccount.name }}
+      serviceAccountName: {{ .Values.serviceAccount.name }}
+      {{- end }}
+      {{- with .Values.topologySpreadConstraints }}
+      topologySpreadConstraints:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: app
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.containerPort }}
+          env:
+            - name: DEVX_HOSTING
+              value: {{ .Values.env.devxHosting | quote }}
+            - name: AWS_REGION
+              value: {{ .Values.env.awsRegion | quote }}
+            - name: AWS_SECRET_NAME
+              value: {{ .Values.env.awsSecretName | quote }}
+            - name: NODE_ENV
+              value: {{ .Values.env.nodeEnv | quote }}
+            - name: PORT
+              value: {{ .Values.containerPort | quote }}
+            {{- if .Values.env.devxAllowAzureApis }}
+            - name: DEVX_ALLOW_AZURE_APIS
+              value: {{ .Values.env.devxAllowAzureApis | quote }}
+            {{- end }}
+            {{- if .Values.migrations.runOnPodStart }}
+            - name: RUN_DB_MIGRATIONS
+              value: "true"
+            - name: RUN_DB_SEED
+              value: {{ .Values.migrations.seed | quote }}
+            - name: RUN_DB_MIGRATIONS_STRICT
+              value: {{ .Values.migrations.strict | quote }}
+            {{- if .Values.migrations.mysqlSsl }}
+            - name: MYSQL_SSL
+              value: {{ .Values.migrations.mysqlSsl | quote }}
+            {{- end }}
+            {{- end }}
+            - name: DEVX_REPO_ROOT
+              value: "/app"
+          {{- if .Values.mysql.existingSecret }}
+          envFrom:
+            - secretRef:
+                name: {{ .Values.mysql.existingSecret }}
+          {{- end }}
+          {{- if .Values.migrations.runOnPodStart }}
+          startupProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            periodSeconds: {{ .Values.migrations.startupProbePeriodSeconds }}
+            timeoutSeconds: 5
+            failureThreshold: {{ .Values.migrations.startupProbeFailureThreshold }}
+          {{- end }}
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            {{- if .Values.migrations.runOnPodStart }}
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+            {{- else }}
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 6
+            {{- end }}
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            {{- if not .Values.migrations.runOnPodStart }}
+            initialDelaySeconds: 60
+            {{- end }}
+            periodSeconds: 30
+            timeoutSeconds: 5
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}

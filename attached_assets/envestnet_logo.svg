@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 100" role="img" aria-label="Envestnet">
+  <!-- Envestnet Chevron Mark (two parallel forward-pointing chevron stripes) -->
+  <g fill="#0074bd">
+    <!-- First (left) chevron stripe -->
+    <polygon points="0,50 20,10 35,10 50,50 35,90 20,90"/>
+    <!-- Second (right) chevron stripe -->
+    <polygon points="30,50 50,10 65,10 80,50 65,90 50,90"/>
+  </g>
+  <!-- "Envestnet" Logotype -->
+  <text
+    x="97"
+    y="68"
+    font-family="'Helvetica Neue', Arial, sans-serif"
+    font-weight="600"
+    font-size="46"
+    letter-spacing="-0.5"
+    fill="#1c2b4a"
+  >Envestnet</text>
+</svg>

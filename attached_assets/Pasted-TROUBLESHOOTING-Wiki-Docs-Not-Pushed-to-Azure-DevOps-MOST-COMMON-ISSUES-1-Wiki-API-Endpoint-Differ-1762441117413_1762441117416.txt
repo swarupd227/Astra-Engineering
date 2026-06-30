@@ -1,0 +1,256 @@
+TROUBLESHOOTING: Wiki Docs Not Pushed to Azure DevOps
+MOST COMMON ISSUES
+1. Wiki API Endpoint Differences
+Azure DevOps has two types of wikis with different APIs:
+Project Wiki (what you're using):
+
+URL pattern: .../_wiki/wikis/{ProjectName}.wiki/...
+API: POST {orgUrl}/{project}/_apis/wiki/wikis/{wikiIdentifier}/pages?path={pagePath}&api-version=7.0
+
+Code Wiki (wiki in a Git repo):
+
+Different API: Uses Git repository APIs
+
+Check which type you have:
+javascript// Verify wiki type
+GET https://dev.azure.com/DevXPlatform/NousAugmentedDevX/_apis/wiki/wikis?api-version=7.0
+
+// Response will show wiki type and identifier
+
+2. Missing Wiki Identifier
+The code might be using the wrong wiki identifier.
+Your wiki URL shows: NousAugmentedDevX.wiki
+Check if code is using:
+javascript// ❌ Wrong - using project name instead of wiki identifier
+const wikiId = "NousAugmentedDevX"; 
+
+// ✅ Correct - should be
+const wikiId = "NousAugmentedDevX.wiki";
+
+3. Incorrect API Endpoint
+Correct endpoint for creating/updating wiki pages:
+javascript// Create new page
+PUT https://dev.azure.com/DevXPlatform/NousAugmentedDevX/_apis/wiki/wikis/NousAugmentedDevX.wiki/pages?path={pagePath}&api-version=7.0
+
+// Update existing page  
+PUT https://dev.azure.com/DevXPlatform/NousAugmentedDevX/_apis/wiki/wikis/NousAugmentedDevX.wiki/pages?path={pagePath}&api-version=7.0
+
+// Headers
+{
+  "Authorization": "Basic " + btoa(":" + patToken),
+  "Content-Type": "application/json"
+}
+
+// Body
+{
+  "content": "# Wiki Page Content\n\nMarkdown content here..."
+}
+Note: For updates, you need If-Match header with eTag:
+javascript// Get current page first to get eTag
+GET .../pages?path=/PageName
+
+// Then update with eTag
+PUT .../pages?path=/PageName
+Headers: {
+  "If-Match": eTagFromGetRequest
+}
+
+4. PAT Token Permissions
+Required permissions for Wiki operations:
+Check if your PAT token has:
+
+✅ Code: Read & Write (if using Code Wiki)
+✅ Wiki: Read & Write (for Project Wiki)
+
+Verify token permissions:
+
+Go to Azure DevOps → User Settings → Personal Access Tokens
+Find your token → Edit
+Ensure "Wiki (Read, write, & manage)" is checked
+
+
+5. Page Path Format Issues
+Common mistakes:
+javascript// ❌ Wrong - missing leading slash
+path: "Overview-and-Vision"
+
+// ❌ Wrong - using backslashes
+path: "\Overview-and-Vision"
+
+// ❌ Wrong - spaces not encoded
+path: "/Overview and Vision"
+
+// ✅ Correct formats
+path: "/Overview-and-Vision"           // Top-level page
+path: "/Parent-Page/Child-Page"        // Nested page
+path: "/Overview%20and%20Vision"       // Spaces encoded
+
+6. Silent Failures
+The code might be failing silently without showing errors.
+Add comprehensive logging:
+javascriptasync function pushWikiToADO(wikiPages, adoCredentials) {
+  console.log('🚀 Starting wiki push to ADO...');
+  console.log('Wiki pages count:', wikiPages.length);
+  console.log('ADO Credentials:', { 
+    orgUrl: adoCredentials.organizationUrl,
+    project: adoCredentials.projectName,
+    hasToken: !!adoCredentials.patToken 
+  });
+
+  for (const page of wikiPages) {
+    try {
+      console.log(`📄 Pushing page: ${page.title} to path: ${page.path}`);
+      
+      const response = await createWikiPage(page, adoCredentials);
+      
+      console.log(`✅ Success: ${page.title}`, response);
+    } catch (error) {
+      console.error(`❌ Failed: ${page.title}`, {
+        status: error.response?.status,
+        statusText: error.response?.statusText,
+        message: error.message,
+        details: error.response?.data
+      });
+    }
+  }
+}
+
+7. Check Network Tab
+In browser DevTools:
+
+Open Network tab
+Filter by "Fetch/XHR"
+Look for requests to _apis/wiki/
+Check:
+
+❌ Are wiki requests being made at all?
+❌ What status codes are returned? (200, 201, 400, 401, 403, 404?)
+❌ What's in the request payload?
+❌ What's in the response body?
+
+
+
+
+8. Common Error Status Codes
+StatusMeaningSolution401UnauthorizedCheck PAT token validity403ForbiddenCheck PAT permissions (needs Wiki: Read & Write)404Not FoundWrong wiki identifier or page path400Bad RequestInvalid JSON body or path format409ConflictPage already exists, use PUT with eTag to update
+
+DEBUGGING STEPS
+Step 1: Verify Wiki Exists
+javascript// Test if you can read the wiki
+const response = await fetch(
+  'https://dev.azure.com/DevXPlatform/NousAugmentedDevX/_apis/wiki/wikis?api-version=7.0',
+  {
+    headers: {
+      'Authorization': 'Basic ' + btoa(':' + yourPATToken)
+    }
+  }
+);
+
+const wikis = await response.json();
+console.log('Available wikis:', wikis);
+// Look for id/identifier matching "NousAugmentedDevX.wiki"
+Step 2: Test Creating Simple Page
+javascript// Minimal test
+const testPage = {
+  content: "# Test Page\n\nThis is a test from the application."
+};
+
+const response = await fetch(
+  'https://dev.azure.com/DevXPlatform/NousAugmentedDevX/_apis/wiki/wikis/NousAugmentedDevX.wiki/pages?path=/Test-Page-Generated&api-version=7.0',
+  {
+    method: 'PUT',
+    headers: {
+      'Authorization': 'Basic ' + btoa(':' + yourPATToken),
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(testPage)
+  }
+);
+
+console.log('Status:', response.status);
+console.log('Response:', await response.json());
+If this works, the issue is in your page generation/formatting logic.
+If this fails, the issue is with credentials or wiki configuration.
+Step 3: Check Code Execution
+Add breakpoints or logs to verify the wiki push function is even being called:
+javascript// In your artifact generation completion handler
+console.log('✅ Artifacts generated successfully');
+console.log('📚 Now pushing to wiki...');
+
+if (typeof pushWikiToADO === 'function') {
+  console.log('✅ pushWikiToADO function exists');
+  await pushWikiToADO(wikiDocs, adoCredentials);
+} else {
+  console.error('❌ pushWikiToADO function not found!');
+}
+
+QUICK DIAGNOSTIC SCRIPT
+Run this in your browser console while on the app:
+javascript// Quick diagnostic
+(async () => {
+  const orgUrl = 'https://dev.azure.com/DevXPlatform';
+  const project = 'NousAugmentedDevX';
+  const wikiId = 'NousAugmentedDevX.wiki';
+  const patToken = 'YOUR_PAT_TOKEN'; // Replace with actual token
+
+  // Test 1: Can we access wikis?
+  console.log('Test 1: Fetching wikis...');
+  const wikisResponse = await fetch(
+    `${orgUrl}/${project}/_apis/wiki/wikis?api-version=7.0`,
+    { headers: { 'Authorization': 'Basic ' + btoa(':' + patToken) } }
+  );
+  console.log('Wikis:', await wikisResponse.json());
+
+  // Test 2: Can we create a page?
+  console.log('\nTest 2: Creating test page...');
+  const createResponse = await fetch(
+    `${orgUrl}/${project}/_apis/wiki/wikis/${wikiId}/pages?path=/Diagnostic-Test&api-version=7.0`,
+    {
+      method: 'PUT',
+      headers: {
+        'Authorization': 'Basic ' + btoa(':' + patToken),
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ content: '# Diagnostic Test\n\nGenerated at ' + new Date() })
+    }
+  );
+  console.log('Create Status:', createResponse.status);
+  console.log('Create Response:', await createResponse.json());
+
+  // Check the page at: https://dev.azure.com/DevXPlatform/NousAugmentedDevX/_wiki/wikis/NousAugmentedDevX.wiki?wikiVersion=GBwikiMaster&pagePath=/Diagnostic-Test
+})();
+```
+
+---
+
+### **MOST LIKELY ISSUE**
+
+Based on the fact that work items are pushing successfully but wiki is not:
+
+**The wiki push code is probably:**
+1. Not being called at all (missing function call after artifact generation)
+2. Using wrong wiki identifier (using project name instead of `NousAugmentedDevX.wiki`)
+3. Failing silently without error logs
+
+**Ask Replit AI to verify:**
+- "Where in the code is the wiki push happening after artifact generation?"
+- "Show me the exact API endpoint being used for wiki page creation"
+- "Add detailed console logging to the wiki push function"
+
+---
+
+### **IMMEDIATE ACTION**
+
+Tell Replit AI:
+```
+The generated wiki documentation is not appearing in Azure DevOps at 
+https://dev.azure.com/DevXPlatform/NousAugmentedDevX/_wiki/wikis/NousAugmentedDevX.wiki/
+
+But work items (epics, stories) are pushing successfully.
+
+Please:
+1. Add comprehensive logging to the wiki push function
+2. Verify the wiki API endpoint uses "NousAugmentedDevX.wiki" as the wiki identifier
+3. Ensure the wiki push function is actually being called after artifact generation
+4. Test with this endpoint: PUT https://dev.azure.com/DevXPlatform/NousAugmentedDevX/_apis/wiki/wikis/NousAugmentedDevX.wiki/pages?path=/Test-Page&api-version=7.0
+5. Log any errors with full response details (status, statusText, response body)

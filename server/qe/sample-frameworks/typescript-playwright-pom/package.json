@@ -1,0 +1,22 @@
+{
+  "name": "nat20-typescript-playwright-pom",
+  "version": "1.0.0",
+  "description": "Production-ready TypeScript Playwright POM framework for NAT2.0 autonomous testing",
+  "scripts": {
+    "test": "npx playwright test",
+    "test:smoke": "npx playwright test --grep @smoke",
+    "test:functional": "npx playwright test --grep @functional",
+    "test:headed": "npx playwright test --headed",
+    "test:debug": "npx playwright test --debug",
+    "test:report": "npx playwright show-report",
+    "lint": "npx tsc --noEmit"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.44.0",
+    "@types/node": "^20.0.0",
+    "typescript": "^5.4.0",
+    "allure-playwright": "^3.0.0",
+    "dotenv": "^16.0.0",
+    "@faker-js/faker": "^8.0.0"
+  }
+}

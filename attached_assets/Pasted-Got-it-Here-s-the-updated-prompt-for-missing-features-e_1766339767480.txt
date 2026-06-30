@@ -1,0 +1,801 @@
+Got it! Here's the **updated prompt for missing features/enhancements only** with the corrected menu names:
+
+---
+
+## **Updated Replit Prompt for NAT 2.0 - Complete Feature Enhancements (With Corrected Names)**
+
+```
+FEATURE REQUEST: Complete NAT 2.0 Platform Enhancements - UI/UX, Sprint Continuity, Export/Import, Reporting & Execution Integration
+
+CONTEXT:
+I have an existing NAT 2.0 (Nous Autonomous Testing Platform) application built in Replit with the following structure:
+
+CURRENT LEFT SIDEBAR MENU (TESTING MODES):
+1. Dashboard
+2. Autonomous Testing (Previously "Functional Testing")
+3. Generate from User Stories (Previously "Sprint Testing")
+4. Execution Mode
+5. Visual Regression
+6. Synthetic Data
+7. Project History
+--- (Bottom) ---
+8. Agent Configurations
+
+CURRENT TOP HEADER:
+- NAT 2.0 Logo and "Agentic Testing" label
+- Collapse sidebar button (<)
+- Home icon
+- Project Selector dropdown
+- Export icon
+- User profile (Demo User)
+- Settings gear icon
+- Logout button
+
+CURRENT DASHBOARD:
+- NAT 2.0 Command Center banner with agent badges (Discovery Agent, Test Generator, Executor Agent, QA Refiner)
+- Stats: Active runs, Generated test cases
+- Metric cards: Total Projects, Test Cases, Test Runs, Workflow Tests
+- Test Case Distribution horizontal bar chart
+
+EXISTING THEME:
+- Dark theme (#1a1a2e background)
+- Glassmorphism cards with subtle borders
+- Gradient accents (orange, green, purple, cyan)
+- Modern professional appearance
+- Agent status indicators with colored dots
+
+I need to implement several enhancements across multiple modules and add new menu options while maintaining the existing design language.
+
+=============================================================================
+SECTION 1: LEFT SIDEBAR MENU UPDATE
+=============================================================================
+
+UPDATE LEFT SIDEBAR MENU STRUCTURE:
+
+TESTING MODES (Existing + New):
+1. Dashboard (existing) - Grid icon, orange highlight when active
+2. Autonomous Testing (existing, renamed) - Magic wand/AI icon
+3. Generate from User Stories (existing, renamed) - Document/checklist icon
+4. Execution Mode (existing) - Play icon
+5. Visual Regression (existing) - Eye icon
+6. Synthetic Data (existing) - Database icon
+7. Reports & Analytics (NEW) - Chart/graph icon
+8. Import/Export Center (NEW) - Upload-download arrows icon
+9. Project History (existing) - Clock/history icon
+
+BOTTOM SECTION:
+10. Agent Configurations (existing) - Gear/robot icon
+11. Settings (NEW) - Cog icon
+12. Help & Guidance (NEW) - Question mark icon
+
+NEW MENU ITEMS STYLING:
+- Match existing menu item style
+- Dark background with hover glow effect
+- Active state: Highlighted with orange/accent background
+- Icons on left, labels on right
+- Consistent padding and spacing with existing items
+
+=============================================================================
+SECTION 2: DASHBOARD ENHANCEMENTS
+=============================================================================
+
+LOCATION: Dashboard (existing first menu item)
+
+KEEP EXISTING:
+- NAT 2.0 Command Center header banner
+- Agent badges row (Discovery Agent, Test Generator, Executor Agent, QA Refiner)
+- Active runs and Generated test cases stats (top right of banner)
+- Metric cards row (Total Projects, Test Cases, Test Runs, Workflow Tests)
+- Test Case Distribution horizontal bar chart
+
+ADD NEW SECTIONS BELOW EXISTING:
+
+1. QUICK ACTIONS ROW (After metric cards):
+   - Glassmorphism card containing action buttons:
+     - "New Autonomous Test" button (links to Autonomous Testing)
+     - "Generate from Stories" button (links to Generate from User Stories)
+     - "Run Execution" button (links to Execution Mode)
+     - "Sync from ADO" button (triggers ADO sync)
+     - "Generate Report" button (links to Reports)
+   - Button style: Dark background, subtle border, icon + text
+   - Hover effect: Glow with accent color
+
+2. RECENT ACTIVITY SECTION (Two column layout):
+   
+   LEFT COLUMN - RECENT ACTIVITY FEED:
+   - Card title: "Recent Activity"
+   - Timeline list showing:
+     - Icon (based on action type)
+     - Activity description
+     - Timestamp (relative: "2 hours ago")
+     - Project/Sprint badge
+   - Activities include: Test generated, Execution completed, Sprint synced, Project created
+   - "View All" link at bottom
+   - Max 8 items visible
+   
+   RIGHT COLUMN - ACTIVE SPRINTS:
+   - Card title: "Active Sprints"
+   - List of active sprints across projects:
+     - Sprint name
+     - Project name (smaller text)
+     - Progress bar (user stories covered)
+     - Days remaining badge
+   - "View All Sprints" link
+   - Max 5 sprints visible
+
+3. TEST GENERATION TREND CHART (Full width):
+   - Card title: "Test Generation Trend"
+   - Line chart showing test cases generated over last 7 days
+   - X-axis: Days
+   - Y-axis: Count
+   - Gradient line matching theme colors
+   - Hover tooltip with exact values
+   - Legend if multiple data series
+
+4. PENDING ACTIONS ALERTS (If any):
+   - Card with warning/info styling
+   - List of pending items:
+     - User stories without test cases (count, link)
+     - Failed executions needing review (count, link)
+     - Sprints pending sync (count, link)
+   - Dismiss button per alert
+   - Only show if pending items exist
+
+=============================================================================
+SECTION 3: UI/UX NAVIGATION ENHANCEMENTS (Apply Across All Modules)
+=============================================================================
+
+1. BREADCRUMB NAVIGATION:
+   - Add below top header bar, above page content
+   - Format: Dashboard > Autonomous Testing > Project Name > Test Cases
+   - Format: Dashboard > Generate from User Stories > Project Name > Sprint > User Stories
+   - Separator: ">" or "/" icon
+   - Each item clickable except current page
+   - Styling: Subtle text, matches theme
+
+2. PROJECT SELECTOR ENHANCEMENT (Top Header):
+   - Current: "No Project Selected" dropdown
+   - Enhancement:
+     - Show recently accessed projects at top
+     - Search box within dropdown
+     - "Create New Project" option at bottom
+     - Project badges showing domain (Insurance, Healthcare, etc.)
+     - Star/favorite projects option
+
+3. CONTEXTUAL HELP TOOLTIPS:
+   - Add (i) info icons next to complex features
+   - Hover shows tooltip with explanation
+   - Tooltip styling: Dark background, light text, subtle shadow
+   - Include on: ADO integration fields, Generation options, Filter options
+
+4. GLOBAL SEARCH (Top Header):
+   - Add search icon next to project selector
+   - Click opens search modal/overlay
+   - Search across: Projects, Test Cases, User Stories, Sprints
+   - Keyboard shortcut: Ctrl+K or Cmd+K
+   - Results grouped by type
+   - Recent searches shown
+
+5. NOTIFICATION BELL (Top Header):
+   - Add bell icon between settings and user profile
+   - Badge with unread count
+   - Dropdown shows notifications:
+     - Sync completed
+     - Generation finished
+     - Execution results
+     - Errors/warnings
+   - Mark as read functionality
+   - "View All" link
+
+=============================================================================
+SECTION 4: SPRINT CONTINUITY & REGRESSION MANAGEMENT
+=============================================================================
+
+LOCATION: Inside "Generate from User Stories" menu item
+ADD NEW TAB: "Sprint Continuity" (alongside existing tabs)
+
+ACCESS: Generate from User Stories > Select Project > "Sprint Continuity" tab
+
+SPRINT CONTINUITY TAB STRUCTURE:
+
+1. SPRINT TIMELINE VIEW:
+   - Horizontal scrollable timeline
+   - Each sprint as a node:
+     - Sprint name
+     - Date range
+     - Test case count badge
+     - Status indicator (Active/Completed)
+   - Connecting lines between sprints
+   - Click sprint to see details panel
+   - Current sprint highlighted
+
+2. SPRINT COMPARISON SECTION:
+   - Title: "Compare Sprints"
+   - Two dropdowns: "Sprint A" and "Sprint B"
+   - "Compare" button
+   - Results display:
+     - Side-by-side cards showing:
+       - Sprint A stats | Sprint B stats
+     - Difference summary:
+       - New test cases in B
+       - Removed from A
+       - Modified test cases
+     - Visual diff indicators (green=added, red=removed, yellow=modified)
+
+3. TEST CASE CARRYOVER:
+   - Title: "Carry Forward Test Cases"
+   - Source Sprint dropdown
+   - Target Sprint dropdown
+   - Test case list with checkboxes:
+     - Select All option
+     - Filter by: Regression, Smoke, All
+     - Show test case name, type, priority
+   - Carryover options (radio):
+     - Copy as new
+     - Link to original
+     - Copy as regression
+   - "Carry Forward" button
+   - Progress indicator during operation
+
+4. REGRESSION SUITE BUILDER:
+   - Title: "Regression Test Suite"
+   - Auto-suggested regression tests:
+     - Tests marked as Regression priority
+     - Core functionality tests
+     - Previously failed then fixed tests
+   - "AI Recommendations" section:
+     - Based on test history
+     - Based on code coverage (if available)
+   - Add/Remove from regression suite
+   - "Create Regression Execution" button
+
+5. CROSS-SPRINT TRACEABILITY:
+   - Matrix view:
+     - Rows: User Stories
+     - Columns: Sprints
+     - Cells: Test case count (clickable)
+   - Highlight gaps (empty cells)
+   - Export matrix option
+
+=============================================================================
+SECTION 5: IMPORT/EXPORT CENTER (NEW MENU ITEM)
+=============================================================================
+
+LOCATION: New menu item in left sidebar
+POSITION: After "Synthetic Data", before "Project History"
+ICON: Upload-download arrows icon
+LABEL: "Import/Export"
+
+PAGE STRUCTURE WITH TABS:
+
+TAB 1: EXPORT
+
+1. EXPORT SOURCE:
+   - Radio options:
+     - All Test Cases
+     - From Autonomous Testing (select project)
+     - From Generate from User Stories (select project > sprint)
+     - Custom Selection (opens test case picker)
+
+2. EXPORT FILTERS:
+   - Priority checkboxes: Smoke, Sanity, Regression, etc.
+   - Type checkboxes: Functional, Edge, Negative, Security, etc.
+   - Date range picker
+   - Search box
+
+3. EXPORT FORMAT:
+   - Dropdown: Excel (.xlsx), CSV, JSON, PDF, Word (.docx)
+   - Format-specific options expand below
+
+4. EXPORT TEMPLATE:
+   - Dropdown: Standard, Zephyr Format, TestRail Format, qTest Format, Custom
+   - "Manage Templates" link
+
+5. EXPORT PREVIEW:
+   - "Preview" button shows first 5 records
+   - Preview in modal
+
+6. EXPORT BUTTON:
+   - "Export" primary button
+   - Progress bar
+   - Auto-download on completion
+
+---
+
+TAB 2: IMPORT
+
+1. IMPORT SOURCE:
+   - Radio options:
+     - Upload File
+     - From Connected Tool
+     - From URL
+
+2. FILE UPLOAD (If Upload selected):
+   - Drag & drop zone
+   - Supported: .xlsx, .csv, .json
+   - File info display after upload
+
+3. DESTINATION:
+   - Destination Type:
+     - To Autonomous Testing project
+     - To Generate from User Stories project/sprint
+   - Project dropdown (or create new)
+   - Sprint dropdown (if User Stories destination)
+
+4. FIELD MAPPING:
+   - Auto-detected columns from file
+   - Mapping table: Source Column → NAT Field
+   - "Auto-Map" button (AI suggests)
+   - Save mapping as template option
+
+5. IMPORT OPTIONS:
+   - Duplicate handling: Skip, Replace, Create New
+   - Validation toggle
+   - Generate IDs toggle
+
+6. IMPORT PREVIEW:
+   - Table showing first 10 records
+   - Validation status per row
+   - Error highlighting
+
+7. IMPORT BUTTON:
+   - "Import" primary button
+   - Progress with count
+   - Summary on completion
+
+---
+
+TAB 3: TEMPLATES
+
+1. EXPORT TEMPLATES LIST:
+   - Template cards: Name, Format, Actions (Edit, Delete)
+   - "Create Template" button
+
+2. IMPORT TEMPLATES LIST:
+   - Template cards: Name, Source Format, Actions
+   - "Create Template" button
+
+---
+
+TAB 4: HISTORY
+
+1. SYNC LOG TABLE:
+   - Columns: Date, Type (Import/Export), Source/Dest, Records, Status
+   - Sortable
+   - Click for details
+   - Pagination
+
+=============================================================================
+SECTION 6: REPORTS & ANALYTICS (NEW MENU ITEM)
+=============================================================================
+
+LOCATION: New menu item in left sidebar
+POSITION: After "Synthetic Data", before "Import/Export"
+ICON: Bar chart icon
+LABEL: "Reports"
+
+PAGE STRUCTURE WITH TABS:
+
+TAB 1: OVERVIEW DASHBOARD
+
+1. DATE RANGE SELECTOR:
+   - Quick: Today, This Week, This Month, Custom
+   - Apply button
+
+2. KEY METRICS ROW:
+   - Cards matching dashboard style:
+     - Test Cases Generated (period)
+     - Executions Run
+     - Pass Rate %
+     - Coverage %
+
+3. CHARTS SECTION:
+   
+   GENERATION TREND (Line Chart):
+   - Test cases over time
+   - Daily/Weekly/Monthly toggle
+   - Filter by source: Autonomous Testing, Generate from User Stories, All
+   
+   TEST TYPE DISTRIBUTION (Pie Chart):
+   - Functional, Edge, Negative, Security, etc.
+   - Matches existing bar chart style but as pie
+   
+   EXECUTION RESULTS (Bar Chart):
+   - Passed vs Failed vs Skipped
+   - By project or sprint filter
+   
+   SPRINT VELOCITY (Line Chart):
+   - Test cases per sprint (from Generate from User Stories)
+   - Trend line
+
+---
+
+TAB 2: COVERAGE REPORTS
+
+1. COVERAGE SUMMARY CARD:
+   - Overall coverage % (large)
+   - User Stories covered: X/Y (from Generate from User Stories)
+   - Features covered: X/Y
+
+2. COVERAGE BY PROJECT TABLE:
+   - Project name
+   - Source (Autonomous / User Stories)
+   - Stories/Features
+   - Test Cases
+   - Coverage %
+   - Progress bar
+   - Click to drill down
+
+3. COVERAGE GAP LIST:
+   - User stories without tests (from Generate from User Stories)
+   - Priority indicator
+   - "Generate Tests" action
+
+4. TRACEABILITY MATRIX:
+   - Exportable matrix view
+   - Requirements → Test Cases mapping
+
+---
+
+TAB 3: EXECUTION REPORTS
+
+1. EXECUTION SUMMARY:
+   - Total runs
+   - Pass/Fail/Skip counts
+   - Avg duration
+
+2. EXECUTION HISTORY TABLE:
+   - Run ID, Date, Project, Source (Autonomous/User Stories), Tests, Passed, Failed, Duration
+   - Click for details
+   - Export option
+
+3. FAILURE ANALYSIS:
+   - Top failing tests
+   - Failure trends chart
+   - Root cause grouping
+
+---
+
+TAB 4: CUSTOM REPORTS
+
+1. REPORT BUILDER:
+   - Data source selection:
+     - Autonomous Testing
+     - Generate from User Stories
+     - Execution Mode
+     - All
+   - Field picker
+   - Filter builder
+   - Chart type selector
+   - Preview
+   - Save report
+
+2. SAVED REPORTS:
+   - List of custom reports
+   - Run, Edit, Delete actions
+   - Schedule option
+
+=============================================================================
+SECTION 7: EXECUTION MODE ENHANCEMENTS
+=============================================================================
+
+LOCATION: Existing "Execution Mode" menu item
+
+ADD/ENHANCE THE FOLLOWING:
+
+1. ENHANCED TEST SELECTION:
+   
+   SOURCE TABS:
+   - From Autonomous Testing
+   - From Generate from User Stories
+   - From Regression Suite
+   - Custom Selection
+   
+   SMART SUGGESTIONS:
+   - "Recommended" section showing:
+     - Not yet executed tests
+     - Previously failed tests
+     - High priority tests
+   - AI badge on suggestions
+
+2. EXECUTION SUITE MANAGEMENT:
+   
+   CREATE SUITE:
+   - Suite name input
+   - Add tests from Autonomous Testing and/or Generate from User Stories
+   - Drag to reorder
+   - Save for reuse
+   
+   SAVED SUITES:
+   - Dropdown to select saved suite
+   - Quick run button
+   - Edit/Delete options
+
+3. EXECUTION CONFIG:
+   
+   BROWSER SELECTION:
+   - Multi-select: Chrome, Firefox, Edge
+   - Headless toggle
+   
+   ENVIRONMENT:
+   - Dropdown: Dev, QA, Staging, Prod
+   - URL override option
+   
+   OPTIONS:
+   - Parallel execution toggle
+   - Continue on failure toggle
+   - Screenshot capture: Never, On Failure, Every Step
+   - Retry count: 0, 1, 2, 3
+
+4. LIVE EXECUTION DASHBOARD:
+   
+   DURING EXECUTION:
+   - Agent animation (existing matrix style)
+   - Show active agent: "Executor Agent" badge
+   - Live status messages:
+     - "Executing: [Test Name]"
+     - "Step 4 of 8: [Step Description]"
+   - Progress: X of Y tests
+   - Pass/Fail counters (updating)
+   - Elapsed time
+   - Pause/Stop buttons
+
+5. RESULTS VIEW:
+   
+   SUMMARY HEADER:
+   - Total, Passed, Failed, Skipped with counts and %
+   - Duration
+   - Execution date
+   - Source badge: "Autonomous Testing" or "Generate from User Stories"
+   
+   RESULTS LIST:
+   - Expandable rows per test case:
+     - Status badge (Pass/Fail/Skip)
+     - Duration
+     - Source indicator
+     - Expand shows:
+       - Step-by-step results
+       - Screenshots (if captured)
+       - Error message and stack trace (if failed)
+   
+   FILTERS:
+   - Show: All, Passed, Failed, Skipped
+   - Filter by Source: Autonomous, User Stories, All
+   - Search box
+
+6. DEFECT LINKING:
+   
+   FOR FAILED TESTS:
+   - "Create Defect" button per failed test
+   - Modal with:
+     - Auto-filled title: "Test Failed: [Test Name]"
+     - Auto-filled description with steps and error
+     - Attached screenshots
+     - Destination: ADO Bug, JIRA, Internal
+     - Priority/Severity dropdowns
+     - Create button
+   
+   - "Link Existing Defect" option
+     - Search existing defects
+     - Link to test case
+   
+   DEFECT STATUS:
+   - Show linked defects on test case
+   - Status sync from ADO/JIRA
+   - "Retest" button when fixed
+
+7. EXECUTION HISTORY:
+   
+   HISTORY TAB/SECTION:
+   - Table of past executions
+   - Columns: ID, Date, Suite, Source, Tests, Passed, Failed, Duration
+   - Click to view details
+   - Compare runs option
+   - Re-run button
+
+8. POST-GENERATION INTEGRATION:
+   
+   AFTER TEST GENERATION (Autonomous Testing or Generate from User Stories):
+   - Show prompt: "Tests generated! Execute now?"
+   - Options: "Execute Now", "Add to Suite", "Later"
+   - "Execute Now" navigates to Execution Mode with tests pre-selected
+
+=============================================================================
+SECTION 8: SETTINGS (NEW MENU ITEM)
+=============================================================================
+
+LOCATION: Bottom of left sidebar, after Agent Configurations
+ICON: Cog/gear icon
+LABEL: "Settings"
+
+SETTINGS PAGE SECTIONS:
+
+1. GENERAL SETTINGS:
+   - Default domain selection
+   - Default coverage level
+   - Auto-save interval
+   - Date/time format
+
+2. NOTIFICATION SETTINGS:
+   - Email notifications toggle
+   - Notification types checkboxes:
+     - Generation complete
+     - Execution complete
+     - Sync complete
+     - Errors/failures
+
+3. DISPLAY SETTINGS:
+   - Theme toggle (Dark/Light) - Dark default
+   - Sidebar collapse default
+   - Items per page (pagination)
+
+4. DEFAULT TEST GENERATION SETTINGS:
+   - Default test types selection
+   - Default coverage level
+   - Default module: Autonomous Testing or Generate from User Stories
+
+5. INTEGRATION SETTINGS:
+   - Quick links to Agent Configurations
+   - Connection status overview
+   - ADO default settings
+
+6. ACCOUNT SETTINGS:
+   - Profile information
+   - Change password
+   - API key management (if applicable)
+
+=============================================================================
+SECTION 9: HELP & GUIDANCE (NEW MENU ITEM)
+=============================================================================
+
+LOCATION: Bottom of left sidebar, after Settings
+ICON: Question mark / book icon
+LABEL: "Help"
+
+HELP PAGE SECTIONS:
+
+1. GETTING STARTED:
+   - Quick start guide
+   - Video tutorials (embedded or links)
+   - Step-by-step workflows
+
+2. FEATURE GUIDES:
+   - Autonomous Testing guide
+   - Generate from User Stories guide
+   - ADO Integration guide
+   - Execution Mode guide
+   - Reports guide
+
+3. KEYBOARD SHORTCUTS:
+   - Full list of shortcuts
+   - Categorized by action
+   - Printable format
+
+4. FAQ:
+   - Common questions
+   - Searchable
+   - Expandable answers
+
+5. ONBOARDING TOUR:
+   - "Start Tour" button
+   - Step-by-step overlay tour of platform
+   - Progress indicator
+   - Skip option
+
+6. CONTACT SUPPORT:
+   - Support email/form
+   - Documentation links
+   - Feedback option
+
+=============================================================================
+SECTION 10: KEYBOARD SHORTCUTS (Global)
+=============================================================================
+
+IMPLEMENT GLOBAL KEYBOARD SHORTCUTS:
+
+NAVIGATION:
+- G then D: Go to Dashboard
+- G then A: Go to Autonomous Testing
+- G then U: Go to Generate from User Stories
+- G then E: Go to Execution Mode
+- G then R: Go to Reports
+
+ACTIONS:
+- Ctrl+K / Cmd+K: Global search
+- Ctrl+N: New item (context-aware)
+- Ctrl+S: Save current
+- Ctrl+E: Export
+- Ctrl+Enter: Add step below (in test case edit)
+
+EDITING:
+- Ctrl+Z: Undo
+- Ctrl+Y / Ctrl+Shift+Z: Redo
+- Escape: Cancel/Close modal
+- Enter: Confirm/Submit
+
+HELP:
+- ?: Show keyboard shortcuts overlay
+- F1: Open help
+
+=============================================================================
+VISUAL DESIGN REQUIREMENTS
+=============================================================================
+
+MAINTAIN EXISTING DESIGN LANGUAGE:
+- Dark background: #1a1a2e or similar
+- Card backgrounds: Glassmorphism with rgba backgrounds
+- Accent colors: Orange (#f39c12), Green (#2ecc71), Purple (#9b59b6), Cyan (#00d4ff)
+- Text: White primary, gray secondary
+- Borders: Subtle, 1px, rgba white
+- Shadows: Subtle glow effects
+- Icons: Consistent icon family (Lucide or similar)
+- Fonts: Modern sans-serif (Inter, Poppins, or system)
+
+ANIMATIONS:
+- Smooth transitions (0.2-0.3s)
+- Hover effects with subtle scale or glow
+- Loading spinners matching theme
+- Agent animations (matrix style) for operations
+- Progress bars with gradient fills
+
+RESPONSIVE:
+- Collapsible sidebar for smaller screens
+- Card layouts adapt to screen width
+- Mobile-friendly touch targets
+
+=============================================================================
+ERROR HANDLING & FEEDBACK
+=============================================================================
+
+1. TOAST NOTIFICATIONS:
+   - Position: Top-right
+   - Types: Success (green), Error (red), Warning (yellow), Info (blue)
+   - Auto-dismiss after 5 seconds
+   - Manual dismiss option
+
+2. LOADING STATES:
+   - Skeleton loaders for content areas
+   - Spinner for buttons during action
+   - Progress bars for long operations
+   - Status messages during processing
+
+3. ERROR DISPLAYS:
+   - Inline validation errors (red text below field)
+   - Modal for critical errors
+   - Retry options where applicable
+   - User-friendly messages
+
+4. EMPTY STATES:
+   - Friendly illustrations/icons
+   - Helpful message
+   - Action button (e.g., "Create your first project")
+
+=============================================================================
+DATA PERSISTENCE
+=============================================================================
+
+ENSURE ALL DATA IS STORED AND RETRIEVABLE:
+- Projects (both Autonomous Testing and Generate from User Stories)
+- Sprints and User Stories
+- Test Cases from both modules
+- Execution results and history
+- Import/Export history
+- User preferences and settings
+- Custom report definitions
+- Saved execution suites
+- Regression suite configurations
+
+DATABASE OPERATIONS:
+- Auto-save for test case edits
+- Optimistic updates with rollback on error
+- Pagination for large data sets
+- Caching for frequently accessed data
+```
+
+---
+
+This updated prompt now uses the correct names:
+- **Autonomous Testing** (instead of Functional Testing)
+- **Generate from User Stories** (instead of Sprint Testing)
+
+All references throughout the prompt have been updated consistently. Ready to paste into Replit, Chandra!

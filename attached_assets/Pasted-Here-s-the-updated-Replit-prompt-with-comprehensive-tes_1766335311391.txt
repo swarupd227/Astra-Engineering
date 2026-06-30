@@ -1,0 +1,542 @@
+Here's the updated Replit prompt with comprehensive test case editing functionality added to the Test Case Results section.
+
+---
+
+## **Replit Prompt for Functional Testing Enhancement (Updated with Edit Functionality)**
+
+```
+FEATURE REQUEST: Enhance Functional Testing Module with Document Upload, URL Context & Test Case Editing
+
+CONTEXT:
+I have an existing NAT 2.0 (Nous Autonomous Tester 2.0) application built in Replit. The Functional Testing module currently generates test cases by analyzing application URLs. I need to enhance this module to accept additional context through document uploads and multiple URL references before generating test cases. Additionally, users must be able to edit generated test cases including adding, removing, and reordering test steps.
+
+EXISTING STRUCTURE:
+- Left sidebar with: Visual Regression Testing, Test Configuration, Functional Testing, Sprint Testing, Execution Mode, Project History, Agent Configurations
+- Functional Testing currently: Takes application URL, selects domain (Insurance, Healthcare, Banking, Fintech), crawls pages, generates test cases
+- Dark theme with glassmorphism UI, matrix-style agent animations
+
+ENHANCEMENT: FUNCTIONAL TESTING MODULE
+
+MODIFY FUNCTIONAL TESTING PAGE STRUCTURE:
+
+1. PROJECT SETUP SECTION (Step 1):
+   - Project Name (text input, required)
+   - Application URL (text input, required) - Primary URL to test
+   - Domain Selection (dropdown): Insurance, Healthcare, Banking, Fintech
+   - Application Type (dropdown): SaaS Application, Custom Application, Packaged Application, Web Portal, E-Commerce
+
+2. NEW: CONTEXT INPUT SECTION (Step 2):
+   Create a tabbed interface with two tabs: "Document Upload" and "URL References"
+
+   TAB 1: DOCUMENT UPLOAD
+   - Drag & drop zone for multiple document uploads
+   - Supported formats: PDF, DOCX, TXT, MD, HTML
+   - File size limit: 10MB per file, max 10 files
+   - Upload progress indicator for each file
+   - Uploaded documents displayed as cards showing:
+     - Document name with file icon
+     - File size and format badge
+     - Upload timestamp
+     - Preview button (opens modal with document content preview)
+     - Delete button (X icon)
+   - Document type tags for each upload (dropdown on card):
+     - Requirements Document
+     - User Stories
+     - Functional Specifications
+     - Business Rules
+     - API Documentation
+     - User Manual
+     - Release Notes
+     - Other
+   
+   TAB 2: URL REFERENCES
+   - Input field to add URLs with "Add URL" button
+   - Multiple URLs can be added (minimum 0, maximum 10)
+   - Each added URL displayed as a card showing:
+     - URL text (truncated with tooltip for full URL)
+     - URL type dropdown:
+       - Product Documentation
+       - API Reference
+       - User Guide
+       - Knowledge Base
+       - Release Notes
+       - Technical Specs
+       - Other
+     - Fetch Status indicator (Pending, Fetching, Success, Failed)
+     - Preview button (opens modal with fetched content preview)
+     - Delete button (X icon)
+   - "Fetch All" button to crawl and extract content from all URLs
+   - Progress indicator showing fetch status for each URL
+
+3. CONTEXT PREVIEW SECTION (Step 2.5):
+   - Collapsible section showing "Context Summary"
+   - Display total documents uploaded count
+   - Display total URLs added count
+   - Display total context size (characters/tokens)
+   - "View Full Context" button opens modal showing:
+     - All extracted text from documents
+     - All fetched content from URLs
+     - Organized by source with expandable sections
+   - Context readiness indicator: "Ready for Test Generation" or "Processing..."
+
+4. TEST GENERATION CONFIGURATION (Step 3):
+   - Generation Mode toggle:
+     - Autonomous (AI analyzes all context and generates comprehensive tests)
+     - Guided (User selects specific areas to focus test generation)
+   
+   - If Guided mode selected, show:
+     - Modules/Features multi-select (extracted from uploaded documents)
+     - Priority areas checkboxes
+     - Specific scenarios text area
+   
+   - Test Types to Generate (checkboxes, all selected by default):
+     - [ ] Functional Tests
+     - [ ] Edge Case Tests
+     - [ ] Negative Tests
+     - [ ] Boundary Tests
+     - [ ] Security Tests
+     - [ ] Accessibility Tests
+     - [ ] Performance Tests (basic)
+   
+   - Test Coverage Level (radio buttons):
+     - Basic (faster, fewer test cases)
+     - Standard (balanced)
+     - Comprehensive (thorough, more test cases)
+   
+   - Include in Test Cases (checkboxes):
+     - [ ] Preconditions
+     - [ ] Test Data suggestions
+     - [ ] Expected Results
+     - [ ] Priority tags (Smoke/Sanity/Regression)
+     - [ ] Traceability to source document/URL
+
+5. GENERATE TEST CASES BUTTON:
+   - Large prominent button: "Generate Test Cases"
+   - On click, show agent animation panel (existing matrix-style animation)
+   - Display agent status messages:
+     - "Reading uploaded documents..."
+     - "Analyzing document: [filename]..."
+     - "Fetching URL content..."
+     - "Extracting requirements from context..."
+     - "Identifying test scenarios..."
+     - "Generating functional test cases..."
+     - "Generating edge case tests..."
+     - "Generating security tests..."
+     - "Organizing and prioritizing tests..."
+     - "Test generation complete!"
+
+6. TEST CASE RESULTS SECTION WITH FULL EDITING (Step 4):
+
+   HEADER BAR:
+   - Title: "Generated Test Cases" with count badge
+   - View toggle: Card View | Table View | Compact View
+   - Auto-save indicator: "All changes saved" or "Saving..."
+   - "Add New Test Case" button (+ icon) - creates blank test case
+   
+   FILTER & SEARCH BAR:
+   - Filter by Priority dropdown (All, Smoke, Sanity, Regression)
+   - Filter by Test Type dropdown (All, Functional, Edge, Negative, Security, Accessibility)
+   - Filter by Source dropdown (All, list of uploaded documents/URLs)
+   - Filter by Status dropdown (All, Original, Modified, New, Deleted)
+   - Search box for test case title/description
+   - "Clear Filters" button
+   
+   BULK ACTIONS TOOLBAR:
+   - Select All checkbox
+   - "Export Selected" dropdown (Excel, CSV, JSON, PDF)
+   - "Add to Test Suite" button
+   - "Duplicate Selected" button
+   - "Delete Selected" button (with confirmation)
+   - "Revert Selected" button (revert to original generated version)
+   
+   SUMMARY STATS BAR:
+   - Total test cases: X (Y modified, Z new)
+   - Breakdown by type pie chart (clickable to filter)
+   - Breakdown by priority bar chart (clickable to filter)
+
+   TEST CASE CARDS (Expandable):
+   Each test case displayed as an expandable card with:
+   
+   COLLAPSED VIEW:
+   - Checkbox for selection
+   - Test Case ID (editable inline)
+   - Test Case Title (editable inline with pencil icon)
+   - Priority badge (clickable to change: Smoke/Sanity/Regression)
+   - Test Type badge (clickable to change)
+   - Source Reference badge
+   - Status indicator (Original/Modified/New)
+   - Quick actions: Edit, Duplicate, Delete icons
+   - Expand/Collapse arrow
+   
+   EXPANDED VIEW (Full Edit Mode):
+   When user clicks expand or Edit icon, show full editable form:
+   
+   A. BASIC INFORMATION SECTION:
+      - Test Case ID (text input, editable)
+      - Title (text input, editable, required)
+      - Description (textarea, editable)
+      - Priority (dropdown: Smoke, Sanity, Regression, Critical, High, Medium, Low)
+      - Test Type (dropdown: Functional, Edge Case, Negative, Boundary, Security, Accessibility, Performance)
+      - Status (read-only badge: Original, Modified, New)
+      - Source Reference (text input, editable)
+      - Tags (multi-select chips input for custom tags)
+   
+   B. PRECONDITIONS SECTION:
+      - Textarea for preconditions (editable)
+      - "Add from Template" button (dropdown with common preconditions)
+   
+   C. TEST STEPS SECTION (Most Critical - Full CRUD):
+      
+      STEP LIST DISPLAY:
+      - Each step displayed as a draggable row with:
+        - Drag handle icon (for reordering via drag & drop)
+        - Step number (auto-calculated, updates on reorder)
+        - Step description (inline editable text area)
+        - Expected result for step (inline editable text area, optional)
+        - Action buttons:
+          - "Add Step Above" button (+ icon with up arrow)
+          - "Add Step Below" button (+ icon with down arrow)
+          - "Duplicate Step" button (copy icon)
+          - "Delete Step" button (trash icon with confirmation)
+          - "Move Up" button (up arrow)
+          - "Move Down" button (down arrow)
+      
+      STEP EDITING FEATURES:
+      - Click on step text to edit inline
+      - Tab key moves to next step
+      - Enter key saves current step and creates new step below
+      - Escape key cancels editing
+      - Auto-save after 2 seconds of no typing
+      
+      ADD NEW STEP OPTIONS:
+      - "Add Step at Beginning" button at top of steps list
+      - "Add Step at End" button at bottom of steps list
+      - Between any two steps: hover reveals "Insert Step Here" button
+      - Keyboard shortcut: Ctrl+Enter adds step below current
+      - Right-click context menu on any step:
+        - Insert Step Above
+        - Insert Step Below
+        - Duplicate Step
+        - Delete Step
+        - Move to Top
+        - Move to Bottom
+      
+      DRAG AND DROP REORDERING:
+      - Grab drag handle to reorder steps
+      - Visual placeholder showing drop position
+      - Step numbers auto-update after reorder
+      - Smooth animation during drag
+      - "Undo Reorder" option appears after reorder
+      
+      BULK STEP OPERATIONS:
+      - Multi-select steps with checkboxes
+      - "Delete Selected Steps" button
+      - "Duplicate Selected Steps" button
+      - "Copy Steps to Another Test Case" button
+      
+      STEP TEMPLATES:
+      - "Insert from Template" button opens modal with common step templates:
+        - Login steps
+        - Navigation steps
+        - Form fill steps
+        - Validation steps
+        - Logout steps
+      - Templates are domain-aware (Insurance, Healthcare, Banking, Fintech)
+   
+   D. EXPECTED RESULTS SECTION:
+      - Textarea for overall expected results (editable)
+      - Or toggle: "Use per-step expected results" checkbox
+   
+   E. TEST DATA SECTION:
+      - Textarea for test data suggestions (editable)
+      - "Generate Test Data" button (AI generates sample data)
+      - Data table option: Add rows/columns for structured test data
+   
+   F. ATTACHMENTS SECTION:
+      - Upload attachments (screenshots, files)
+      - Display attached files with preview and delete options
+   
+   G. HISTORY & NOTES SECTION:
+      - "View Change History" expandable (shows all edits with timestamps)
+      - Notes textarea for additional comments
+      - Created date, Last modified date
+   
+   H. ACTION BUTTONS (Bottom of expanded card):
+      - "Save Changes" button (primary)
+      - "Revert to Original" button (if modified)
+      - "Duplicate Test Case" button
+      - "Delete Test Case" button (with confirmation modal)
+      - "Collapse" button
+
+   CREATE NEW TEST CASE:
+   When user clicks "Add New Test Case" button:
+   - Opens a new expanded card at top of list
+   - All fields are empty/default
+   - Test Case ID auto-generated (e.g., TC_NEW_001)
+   - Status marked as "New"
+   - Minimum required: Title and at least one test step
+   - "Save" creates the test case
+   - "Cancel" discards the new test case
+
+   INLINE EDITING FEATURES:
+   - Double-click any field to edit inline
+   - Single-click on pencil icon to enter edit mode
+   - Escape to cancel, Enter or click outside to save
+   - Visual indicator showing field is in edit mode (border highlight)
+   - Validation errors shown inline (red border, error message)
+
+   UNDO/REDO FUNCTIONALITY:
+   - Ctrl+Z to undo last action
+   - Ctrl+Y to redo
+   - Undo/Redo buttons in toolbar
+   - Undo history shows last 20 actions
+   - Actions tracked: edit field, add step, delete step, reorder, etc.
+
+   AUTO-SAVE FUNCTIONALITY:
+   - Changes auto-saved to database every 5 seconds
+   - Or immediately on blur (leaving a field)
+   - "Saving..." indicator during save
+   - "All changes saved" confirmation
+   - Offline detection: "You're offline. Changes will save when connected."
+
+   DELETE CONFIRMATION:
+   - Deleting test case shows modal: "Are you sure you want to delete [Test Case Title]? This action cannot be undone."
+   - Options: "Delete" (red button), "Cancel"
+   - Deleted test cases moved to "Trash" (recoverable for 30 days)
+
+   KEYBOARD SHORTCUTS:
+   - Ctrl+S: Save current test case
+   - Ctrl+N: Add new test case
+   - Ctrl+D: Duplicate current test case
+   - Ctrl+E: Toggle edit mode
+   - Ctrl+Enter: Add new step below (when in steps section)
+   - Delete: Delete selected items
+   - Arrow keys: Navigate between test cases
+   - Enter: Expand/collapse test case
+
+7. TEST CASE STORAGE & PERSISTENCE:
+
+   DATABASE SCHEMA FOR TEST CASES:
+   ```
+   TestCase {
+     id: unique identifier
+     projectId: reference to project
+     testCaseId: display ID (e.g., TC001)
+     title: string
+     description: string
+     priority: enum (Smoke, Sanity, Regression, Critical, High, Medium, Low)
+     type: enum (Functional, Edge, Negative, Boundary, Security, Accessibility, Performance)
+     status: enum (Original, Modified, New, Deleted)
+     preconditions: string
+     steps: [
+       {
+         stepNumber: integer
+         description: string
+         expectedResult: string (optional)
+         createdAt: timestamp
+         modifiedAt: timestamp
+       }
+     ]
+     expectedResults: string
+     testData: string
+     sourceReference: string
+     tags: [string]
+     attachments: [file references]
+     notes: string
+     originalVersion: JSON (snapshot of generated version)
+     changeHistory: [
+       {
+         timestamp: datetime
+         userId: string
+         action: string
+         fieldChanged: string
+         oldValue: any
+         newValue: any
+       }
+     ]
+     createdAt: timestamp
+     modifiedAt: timestamp
+     createdBy: string
+     modifiedBy: string
+   }
+   ```
+
+   STORAGE OPERATIONS:
+   - Create: Insert new test case to database
+   - Read: Fetch test cases by project with pagination
+   - Update: Update specific fields, append to change history
+   - Delete: Soft delete (mark as deleted, move to trash)
+   - Restore: Restore from trash
+   - Revert: Replace current with originalVersion
+   - Export: Generate file in selected format
+   - Import: Parse and create test cases from file
+
+   RENDERING:
+   - Fetch test cases on page load
+   - Implement pagination (20 test cases per page)
+   - Lazy load expanded content
+   - Cache rendered test cases for performance
+   - Real-time updates if multiple users (optional websocket)
+
+BACKEND LOGIC REQUIREMENTS:
+
+1. DOCUMENT PROCESSING:
+   - Use appropriate libraries to extract text from:
+     - PDF files (pdf-parse or similar)
+     - DOCX files (mammoth or similar)
+     - TXT/MD files (direct read)
+     - HTML files (cheerio to extract text)
+   - Store extracted content in memory/database associated with project
+   - Maintain document metadata (name, type, size, upload time)
+
+2. URL CONTENT FETCHING:
+   - Use puppeteer or axios + cheerio to fetch URL content
+   - Handle authentication requirements (optional future enhancement)
+   - Extract main content, ignore navigation/footer/ads
+   - Store fetched content associated with project
+   - Cache fetched content to avoid re-fetching
+
+3. LLM CONTEXT PREPARATION:
+   - Combine all document content and URL content into structured context
+   - Format context with clear section markers:
+     ```
+     === DOCUMENT: [filename] (Type: [document type]) ===
+     [extracted content]
+     
+     === URL: [url] (Type: [url type]) ===
+     [fetched content]
+     ```
+   - Truncate/chunk if context exceeds token limits
+   - Prioritize content based on document type relevance
+
+4. LLM TEST GENERATION:
+   - Send structured prompt to LLM with:
+     - Application URL
+     - Domain context
+     - All uploaded document content
+     - All fetched URL content
+     - Selected test types
+     - Coverage level
+   - Parse LLM response into structured test case objects
+   - Store generated test cases in database with originalVersion snapshot
+
+5. PROMPT STRUCTURE FOR LLM:
+   ```
+   You are an expert QA Test Engineer specializing in [DOMAIN] applications.
+   
+   APPLICATION UNDER TEST:
+   - URL: [application_url]
+   - Type: [application_type]
+   - Domain: [domain]
+   
+   CONTEXT DOCUMENTS PROVIDED:
+   [All document contents with source markers]
+   
+   REFERENCE URLS CONTENT:
+   [All URL contents with source markers]
+   
+   TASK:
+   Based on the above context, generate comprehensive test cases for the application.
+   
+   REQUIREMENTS:
+   - Generate [coverage_level] coverage test cases
+   - Include test types: [selected_test_types]
+   - Each test case must include:
+     - Unique ID
+     - Title
+     - Description
+     - Priority (Smoke/Sanity/Regression)
+     - Type (Functional/Edge/Negative/Security/Accessibility)
+     - Preconditions
+     - Test Steps (numbered array with step description and expected result per step)
+     - Overall Expected Results
+     - Test Data suggestions
+     - Source Reference (which document/URL this is based on)
+   
+   OUTPUT FORMAT:
+   Return test cases in JSON array format:
+   [
+     {
+       "id": "TC001",
+       "title": "...",
+       "description": "...",
+       "priority": "...",
+       "type": "...",
+       "preconditions": "...",
+       "steps": [
+         {"stepNumber": 1, "description": "Step 1 action", "expectedResult": "Expected outcome"},
+         {"stepNumber": 2, "description": "Step 2 action", "expectedResult": "Expected outcome"}
+       ],
+       "expectedResults": "Overall expected results...",
+       "testData": "...",
+       "sourceReference": "Document: filename.pdf, Section: ..."
+     }
+   ]
+   ```
+
+6. TEST CASE CRUD API ENDPOINTS:
+   - POST /api/testcases - Create new test case
+   - GET /api/testcases?projectId=X - Get all test cases for project
+   - GET /api/testcases/:id - Get single test case
+   - PUT /api/testcases/:id - Update test case
+   - PATCH /api/testcases/:id/steps - Update only steps array
+   - DELETE /api/testcases/:id - Soft delete test case
+   - POST /api/testcases/:id/revert - Revert to original
+   - POST /api/testcases/:id/duplicate - Duplicate test case
+   - GET /api/testcases/:id/history - Get change history
+   - POST /api/testcases/export - Export selected test cases
+   - POST /api/testcases/import - Import test cases from file
+
+UI/UX REQUIREMENTS:
+- Maintain existing dark theme with glassmorphism cards
+- Smooth transitions between steps
+- Loading spinners for async operations
+- Toast notifications for success/error states
+- Responsive design for different screen sizes
+- Drag and drop visual feedback for document upload and step reordering
+- Progress indicators for long operations
+- Modal dialogs for previews and confirmations
+- Inline editing with clear visual states
+- Undo/redo feedback animations
+
+AGENT VISUALIZATION:
+- During test generation, show the autonomous agent panel
+- Matrix-style falling characters background
+- Agent avatar with status indicator
+- Real-time status messages showing what agent is doing
+- Progress bar showing overall completion
+- Estimated time remaining
+
+ERROR HANDLING:
+- Document upload failures (size, format, corrupted)
+- URL fetch failures (timeout, 404, blocked)
+- LLM API failures (retry logic, fallback)
+- Validation errors (required fields, invalid URLs)
+- Save failures (network, database)
+- Display user-friendly error messages
+- Log errors for debugging
+- Auto-retry failed saves
+
+NAVIGATION FLOW:
+1. User clicks "Functional Testing" in sidebar
+2. User enters project details (Step 1)
+3. User uploads documents and/or adds URLs (Step 2)
+4. User previews context summary (Step 2.5)
+5. User configures test generation options (Step 3)
+6. User clicks "Generate Test Cases"
+7. Agent animation shows with real-time progress
+8. Test cases displayed with filters and export options (Step 4)
+9. User can view, edit, add steps, reorder steps, delete test cases
+10. All changes auto-saved to database
+11. User can export, or add tests to execution suite
+
+INTEGRATION POINTS:
+- Generated and edited test cases accessible from "Execution Mode" module
+- Test cases exportable to configured test management tools (Zephyr, TestRail, qTest, etc.)
+- Project history tracks all test generation runs and edit sessions
+- Test cases linked to source documents for traceability
+```
+
+---
+
+This updated prompt now includes comprehensive test case editing functionality with step management (add, edit, delete, reorder), inline editing, auto-save, undo/redo, change history tracking, and full CRUD operations. Ready to paste into Replit Agent, Chandra!

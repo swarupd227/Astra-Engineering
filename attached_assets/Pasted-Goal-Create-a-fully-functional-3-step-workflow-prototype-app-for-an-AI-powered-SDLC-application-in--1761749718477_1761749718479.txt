@@ -1,0 +1,147 @@
+Goal:
+Create a fully functional 3-step workflow prototype app for an AI-powered SDLC application in the insurance domain. The app should demonstrate intelligent requirements processing, agile artifact generation with persona-based user stories, and Azure DevOps integration.
+
+⚙️ Technical Stack
+
+Frontend: React 18.2.0 (with hooks)
+
+Styling: Tailwind CSS (modern gradient and glassmorphism designs)
+
+Icons: lucide-react
+
+State Management: React Context API
+
+Notifications: react-hot-toast
+
+AI Integration: Azure OpenAI API (already configured)
+
+DevOps: Azure DevOps REST API
+
+🧩 Core Component Structure
+
+Main Component: WorkflowDemo.js
+
+Step 1 – Requirements Input & Generation
+
+Two input options:
+
+Textarea for manual requirement entry (insurance domain examples)
+
+File upload: .pdf, .docx, .txt
+
+Example pre-filled requirement:
+
+“I need a system to ingest bureau rating algorithms. As an actuary, I will import filing to create rating calculations using AI for premium calculations.”
+
+Button: “Generate Guidelines & Artifacts” (blue→purple gradient)
+
+Show loading spinner + progress indicator (10–15s simulated delay)
+
+On success → show green checkmark, proceed to Step 2
+
+Step 2 – Generated Content Display
+
+Split-screen layout:
+
+Left Panel: AI Design Guidelines
+
+Markdown-rendered content in scrollable card
+
+“Copy” and “Download” buttons
+
+Figma-ready preview format
+
+Right Panel: Agile Artifacts
+
+Epics (2–3 items): red gradient cards
+
+Features (5–8 items): blue gradient cards
+
+User Stories (15–25 items): green gradient cards
+
+Each user story:
+
+Persona-based (see list below)
+
+Priority (High/Medium/Low)
+
+Story points badge
+
+Expandable modal with:
+
+Full description
+
+Acceptance criteria (Given/When/Then)
+
+Linked Epic + Feature context
+
+Persona empathy details
+
+Additional:
+
+Search + Filter functionality
+
+“Proceed to DevOps Push” (emerald gradient button)
+
+Step 3 – Azure DevOps Integration
+
+Collapsible configuration panel (with prefilled demo values):
+
+Organization: InsurityPOC
+
+Project: InsurityPOC
+
+Repository: InsurityPocAIFigma
+
+Branch: main
+
+PAT: hidden input (validated)
+
+User actions:
+
+Select Epics, Features, or Stories via checkboxes
+
+“Select All” / “Deselect All”
+
+“Preview Content” → Markdown view
+
+“Push to Azure DevOps” (orange gradient button)
+
+Progress indicator + success animation + Azure DevOps link
+
+🎨 Visual Design Requirements
+
+Workflow Progress Tracker (top bar):
+Horizontal stepper showing:
+✅ Step 1 → ✅ Step 2 → ⚪ Step 3
+
+Step circles with icons and connecting lines
+
+Completed: Green checkmark
+
+Active step: Pulse animation
+
+Labels under icons
+
+Color Scheme
+
+Purpose	Color
+Primary	Blue→Purple gradient (#4F46E5 → #7C3AED)
+Success	Emerald (#10B981)
+Warning	Orange (#F59E0B)
+Error	Red (#EF4444)
+Background	Slate gray gradient + white cards
+
+Cards & Effects
+
+Rounded corners (rounded-2xl / rounded-3xl)
+
+Subtle gradient borders
+
+Hover scale transform
+
+Smooth transitions (duration-300)
+
+Shadow: shadow-xl, shadow-2xl
+
+Glassmorphism overlays

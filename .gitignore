@@ -1,0 +1,36 @@
+node_modules
+dist
+.DS_Store
+server/public
+vite.config.ts.*
+*.tar.gz
+.env
+.env.local
+.env.local.example
+package-lock.json
+.cache/
+
+# Stack modernization temp files (extracted uploads, session data)
+.stack-mod-temp/
+
+# Build artifacts
+downloads/
+remote-agent/dist/
+logs/
+
+# Replit agent scratch state / local logs
+.local/
+*.log
+
+# Heavy scratch media (demo videos) — keep out of source control
+*.mp4
+*.mov
+
+# Replit-only platform config (not used for GitHub/Docker)
+.replit
+.replit.nix
+replit.nix
+
+# Environment files (only env/*/env.template placeholders are tracked)
+env/**/.env
+.env.*.local

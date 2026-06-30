@@ -1,0 +1,70 @@
+---
+description: DevX 2.0 coding conventions — UI patterns, project structure, and module architecture rules. Apply to all files in this project.
+alwaysApply: true
+---
+
+# DevX 2.0 - Development Guide
+
+## UI Conventions
+
+When creating or modifying pages, follow these patterns:
+
+### Page Layout
+- All pages use `<div className="flex-1 space-y-6 p-6">` as the main container
+- Always use the `<PageHeader>` component from `@/components/ui/page-header` for page titles
+- Use `p-6` padding (24px) everywhere — never `px-6 py-4`
+- No `container`, `max-w-*`, or `mx-auto` on page wrappers
+
+### PageHeader Usage
+```tsx
+import { PageHeader } from "@/components/ui/page-header";
+import { IconName } from "lucide-react";
+
+<PageHeader icon={IconName} title="Title" subtitle="Description" color="violet">
+  <Button>Action</Button>  {/* optional right-side children */}
+</PageHeader>
+```
+Colors: blue, violet, emerald, amber, rose, slate, orange, cyan
+
+### Color Tokens (Dark Mode)
+Never use hardcoded colors like `bg-white`, `text-gray-900`, `border-gray-200`.
+Use: `bg-background`, `bg-card`, `text-foreground`, `text-muted-foreground`, `border-border`, `bg-muted`
+
+### Card Style
+Cards use `rounded-2xl shadow-sm border border-border/40 border-l-[3px] border-l-{color}-500`
+
+### Skeleton Loaders
+Must match the actual content layout — same container, grid, card shapes.
+
+## Project Structure
+- Client pages: `client/src/pages/`
+- UI components: `client/src/components/ui/`
+- Feature modules: `client/src/components/{feature-name}/` (see Module Structure below)
+- API calls: `apiRequest()` from `client/src/lib/queryClient.ts`
+- Server routes: `server/routes.ts`
+- Dev server: `npm run dev` (port 4000)
+
+## Module Structure (Mandatory for complex features)
+
+Any feature with more than ~400 lines **must** be a standalone module, not a single file. Follow the pattern established in `client/src/components/specs/`:
+
+```
+client/src/components/{feature}/
+├── types.ts              # All TypeScript interfaces and type aliases
+├── utils.ts              # Pure functions, constants, helpers (no React)
+├── use-{concern}.ts      # Custom hooks — one per logical concern (queries, sync, generation, etc.)
+├── {panel-name}.tsx      # Sub-components extracted from render functions
+├── {dialog-name}.tsx     # Dialogs as standalone components
+└── index.tsx             # Slim orchestrator: state + layout only (~300–500 lines)
+```
+
+### Rules
+- **File size cap**: No single `.tsx` or `.ts` file over ~600 lines. Split at that point.
+- **types.ts first**: Before writing any component, define all interfaces in `types.ts`.
+- **utils.ts for pure logic**: Markdown generators, slug helpers, localStorage wrappers, config maps — never inline these in components.
+- **Custom hooks for side effects**: Each `useQuery`/`useEffect` cluster with a clear concern goes into its own `use-*.ts` hook. E.g. `use-specs-generation.ts`, `use-repo-sync.ts`.
+- **Sub-components for render functions**: Any `renderXxx()` function over ~50 lines becomes a named component in its own file with an explicit Props interface.
+- **Dialogs are components**: Never inline dialog JSX in the parent; extract to `{name}-dialog.tsx`.
+- **index.tsx is the orchestrator only**: It imports everything, manages shared state, and composes the layout. No inline render helpers, no large blocks of JSX.
+- **Re-export from original path**: When moving a component to a new module, the original file becomes a single `export { X } from "@/components/{feature}";` so existing imports don't break.
+- **Relative imports within a module**: Files inside the same module folder import each other with `./`, never with `@/components/{feature}/`.

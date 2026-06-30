@@ -1,0 +1,5 @@
+{
+  "serverUrl": "ws://localhost:4000/ws/execution-agent",
+  "agentId": "my-agent-01",
+  "token": ""
+}

@@ -1,0 +1,59 @@
+{{- if .Values.migrations.runAsJob }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Release.Name }}-db-migrate-{{ .Release.Revision }}
+  labels:
+    {{- include "devx.labels" . | nindent 4 }}
+    app.kubernetes.io/component: db-migrate
+  annotations:
+    "helm.sh/hook": pre-upgrade,pre-install
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+spec:
+  backoffLimit: {{ .Values.migrations.backoffLimit }}
+  ttlSecondsAfterFinished: {{ .Values.migrations.ttlSecondsAfterFinished }}
+  template:
+    metadata:
+      labels:
+        {{- include "devx.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: db-migrate
+    spec:
+      restartPolicy: Never
+      {{- if .Values.serviceAccount.name }}
+      serviceAccountName: {{ .Values.serviceAccount.name }}
+      {{- end }}
+      containers:
+        - name: migrate
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["node", "/app/scripts/run-container-migrations.js"]
+          env:
+            - name: RUN_DB_MIGRATIONS
+              value: "true"
+            - name: RUN_DB_SEED
+              value: {{ .Values.migrations.seed | quote }}
+            - name: RUN_DB_MIGRATIONS_STRICT
+              value: {{ .Values.migrations.strict | quote }}
+            - name: DEVX_REPO_ROOT
+              value: "/app"
+            - name: DEVX_HOSTING
+              value: {{ .Values.env.devxHosting | quote }}
+            - name: AWS_REGION
+              value: {{ .Values.env.awsRegion | quote }}
+            - name: AWS_SECRET_NAME
+              value: {{ .Values.env.awsSecretName | quote }}
+            - name: NODE_ENV
+              value: {{ .Values.env.nodeEnv | quote }}
+            {{- if .Values.migrations.mysqlSsl }}
+            - name: MYSQL_SSL
+              value: {{ .Values.migrations.mysqlSsl | quote }}
+            {{- end }}
+          {{- if .Values.mysql.existingSecret }}
+          envFrom:
+            - secretRef:
+                name: {{ .Values.mysql.existingSecret }}
+          {{- end }}
+          resources:
+            {{- toYaml .Values.migrations.resources | nindent 12 }}
+{{- end }}

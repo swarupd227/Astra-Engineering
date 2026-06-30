@@ -1,0 +1,433 @@
+FEATURE REQUEST: Add Agent Configurations/Settings Module to NAT 2.0 Platform
+
+CONTEXT:
+I have an existing NAT 2.0 (Nous Autonomous Tester 2.0) application with left sidebar containing: Visual Regression Testing, Test Configuration, Functional Testing, Sprint Testing, Execution Mode, and Project History. Now I need to add a new "Agent Configurations" settings module at the BOTTOM of the left sidebar (lower corner) that allows users to configure integrations with external tools.
+
+EXISTING DESIGN:
+- Dark theme (#0a0a0a background, cyan/teal accents)
+- Glassmorphism effect on cards and panels
+- Left sidebar navigation
+- Professional enterprise look
+
+NEW FEATURE: AGENT CONFIGURATIONS
+
+SIDEBAR PLACEMENT:
+- Add "Agent Configurations" or "Agent Settings" menu item at the BOTTOM LEFT CORNER of the sidebar
+- Use a settings/gear icon with subtle glow effect
+- Visually separate from main navigation items (add a divider line above it)
+- When active, highlight with cyan/teal accent
+
+MAIN CONFIGURATIONS PAGE (Initial View):
+Display all integrations as beautiful cards in a grid layout (2-3 cards per row based on screen size)
+
+INTEGRATION CARDS TO DISPLAY:
+
+1. AZURE DEVOPS CARD
+   - Icon: Azure DevOps logo
+   - Title: "Azure DevOps"
+   - Description: "Connect to Azure DevOps for user stories, work items, and sprint synchronization"
+   - Status indicator: Connected (green) / Not Configured (gray) / Error (red)
+   - Last synced timestamp if connected
+   - Click to configure
+
+2. JIRA CARD
+   - Icon: Jira logo
+   - Title: "JIRA"
+   - Description: "Integrate with Atlassian JIRA for issue tracking and user story import"
+   - Status indicator: Connected / Not Configured / Error
+   - Last synced timestamp if connected
+   - Click to configure
+
+3. ZEPHYR CARD
+   - Icon: Zephyr logo
+   - Title: "Zephyr"
+   - Description: "Connect to Zephyr Scale or Zephyr Squad for test case management"
+   - Status indicator: Connected / Not Configured / Error
+   - Last synced timestamp if connected
+   - Click to configure
+
+4. TESTRAIL CARD
+   - Icon: TestRail logo
+   - Title: "TestRail"
+   - Description: "Integrate with TestRail for test case repository and execution tracking"
+   - Status indicator: Connected / Not Configured / Error
+   - Last synced timestamp if connected
+   - Click to configure
+
+5. QTEST CARD
+   - Icon: qTest logo
+   - Title: "qTest"
+   - Description: "Connect to Tricentis qTest for enterprise test management"
+   - Status indicator: Connected / Not Configured / Error
+   - Last synced timestamp if connected
+   - Click to configure
+
+6. QMETRY CARD
+   - Icon: QMetry logo
+   - Title: "QMetry"
+   - Description: "Integrate with QMetry for test management and automation"
+   - Status indicator: Connected / Not Configured / Error
+   - Last synced timestamp if connected
+   - Click to configure
+
+CARD DESIGN:
+- Glassmorphism effect with subtle border
+- Hover effect: slight lift and glow
+- Tool logo/icon prominently displayed
+- Connection status badge in top-right corner
+- Smooth transition animations
+- Disabled/grayed appearance when not configured
+
+---
+
+INDIVIDUAL CONFIGURATION PAGES:
+
+When user clicks on any card, navigate to that specific configuration page with:
+- Back button/arrow to return to main configurations page
+- Breadcrumb: Agent Configurations > [Tool Name]
+- Form fields specific to that integration
+- Test Connection button
+- Save Configuration button
+- Delete/Disconnect button (if already configured)
+- Help/documentation link for each field
+
+---
+
+1. AZURE DEVOPS CONFIGURATION PAGE
+
+Fields Required:
+- Organization URL (text input, required)
+  - Placeholder: "https://dev.azure.com/your-organization"
+  - Validation: Must be valid Azure DevOps URL format
+  
+- Personal Access Token (PAT) (password input, required)
+  - Show/hide toggle
+  - Help text: "Generate PAT from Azure DevOps > User Settings > Personal Access Tokens"
+  - Required scopes hint: "Work Items (Read), Code (Read), Build (Read)"
+
+- Default Project (dropdown, optional)
+  - Populate after successful connection test
+  - Allow "Select at runtime" option
+
+- API Version (dropdown, optional)
+  - Default: "7.0"
+  - Options: 7.0, 6.0, 5.1
+
+- Sync Options (checkboxes):
+  - [ ] Auto-sync user stories on sprint start
+  - [ ] Sync work item comments
+  - [ ] Create work items for failed tests
+  - [ ] Link test cases to work items
+
+- Sync Frequency (dropdown):
+  - Manual only
+  - Every 15 minutes
+  - Every hour
+  - Every 6 hours
+  - Daily
+
+---
+
+2. JIRA CONFIGURATION PAGE
+
+Fields Required:
+- JIRA Instance URL (text input, required)
+  - Placeholder: "https://your-company.atlassian.net"
+  - Support both Cloud and Server/Data Center
+
+- Authentication Type (radio buttons, required):
+  - API Token (Cloud)
+  - Personal Access Token (Server/Data Center)
+  - OAuth 2.0
+
+- Email Address (text input, required for API Token auth)
+  - Placeholder: "user@company.com"
+
+- API Token / PAT (password input, required)
+  - Show/hide toggle
+  - Help text based on selected auth type
+
+- Default Project Key (text input, optional)
+  - Placeholder: "PROJ"
+  - Autocomplete after connection test
+
+- Issue Types to Sync (multi-select checkboxes):
+  - [ ] Story
+  - [ ] Bug
+  - [ ] Task
+  - [ ] Epic
+  - [ ] Sub-task
+
+- Custom JQL Filter (text area, optional)
+  - Placeholder: "project = PROJ AND sprint in openSprints()"
+  - Help text: "Use JQL to filter specific issues for sync"
+
+- Field Mapping Section:
+  - Map JIRA fields to NAT 2.0 fields (expandable section)
+  - Summary → Test Case Name
+  - Description → Test Description
+  - Acceptance Criteria (custom field) → Expected Results
+
+- Sync Options (checkboxes):
+  - [ ] Auto-sync on issue update
+  - [ ] Create JIRA issues for failed tests
+  - [ ] Add test execution links to issues
+  - [ ] Sync attachments
+
+---
+
+3. ZEPHYR CONFIGURATION PAGE
+
+Fields Required:
+- Zephyr Product (radio buttons, required):
+  - Zephyr Scale (Cloud)
+  - Zephyr Scale (Server/Data Center)
+  - Zephyr Squad
+
+- JIRA Instance URL (text input, required)
+  - Placeholder: "https://your-company.atlassian.net"
+  - Note: "Zephyr works alongside JIRA"
+
+- Zephyr API Access Token (password input, required)
+  - Show/hide toggle
+  - Help text: "Generate from Zephyr Scale > Settings > API Access Tokens"
+
+- Account ID (text input, required for Cloud)
+  - Help text: "Your Atlassian Account ID"
+
+- Default Project (dropdown, optional)
+  - Populate after connection
+
+- Test Cycle Settings:
+  - Auto-create test cycles (toggle)
+  - Cycle naming pattern (text input)
+    - Placeholder: "NAT-{date}-{sprint}"
+  - Default cycle folder (dropdown)
+
+- Sync Options (checkboxes):
+  - [ ] Push test cases to Zephyr
+  - [ ] Sync test execution results
+  - [ ] Create test cycles automatically
+  - [ ] Map NAT priorities to Zephyr priorities
+
+- Priority Mapping (expandable section):
+  - NAT Critical → Zephyr Highest
+  - NAT High → Zephyr High
+  - NAT Medium → Zephyr Medium
+  - NAT Low → Zephyr Low
+
+---
+
+4. TESTRAIL CONFIGURATION PAGE
+
+Fields Required:
+- TestRail Instance URL (text input, required)
+  - Placeholder: "https://your-company.testrail.io"
+
+- Username/Email (text input, required)
+  - Placeholder: "user@company.com"
+
+- API Key (password input, required)
+  - Show/hide toggle
+  - Help text: "Generate from TestRail > My Settings > API Keys"
+
+- Default Project (dropdown, optional)
+  - Populate after connection test
+
+- Default Test Suite (dropdown, optional)
+  - Depends on selected project
+  - Support single-suite and multi-suite modes
+
+- Test Run Settings:
+  - Auto-create test runs (toggle)
+  - Run naming pattern (text input)
+    - Placeholder: "NAT Execution - {date}"
+  - Assign to user (dropdown)
+  - Include all test cases (toggle) or specific sections
+
+- Section Mapping:
+  - Map NAT test categories to TestRail sections
+  - Smoke → Section dropdown
+  - Sanity → Section dropdown
+  - Regression → Section dropdown
+  - Security → Section dropdown
+  - Accessibility → Section dropdown
+
+- Result Mapping:
+  - NAT Pass → TestRail Passed
+  - NAT Fail → TestRail Failed
+  - NAT Skip → TestRail Blocked/Skipped
+  - NAT Error → TestRail Retest
+
+- Sync Options (checkboxes):
+  - [ ] Push test cases to TestRail
+  - [ ] Sync execution results automatically
+  - [ ] Include screenshots in results
+  - [ ] Include step-level results
+  - [ ] Create defects for failures (link to defect tracker)
+
+---
+
+5. QTEST CONFIGURATION PAGE
+
+Fields Required:
+- qTest Manager URL (text input, required)
+  - Placeholder: "https://your-company.qtestnet.com"
+
+- Authentication Method (radio buttons):
+  - API Token
+  - Username/Password
+  - OAuth 2.0 (SSO)
+
+- API Token (password input, if API Token selected)
+  - Show/hide toggle
+  - Help text: "Generate from qTest > Settings > API & SDK"
+
+- Username (text input, if username/password selected)
+- Password (password input, if username/password selected)
+
+- Default Project (dropdown, required)
+  - Populate after connection
+
+- Module/Folder for Test Cases (tree selector, optional)
+  - Display qTest module hierarchy
+  - Allow selection of target folder
+
+- Test Run Settings:
+  - Target Test Cycle (dropdown)
+  - Auto-create test suites (toggle)
+  - Suite naming pattern (text input)
+
+- Field Mapping (expandable section):
+  - Map NAT fields to qTest fields
+  - Include custom field mapping
+
+- Automation Settings:
+  - Link to Automation Host (toggle)
+  - Automation Host ID (text input, if enabled)
+  - Agent Name (text input)
+
+- Sync Options (checkboxes):
+  - [ ] Push test cases to qTest
+  - [ ] Sync test execution logs
+  - [ ] Include automation results
+  - [ ] Upload attachments/screenshots
+  - [ ] Create defects in qTest for failures
+
+---
+
+6. QMETRY CONFIGURATION PAGE
+
+Fields Required:
+- QMetry Instance Type (radio buttons, required):
+  - QMetry for JIRA (Cloud)
+  - QMetry for JIRA (Server)
+  - QMetry Test Management (Standalone)
+
+- Base URL (text input, required)
+  - Placeholder varies by type selected
+
+- API Key (password input, required)
+  - Show/hide toggle
+  - Help text: "Generate from QMetry > Configuration > API Key"
+
+- For JIRA Integration (if QMetry for JIRA selected):
+  - JIRA Instance URL (text input)
+  - JIRA API Token (password input)
+  - Project Key (text input)
+
+- Default Project (dropdown, optional)
+  - Populate after connection
+
+- Test Cycle Configuration:
+  - Folder path for test cases (text input)
+  - Cycle naming convention (text input)
+  - Platform/Environment (dropdown)
+  - Build version field (text input)
+
+- Automation Settings:
+  - Enable automation sync (toggle)
+  - Automation framework (dropdown): Selenium, Playwright, Cypress, Other
+  - Entity type for results (dropdown): Test Case, Test Cycle
+
+- Sync Options (checkboxes):
+  - [ ] Sync test cases to QMetry
+  - [ ] Push execution results
+  - [ ] Include step-level results
+  - [ ] Attach evidence (screenshots, logs)
+  - [ ] Create defects for failures
+  - [ ] Link requirements
+
+---
+
+COMMON UI ELEMENTS FOR ALL CONFIGURATION PAGES:
+
+HEADER:
+- Back arrow button (returns to main configurations page)
+- Tool logo and name
+- Connection status badge
+- Last connected/synced timestamp
+
+FORM LAYOUT:
+- Organized in logical sections with collapsible panels
+- Required fields marked with asterisk (*)
+- Inline validation with error messages
+- Help icons (?) with tooltips for each field
+- Placeholder text for guidance
+
+ACTION BUTTONS (sticky footer):
+- "Test Connection" button (primary action)
+  - Shows loading spinner during test
+  - Success: Green checkmark with "Connection Successful"
+  - Failure: Red X with error message details
+  
+- "Save Configuration" button
+  - Disabled until Test Connection succeeds
+  - Shows saving indicator
+  - Success notification after save
+
+- "Reset to Defaults" button (secondary)
+- "Delete Configuration" button (danger, only if already configured)
+  - Confirmation modal before deletion
+
+VISUAL FEEDBACK:
+- Form fields highlight on focus
+- Real-time validation feedback
+- Success/error toast notifications
+- Loading states for async operations
+- Smooth transitions between pages
+
+---
+
+DATA STORAGE:
+- Store all configurations securely in database
+- Encrypt sensitive fields (tokens, passwords, API keys)
+- Store connection status and last sync timestamps
+- Maintain configuration history for audit
+
+NAVIGATION FLOW:
+1. User clicks "Agent Configurations" in sidebar
+2. Main page shows all 6 integration cards
+3. User clicks any card → navigates to specific config page
+4. User configures, tests connection, saves
+5. Back button returns to main configurations page
+6. Card now shows "Connected" status
+
+VISUAL DESIGN:
+- Match existing NAT 2.0 dark theme
+- Glassmorphism cards with tool-specific accent colors
+- Azure DevOps: Blue accent
+- JIRA: Blue accent
+- Zephyr: Teal accent
+- TestRail: Green accent
+- qTest: Purple accent
+- QMetry: Orange accent
+- Smooth animations and transitions
+- Professional enterprise appearance
+- Responsive design for different screen sizes
+
+SECURITY CONSIDERATIONS:
+- Never display full API tokens after save (show masked version)
+- Secure storage for credentials
+- Option to re-enter credentials for edit
+- Session-based encryption for sensitive data in transit

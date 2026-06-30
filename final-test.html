@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>DevXPlatform Final Test</title>
+<style>body{font-family:Arial,sans-serif;padding:20px;max-width:800px;margin:auto;}
+.result{margin:20px 0;padding:15px;border:1px solid #ccc;background:#f9f9f9;white-space:pre-wrap;font-family:monospace;}</style>
+</head>
+<body>
+<h1>🧪 DevXPlatform Final Test</h1>
+<p>Testing push-to-ado API with enhanced organization normalization...</p>
+
+<button onclick="runTest()">🚀 Test DevXPlatform</button>
+<button onclick="runTestNoSlash()">🚀 Test Without Trailing Slash</button>
+
+<div id="result" class="result">Click a button to run the test...</div>
+
+<script>
+function showResult(title, status, data) {
+    document.getElementById('result').textContent = `${title}\nStatus: ${status}\nResponse: ${data}`;
+}
+
+async function runTest() {
+    try {
+        showResult('🔄 Testing with trailing slash...', 'Loading...', '');
+        
+        const response = await fetch('/api/codegen/push-to-ado', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                workItems: [{
+                    id: 'devx-test-001',
+                    title: 'DevXPlatform Repository Test',
+                    description: 'Testing repository creation with confirmed permissions',
+                    organizationUrl: 'https://dev.azure.com/DevXPlatform/',
+                    projectId: 'NousAugmentedDevX',
+                    acceptanceCriteria: [
+                        'Repository should be created successfully in DevXPlatform',
+                        'Generated code should be committed to the repository'
+                    ]
+                }]
+            })
+        });
+        
+        const data = await response.text();
+        showResult('✅ Test with trailing slash completed!', response.status, data);
+    } catch (error) {
+        showResult('❌ Test failed!', 'Error', error.message);
+    }
+}
+
+async function runTestNoSlash() {
+    try {
+        showResult('🔄 Testing without trailing slash...', 'Loading...', '');
+        
+        const response = await fetch('/api/codegen/push-to-ado', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                workItems: [{
+                    id: 'devx-test-002',
+                    title: 'DevXPlatform Repository Test No Slash',
+                    description: 'Testing repository creation without trailing slash',
+                    organizationUrl: 'https://dev.azure.com/DevXPlatform',
+                    projectId: 'NousAugmentedDevX',
+                    acceptanceCriteria: [
+                        'Repository should be created successfully in DevXPlatform',
+                        'URL normalization should handle missing trailing slash'
+                    ]
+                }]
+            })
+        });
+        
+        const data = await response.text();
+        showResult('✅ Test without trailing slash completed!', response.status, data);
+    } catch (error) {
+        showResult('❌ Test failed!', 'Error', error.message);
+    }
+}
+</script>
+</body>
+</html>

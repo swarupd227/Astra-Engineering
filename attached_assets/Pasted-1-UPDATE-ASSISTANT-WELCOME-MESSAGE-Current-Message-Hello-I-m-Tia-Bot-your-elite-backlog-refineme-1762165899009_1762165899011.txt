@@ -1,0 +1,55 @@
+1. UPDATE ASSISTANT WELCOME MESSAGE
+Current Message:
+Hello! I'm Tia Bot, your elite backlog refinement assistant. I'm here to help you create comprehensive, well-structured agile artifacts through a natural conversation. I'll ask smart questions to understand your project deeply, and I promise to: ✓ Never repeat questions ✓ Infer what I can from context ✓ Respect your time ✓ Build on everything you share Ready when you are - just say hi or tell me what you're working on!
+```
+
+**Replace With:**
+```
+Hello! I'm Tia Bot, your agile backlog assistant.
+
+I'll help you create detailed epics, user stories, and tasks through a collaborative conversation. I'll ask thoughtful questions to understand your project deeply, building on everything you share to create high-quality, actionable artifacts.
+
+Ready to get started? Tell me about your project!
+Tone: Professional, efficient, and welcoming without overpromising.
+
+2. ADD SMART QUICK-REPLY SUGGESTIONS
+Objective: Reduce typing and speed up the conversation by providing contextually relevant quick-reply options for appropriate questions.
+Implementation Details:
+When to Show Suggestions:
+
+Display quick-reply chips/buttons below the assistant's message when the question has clear, predictable answer options
+Suggestions should appear for: yes/no questions, multiple choice questions, platform selection, user role identification, priority ranking, etc.
+Do NOT show suggestions for open-ended questions requiring detailed explanations
+
+Design Specifications:
+
+Visual Style: Pill-shaped buttons with subtle border and hover effect
+Placement: Directly below assistant message, horizontally aligned with 8-12px spacing between chips
+Interaction: Single-click to select and auto-submit (no need to press Send button)
+Accessibility: Keyboard navigable (Tab + Enter), minimum 44px touch target height
+Mobile: Stack vertically or wrap to next line on smaller screens
+
+Example Scenarios:
+javascript// Scenario 1: Platform Selection
+Assistant: "What platform should this run on?"
+Quick Replies: [Web] [Mobile] [Desktop] [Both Web & Mobile] [All Platforms] [Other]
+
+// Scenario 2: Yes/No Questions
+Assistant: "Do you need user authentication?"
+Quick Replies: [Yes] [No] [Not sure yet]
+
+// Scenario 3: User Roles
+Assistant: "Who are the primary users of this solution?"
+Quick Replies: [Customers] [Employees] [Administrators] [Multiple user types] [Let me explain...]
+
+// Scenario 4: Team Size/Scale
+Assistant: "How large is your team?"
+Quick Replies: [1-10] [11-50] [51-200] [200+] [Specify exact number...]
+
+// Scenario 5: Priority/Timeline
+Assistant: "What's your timeline for this project?"
+Quick Replies: [1-3 months] [3-6 months] [6-12 months] [12+ months] [Flexible]
+
+// Scenario 6: Integration Needs
+Assistant: "Do you need any third-party integrations?"
+Quick Replies: [Yes, I'll specify] [No integrations needed] [Not sure yet]

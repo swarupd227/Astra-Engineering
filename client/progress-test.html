@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevX Progress Tracking System Test</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .controls {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 5px;
+            transition: all 0.3s;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        button.danger {
+            background: linear-gradient(135deg, #f44336, #d32f2f);
+        }
+        
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        
+        .connected {
+            background: #c8e6c9;
+            color: #2e7d32;
+        }
+        
+        .disconnected {
+            background: #ffcdd2;
+            color: #c62828;
+        }
+        
+        .events {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 10px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .event {
+            background: white;
+            margin: 10px 0;
+            padding: 15px;
+            border-left: 4px solid #2196F3;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .event.success {
+            border-left-color: #4caf50;
+        }
+        
+        .event.error {
+            border-left-color: #f44336;
+        }
+        
+        .event.warning {
+            border-left-color: #ff9800;
+        }
+        
+        .timestamp {
+            font-size: 12px;
+            color: #666;
+            float: right;
+        }
+        
+        input, select {
+            padding: 8px;
+            margin: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .form-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 10px 0;
+        }
+        
+        .form-row label {
+            min-width: 120px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 DevX Real-time Progress Tracking Test</h1>
+        
+        <div class="controls">
+            <h3>🔗 Connection Status</h3>
+            <div id="connection-status" class="status disconnected">
+                ❌ Disconnected
+            </div>
+            
+            <div class="form-row">
+                <label>Organization:</label>
+                <input type="text" id="org" value="DevXPlatform" placeholder="DevXPlatform">
+            </div>
+            
+            <div class="form-row">
+                <label>Project:</label>
+                <input type="text" id="project" value="NousAugmentedDevX" placeholder="NousAugmentedDevX">
+            </div>
+            
+            <div class="form-row">
+                <label>Repository:</label>
+                <input type="text" id="repo" value="test-repo-" placeholder="test-repo-name">
+                <button onclick="generateRandomRepo()">🎲 Random</button>
+            </div>
+            
+            <div class="form-row">
+                <label>App Service:</label>
+                <input type="text" id="appservice" value="codegen-f7hbbfcvcycjfjg7" placeholder="your-app-service">
+            </div>
+            
+            <h3>🎛️ Test Controls</h3>
+            <button onclick="startRalphLoop()">🤖 Start AI Ralph Loop</button>
+            <button onclick="runQAAnalysis()">🔍 Run QA Analysis</button>
+            <button onclick="checkHealth()">💚 Health Check</button>
+            <button onclick="clearEvents()" class="danger">🗑️ Clear Events</button>
+        </div>
+        
+        <div class="events">
+            <h3>📊 Real-time Events</h3>
+            <div id="events-container">
+                <p>🔄 Waiting for events...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let socket = null;
+        let eventCount = 0;
+
+        // Generate random repository name
+        function generateRandomRepo() {
+            const adjectives = ['awesome', 'cool', 'smart', 'fast', 'modern', 'simple'];
+            const nouns = ['app', 'tool', 'service', 'platform', 'system', 'project'];
+            const adj = adjectives[Math.floor(Math.random() * adjectives.length)];
+            const noun = nouns[Math.floor(Math.random() * nouns.length)];
+            const num = Math.floor(Math.random() * 1000);
+            document.getElementById('repo').value = `${adj}-${noun}-${num}`;
+        }
+
+        // Initialize Socket.IO connection
+        function initializeSocket() {
+            socket = io(window.location.origin);
+
+            socket.on('connect', () => {
+                console.log('Connected to WebSocket');
+                updateConnectionStatus(true);
+                addEvent('🔗 Connected to WebSocket', 'Connected successfully!', 'success');
+            });
+
+            socket.on('disconnect', () => {
+                console.log('Disconnected from WebSocket');
+                updateConnectionStatus(false);
+                addEvent('🔗 Disconnected from WebSocket', 'Connection lost', 'error');
+            });
+
+            socket.on('progress:event', (event) => {
+                console.log('Progress event:', event);
+                addEvent(
+                    `${getTypeIcon(event.type)} ${event.stage}`,
+                    `${getStatusIcon(event.status)} ${event.message}`,
+                    getStatusClass(event.status),
+                    event
+                );
+            });
+
+            socket.on('progress:session', (session) => {
+                console.log('Session update:', session);
+                addEvent(
+                    `📋 Session Update`,
+                    `${session.repositoryName}: ${session.currentStage} (${session.completedStages}/${session.totalStages})`,
+                    getSessionStatusClass(session.status),
+                    session
+                );
+            });
+
+            socket.on('progress:file-change', (data) => {
+                console.log('File change:', data);
+                addEvent(
+                    `📁 File Change`,
+                    `${data.fileChange.action.toUpperCase()}: ${data.fileChange.filePath}`,
+                    'info',
+                    data
+                );
+            });
+        }
+
+        function updateConnectionStatus(connected) {
+            const status = document.getElementById('connection-status');
+            if (connected) {
+                status.className = 'status connected';
+                status.innerHTML = '✅ Connected';
+            } else {
+                status.className = 'status disconnected';
+                status.innerHTML = '❌ Disconnected';
+            }
+        }
+
+        function getTypeIcon(type) {
+            const icons = {
+                'repo-creation': '📁',
+                'pipeline-run': '⚙️',
+                'deployment': '🚀',
+                'qa-analysis': '🔍',
+                'ai-fix': '🤖',
+                'health-check': '💚'
+            };
+            return icons[type] || '📋';
+        }
+
+        function getStatusIcon(status) {
+            const icons = {
+                'pending': '⏳',
+                'in-progress': '🔄',
+                'completed': '✅',
+                'failed': '❌',
+                'warning': '⚠️'
+            };
+            return icons[status] || '❓';
+        }
+
+        function getStatusClass(status) {
+            return status === 'completed' ? 'success' : 
+                   status === 'failed' ? 'error' : 
+                   status === 'warning' ? 'warning' : 'info';
+        }
+
+        function getSessionStatusClass(status) {
+            return status === 'completed' ? 'success' : 
+                   status === 'failed' ? 'error' : 'info';
+        }
+
+        function addEvent(title, message, className = 'info', data = null) {
+            const container = document.getElementById('events-container');
+            
+            // Remove "waiting" message if it's the first event
+            if (eventCount === 0) {
+                container.innerHTML = '';
+            }
+            
+            const event = document.createElement('div');
+            event.className = `event ${className}`;
+            event.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <strong>${title}</strong>
+                        <div style="margin-top: 5px;">${message}</div>
+                        ${data ? `<details style="margin-top: 10px;"><summary style="cursor: pointer; color: #666;">📋 Show Details</summary><pre style="font-size: 11px; background: #f5f5f5; padding: 10px; margin-top: 5px; border-radius: 3px; overflow-x: auto;">${JSON.stringify(data, null, 2)}</pre></details>` : ''}
+                    </div>
+                    <span class="timestamp">${new Date().toLocaleTimeString()}</span>
+                </div>
+            `;
+            
+            // Add to top for most recent events
+            container.insertBefore(event, container.firstChild);
+            eventCount++;
+        }
+
+        function clearEvents() {
+            document.getElementById('events-container').innerHTML = '<p>🔄 Waiting for events...</p>';
+            eventCount = 0;
+        }
+
+        async function startRalphLoop() {
+            const org = document.getElementById('org').value;
+            const project = document.getElementById('project').value;
+            const repo = document.getElementById('repo').value;
+            const appservice = document.getElementById('appservice').value;
+
+            if (!org || !project || !repo) {
+                addEvent('❌ Validation Error', 'Please fill in all required fields', 'error');
+                return;
+            }
+
+            // Join repository room to receive updates
+            if (socket) {
+                socket.emit('join-repo', repo);
+            }
+
+            addEvent('🚀 Starting Ralph Loop', `Initiating AI-powered deployment for ${repo}...`, 'info');
+
+            try {
+                const response = await fetch(`/api/ralph-loop/start-tracked/${org}/${project}/${repo}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        targetAppService: appservice,
+                        maxIterations: 3,
+                        autoFixEnabled: true
+                    })
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    // Join session room for specific updates
+                    if (socket) {
+                        socket.emit('join-session', result.sessionId);
+                    }
+                    
+                    addEvent(
+                        '🎉 Ralph Loop Started!', 
+                        `Session ${result.sessionId} is now tracking deployment progress`, 
+                        'success',
+                        result
+                    );
+                } else {
+                    addEvent('❌ Ralph Loop Failed', result.error || 'Unknown error', 'error', result);
+                }
+            } catch (error) {
+                addEvent('❌ Network Error', error.message, 'error');
+            }
+        }
+
+        async function runQAAnalysis() {
+            const org = document.getElementById('org').value;
+            const project = document.getElementById('project').value;
+            const repo = document.getElementById('repo').value;
+            const appservice = document.getElementById('appservice').value;
+
+            if (!org || !project || !repo) {
+                addEvent('❌ Validation Error', 'Please fill in all required fields', 'error');
+                return;
+            }
+
+            addEvent('🔍 Starting QA Analysis', `Analyzing ${repo} deployment...`, 'info');
+
+            try {
+                const response = await fetch(`/api/qa/analyze/${org}/${project}/${repo}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        appServiceUrl: `https://${appservice}.azurewebsites.net`
+                    })
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    addEvent('✅ QA Analysis Complete', 'Quality assurance analysis completed successfully', 'success', result);
+                } else {
+                    addEvent('❌ QA Analysis Failed', result.error || 'Unknown error', 'error', result);
+                }
+            } catch (error) {
+                addEvent('❌ Network Error', error.message, 'error');
+            }
+        }
+
+        async function checkHealth() {
+            const appservice = document.getElementById('appservice').value;
+
+            if (!appservice) {
+                addEvent('❌ Validation Error', 'Please enter an app service name', 'error');
+                return;
+            }
+
+            addEvent('💚 Health Check Started', `Checking health of ${appservice}...`, 'info');
+
+            try {
+                const response = await fetch(`/api/deployment/health/${appservice}`);
+                const result = await response.json();
+                
+                const status = result.isHealthy ? 'success' : 'error';
+                const message = result.isHealthy ? 
+                    `✅ ${appservice} is healthy (HTTP ${result.status})` :
+                    `❌ ${appservice} is unhealthy (${result.error || 'HTTP ' + result.status})`;
+                
+                addEvent('💚 Health Check Complete', message, status, result);
+            } catch (error) {
+                addEvent('❌ Health Check Failed', error.message, 'error');
+            }
+        }
+
+        // Initialize on page load
+        window.onload = function() {
+            initializeSocket();
+            generateRandomRepo(); // Start with a random repo name
+            addEvent('🎬 Test Page Loaded', 'Real-time progress tracking test console is ready', 'info');
+        };
+
+        // Clean up on page unload
+        window.onbeforeunload = function() {
+            if (socket) {
+                socket.disconnect();
+            }
+        };
+    </script>
+</body>
+</html>

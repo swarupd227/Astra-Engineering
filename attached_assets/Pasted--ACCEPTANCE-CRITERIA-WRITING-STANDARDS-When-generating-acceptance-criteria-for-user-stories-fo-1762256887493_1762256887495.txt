@@ -1,0 +1,206 @@
+## ACCEPTANCE CRITERIA WRITING STANDARDS
+
+When generating acceptance criteria for user stories, follow these guidelines to ensure clarity, completeness, and testability.
+
+### FORMAT: Enhanced Given-When-Then with Context
+
+Each acceptance criterion must include:
+1. **Criterion Title**: Brief descriptive name (5-8 words)
+2. **Given (Preconditions)**: Specific, detailed context and system state
+3. **When (Action/Trigger)**: Clear user action or system event with relevant details
+4. **Then (Expected Outcome)**: Concrete, observable, measurable result
+5. **And (Additional Outcomes)**: Secondary effects or validations (when applicable)
+
+### QUALITY REQUIREMENTS FOR EACH COMPONENT:
+
+**Given (Preconditions):**
+✓ Include specific data states, user roles, and system conditions
+✓ Mention relevant permissions, configurations, or prerequisites
+✓ Be concrete - avoid vague terms like "system is operational"
+✗ Don't use: "System is ready", "User is logged in" (too generic)
+✓ Do use: "Claims processor is logged in with 'Approve Claims' permission and viewing claim #12345 in 'Pending Review' status"
+
+**When (Action/Trigger):**
+✓ Describe the exact user action or system event
+✓ Include relevant parameters, inputs, or conditions
+✓ Specify the interface element or API endpoint if applicable
+✗ Don't use: "Claim is submitted", "User clicks button" (too vague)
+✓ Do use: "Claims processor clicks 'Approve' button and enters approval notes 'Medical documentation verified' in the claim details form"
+
+**Then (Expected Outcome):**
+✓ Describe observable, verifiable results
+✓ Include UI changes, data updates, notifications, and system state changes
+✓ Specify timing expectations (immediate, within X seconds, asynchronous)
+✓ Mention all affected entities and their new states
+✗ Don't use: "Workflow progresses", "System updates" (too abstract)
+✓ Do use: "Claim status updates to 'Approved' in database, approval timestamp is recorded, claim appears in 'Approved Claims' dashboard within 2 seconds, and audit log entry is created with processor ID and timestamp"
+
+**And (Additional Outcomes):**
+✓ Cover secondary effects like notifications, integrations, logging
+✓ Include validation rules and error handling
+✓ Mention downstream impacts on related entities
+✓ Example: "And an email notification is sent to the claimant at their registered email address with subject 'Claim #12345 Approved' and expected payment date"
+
+### AVOID THESE COMMON MISTAKES:
+
+❌ **Too Generic:**
+"Given: System is operational
+When: User performs action
+Then: System responds appropriately"
+
+❌ **Lacks Specificity:**
+"Given: Claim exists
+When: Claim is approved
+Then: Payment is processed"
+
+❌ **Missing Observable Outcomes:**
+"Then: Workflow progresses to next stage" (What does "progresses" look like? What changes can be observed?)
+
+❌ **Vague Notifications:**
+"Then: Notifications are sent" (To whom? What content? What channel? When exactly?)
+
+### EXAMPLE TRANSFORMATIONS:
+
+**BEFORE (Poor Quality):**
+```
+Criteria 1:
+Given: System is operational
+When: A claim is submitted
+Then: Workflow progresses automatically to appropriate departments
+```
+
+**AFTER (High Quality):**
+```
+Criteria 1: Automated Claim Routing to Medical Review Department
+Given: 
+  - Insurance portal is accessible and operational
+  - Claimant has active policy #POL-2024-5678
+  - Claim form includes required fields: diagnosis code, provider details, treatment date, and claimed amount
+When: 
+  - Claimant clicks "Submit Claim" button on the claim submission form
+  - Claim amount is $5,000 for outpatient surgery
+Then: 
+  - Claim receives unique ID (format: CLM-YYYY-NNNNNN) and status "Under Review"
+  - Claim automatically routes to Medical Review Department queue within 5 seconds
+  - Claim appears in Medical Reviewer dashboard with priority flag based on amount threshold
+  - Claimant sees confirmation message: "Claim #CLM-2024-123456 submitted successfully. Expected review time: 3-5 business days"
+And:
+  - Email confirmation sent to claimant's registered email with claim number and tracking link
+  - SMS notification sent if claimant opted in for text alerts
+  - Audit log entry created with timestamp, claimant ID, and claim amount
+  - Claim counter in department dashboard increments by 1
+```
+
+**BEFORE (Poor Quality):**
+```
+Criteria 2:
+Given: Automated workflows are in place
+When: Claim status changes
+Then: Notifications are sent to relevant parties
+```
+
+**AFTER (High Quality):**
+```
+Criteria 2: Real-Time Status Change Notifications to Stakeholders
+Given: 
+  - Claim #CLM-2024-123456 exists in system with status "Under Review"
+  - Claimant email: john.doe@email.com is verified
+  - Assigned medical reviewer: Dr. Smith (user ID: MED-456)
+  - Notification preferences: Claimant opted in for email and SMS, Reviewer has email notifications enabled
+When: 
+  - Medical reviewer updates claim status from "Under Review" to "Approved" 
+  - Reviewer adds approval notes: "All documentation verified, treatment covered under policy"
+  - Approved amount: $4,500 (adjusted from claimed $5,000 due to policy deductible)
+Then: 
+  - Within 30 seconds, claimant receives email notification with:
+    * Subject: "Claim #CLM-2024-123456 Status Update: Approved"
+    * Content: Claim number, approved amount, payment timeline (5-7 business days), reason for adjustment
+    * Link to view full claim details in portal
+  - Within 30 seconds, claimant receives SMS (if opted in): "Your claim #CLM-2024-123456 has been approved for $4,500. Payment in 5-7 days. View details: [link]"
+  - Within 60 seconds, assigned reviewer receives email confirmation of status change with audit trail
+And:
+  - Notification delivery status is logged (sent/delivered/failed) in notifications table
+  - If email fails, system retries 3 times over 10 minutes, then logs permanent failure
+  - In-app notification badge appears on claimant's dashboard with unread count
+  - Notification history is accessible in claimant's "Messages" section
+```
+
+**BEFORE (Poor Quality):**
+```
+Criteria 3:
+Given: Workflow automation is active
+When: Claim is approved
+Then: Payment processing is initiated
+```
+
+**AFTER (High Quality):**
+```
+Criteria 3: Automated Payment Processing Upon Claim Approval
+Given: 
+  - Claim #CLM-2024-123456 has been approved with approved amount $4,500
+  - Claimant has active bank account on file: Bank of America ****1234 (verified on 2024-01-15)
+  - Payment processing service (Stripe Connect) is operational and API is responsive
+  - Company bank account has sufficient funds ($50,000+ balance)
+  - No holds or flags on claimant account
+When: 
+  - Claim status changes to "Approved" and approval is saved to database
+  - System runs scheduled payment batch job (executes every 15 minutes during business hours)
+Then: 
+  - Within 15 minutes, payment record is created in payments table with:
+    * Payment ID: PAY-2024-NNNNNN
+    * Status: "Initiated"
+    * Amount: $4,500
+    * Method: ACH Bank Transfer
+    * Expected completion: T+3 business days
+  - API call is made to Stripe Connect to initiate ACH transfer
+  - Payment status updates to "Processing" upon successful API response (HTTP 200)
+  - Claim status updates to "Payment Processing" in claims table
+  - Claimant sees payment status in portal: "Payment of $4,500 initiated on [date]. Expected in your account by [date]"
+And:
+  - Email notification sent to claimant: "Payment initiated for claim #CLM-2024-123456. Amount: $4,500. ETA: [date]"
+  - Payment transaction logged in audit trail with: timestamp, processor ID, amount, payment method, API response code
+  - Finance team dashboard shows payment in "Pending Transfers" section
+  - If API call fails, system logs error, marks payment as "Failed", sends alert to finance team, and retries in next batch cycle
+  - If bank account is invalid/closed, payment status updates to "Returned", claimant receives email requesting updated banking information
+```
+
+### COVERAGE CHECKLIST FOR COMPLETE AC SET:
+
+For each user story, ensure acceptance criteria collectively cover:
+
+✓ **Happy Path:** Standard successful flow
+✓ **Edge Cases:** Boundary conditions, unusual but valid scenarios
+✓ **Error Handling:** Invalid inputs, system failures, timeouts
+✓ **Permissions:** Role-based access, authorization checks
+✓ **Data Validation:** Required fields, format validation, business rules
+✓ **UI/UX:** Visual feedback, loading states, confirmation messages
+✓ **Performance:** Response times, timeout thresholds, concurrency
+✓ **Integration Points:** External systems, APIs, third-party services
+✓ **Notifications:** All communication channels and recipients
+✓ **Audit/Compliance:** Logging, data retention, regulatory requirements
+✓ **Accessibility:** Keyboard navigation, screen reader compatibility (when applicable)
+
+### MINIMUM CRITERIA PER STORY:
+
+- **Simple stories (1-2 points):** 3-5 acceptance criteria
+- **Medium stories (3-4 points):** 5-8 acceptance criteria
+- **Complex stories (5 points):** 8-12 acceptance criteria
+
+### WRITING TONE:
+
+- Use **specific numbers and values** (not "some", "many", "quickly")
+- Use **exact field names, button labels, and UI elements** from the system
+- Use **measurable time periods** ("within 5 seconds", not "quickly")
+- Use **concrete observable outcomes** ("status updates to 'Approved'", not "status changes")
+- Write for **both developers and QA testers** - should be immediately testable
+
+### SELF-CHECK BEFORE FINALIZING:
+
+Ask yourself for each criterion:
+1. Can a QA tester write a test case directly from this AC without asking questions?
+2. Does it specify WHAT changes, not just THAT something changes?
+3. Are all affected systems, users, and data entities mentioned?
+4. Is the timing/performance expectation clear?
+5. Would a developer know exactly what to build from this description?
+
+If any answer is "no", revise the criterion to add missing details.

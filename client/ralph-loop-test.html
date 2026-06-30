@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ralph Loop & Deployment QA Test</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+            padding: 20px;
+            border: 2px solid #e1f5fe;
+            border-radius: 10px;
+            background: #f8f9fa;
+        }
+        
+        .section h2 {
+            color: #1976d2;
+            margin-top: 0;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #495057;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .results {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f1f3f4;
+            border-radius: 5px;
+            border-left: 4px solid #2196F3;
+        }
+        
+        .error {
+            border-left-color: #f44336;
+            background: #ffebee;
+            color: #c62828;
+        }
+        
+        .success {
+            border-left-color: #4caf50;
+            background: #e8f5e8;
+            color: #2e7d32;
+        }
+        
+        .loading {
+            display: inline-block;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        pre {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-size: 12px;
+        }
+        
+        .health-status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-weight: 600;
+            font-size: 12px;
+        }
+        
+        .health-healthy {
+            background: #c8e6c9;
+            color: #2e7d32;
+        }
+        
+        .health-unhealthy {
+            background: #ffcdd2;
+            color: #c62828;
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            font-weight: 600;
+        }
+        
+        .tab.active {
+            border-bottom-color: #2196F3;
+            color: #2196F3;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🤖 Ralph Loop & Deployment QA Test Console</h1>
+        
+        <div class="tabs">
+            <div class="tab active" onclick="showTab('ralph-loop')">Ralph Loop</div>
+            <div class="tab" onclick="showTab('qa-analysis')">QA Analysis</div>
+            <div class="tab" onclick="showTab('health-check')">Health Check</div>
+            <div class="tab" onclick="showTab('manual-deploy')">Manual Deploy</div>
+        </div>
+
+        <!-- Ralph Loop Tab -->
+        <div id="ralph-loop" class="tab-content active">
+            <div class="section">
+                <h2>🔄 Start Ralph Loop</h2>
+                <p><strong>Ralph Loop</strong> is an AI-driven continuous improvement system that:</p>
+                <ul>
+                    <li>✅ Analyzes deployed applications for issues</li>
+                    <li>🤖 Generates AI-powered fixes for problems</li>
+                    <li>🔧 Automatically applies fixes to the codebase</li>
+                    <li>🚀 Redeploys and validates until the app is healthy</li>
+                </ul>
+                
+                <div class="form-group">
+                    <label>Organization Name:</label>
+                    <input type="text" id="ralph-org" placeholder="DevXPlatform" value="DevXPlatform">
+                </div>
+                
+                <div class="form-group">
+                    <label>Project ID:</label>
+                    <input type="text" id="ralph-project" placeholder="NousAugmentedDevX" value="NousAugmentedDevX">
+                </div>
+                
+                <div class="form-group">
+                    <label>Repository Name:</label>
+                    <input type="text" id="ralph-repo" placeholder="example-repo">
+                </div>
+                
+                <div class="form-group">
+                    <label>Target App Service:</label>
+                    <input type="text" id="ralph-appservice" placeholder="codegen-f7hbbfcvcycjfjg7" value="codegen-f7hbbfcvcycjfjg7">
+                </div>
+                
+                <div class="form-group">
+                    <label>Max Iterations:</label>
+                    <select id="ralph-iterations">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3" selected>3</option>
+                        <option value="5">5</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="ralph-autofix" checked> Enable Auto-Fix
+                    </label>
+                </div>
+                
+                <button onclick="startRalphLoop()">🚀 Start Ralph Loop</button>
+                
+                <div id="ralph-results"></div>
+            </div>
+        </div>
+
+        <!-- QA Analysis Tab -->
+        <div id="qa-analysis" class="tab-content">
+            <div class="section">
+                <h2>🔍 QA Analysis</h2>
+                <p>Run quality assurance analysis on a deployed application to identify issues and get recommendations.</p>
+                
+                <div class="form-group">
+                    <label>Organization Name:</label>
+                    <input type="text" id="qa-org" placeholder="DevXPlatform" value="DevXPlatform">
+                </div>
+                
+                <div class="form-group">
+                    <label>Project ID:</label>
+                    <input type="text" id="qa-project" placeholder="NousAugmentedDevX" value="NousAugmentedDevX">
+                </div>
+                
+                <div class="form-group">
+                    <label>Repository Name:</label>
+                    <input type="text" id="qa-repo" placeholder="example-repo">
+                </div>
+                
+                <div class="form-group">
+                    <label>App Service URL (optional):</label>
+                    <input type="text" id="qa-url" placeholder="https://your-app.azurewebsites.net">
+                </div>
+                
+                <button onclick="runQAAnalysis()">🔍 Run QA Analysis</button>
+                
+                <div id="qa-results"></div>
+            </div>
+        </div>
+
+        <!-- Health Check Tab -->
+        <div id="health-check" class="tab-content">
+            <div class="section">
+                <h2>💚 Health Check</h2>
+                <p>Quick health check for your deployed Azure App Services.</p>
+                
+                <div class="form-group">
+                    <label>App Service Name:</label>
+                    <input type="text" id="health-appservice" placeholder="codegen-f7hbbfcvcycjfjg7" value="codegen-f7hbbfcvcycjfjg7">
+                </div>
+                
+                <button onclick="checkHealth()">💚 Check Health</button>
+                
+                <div id="health-results"></div>
+            </div>
+        </div>
+
+        <!-- Manual Deploy Tab -->
+        <div id="manual-deploy" class="tab-content">
+            <div class="section">
+                <h2>🚀 Manual Deployment</h2>
+                <p>Manually trigger a deployment for testing purposes.</p>
+                
+                <div class="form-group">
+                    <label>Organization Name:</label>
+                    <input type="text" id="deploy-org" placeholder="DevXPlatform" value="DevXPlatform">
+                </div>
+                
+                <div class="form-group">
+                    <label>Project ID:</label>
+                    <input type="text" id="deploy-project" placeholder="NousAugmentedDevX" value="NousAugmentedDevX">
+                </div>
+                
+                <div class="form-group">
+                    <label>Repository Name:</label>
+                    <input type="text" id="deploy-repo" placeholder="example-repo">
+                </div>
+                
+                <button onclick="triggerDeployment()">🚀 Trigger Deployment</button>
+                
+                <div id="deploy-results"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+
+        function showResults(containerId, result, isError = false) {
+            const container = document.getElementById(containerId);
+            const resultDiv = document.createElement('div');
+            resultDiv.className = `results ${isError ? 'error' : 'success'}`;
+            
+            if (typeof result === 'object') {
+                resultDiv.innerHTML = `<pre>${JSON.stringify(result, null, 2)}</pre>`;
+            } else {
+                resultDiv.innerHTML = result;
+            }
+            
+            container.innerHTML = '';
+            container.appendChild(resultDiv);
+        }
+
+        function showLoading(containerId, message) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = `
+                <div class="results">
+                    <span class="loading">⚙️</span> ${message}
+                </div>
+            `;
+        }
+
+        async function startRalphLoop() {
+            const org = document.getElementById('ralph-org').value;
+            const project = document.getElementById('ralph-project').value;
+            const repo = document.getElementById('ralph-repo').value;
+            const appservice = document.getElementById('ralph-appservice').value;
+            const maxIterations = document.getElementById('ralph-iterations').value;
+            const autoFixEnabled = document.getElementById('ralph-autofix').checked;
+
+            if (!org || !project || !repo) {
+                showResults('ralph-results', 'Please fill in all required fields', true);
+                return;
+            }
+
+            showLoading('ralph-results', 'Starting Ralph Loop... This may take several minutes as it analyzes, fixes, and redeploys your application.');
+
+            try {
+                const response = await fetch(`/api/ralph-loop/start/${org}/${project}/${repo}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        targetAppService: appservice,
+                        maxIterations: parseInt(maxIterations),
+                        autoFixEnabled: autoFixEnabled
+                    })
+                });
+
+                const result = await response.json();
+                
+                if (response.ok) {
+                    showResults('ralph-results', {
+                        message: '✅ Ralph Loop completed successfully!',
+                        ...result
+                    });
+                } else {
+                    showResults('ralph-results', result, true);
+                }
+            } catch (error) {
+                showResults('ralph-results', `Network error: ${error.message}`, true);
+            }
+        }
+
+        async function runQAAnalysis() {
+            const org = document.getElementById('qa-org').value;
+            const project = document.getElementById('qa-project').value;
+            const repo = document.getElementById('qa-repo').value;
+            const appServiceUrl = document.getElementById('qa-url').value;
+
+            if (!org || !project || !repo) {
+                showResults('qa-results', 'Please fill in all required fields', true);
+                return;
+            }
+
+            showLoading('qa-results', 'Running QA analysis...');
+
+            try {
+                const response = await fetch(`/api/qa/analyze/${org}/${project}/${repo}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        appServiceUrl: appServiceUrl
+                    })
+                });
+
+                const result = await response.json();
+                
+                if (response.ok) {
+                    showResults('qa-results', {
+                        message: '✅ QA Analysis completed!',
+                        ...result
+                    });
+                } else {
+                    showResults('qa-results', result, true);
+                }
+            } catch (error) {
+                showResults('qa-results', `Network error: ${error.message}`, true);
+            }
+        }
+
+        async function checkHealth() {
+            const appServiceName = document.getElementById('health-appservice').value;
+
+            if (!appServiceName) {
+                showResults('health-results', 'Please enter an app service name', true);
+                return;
+            }
+
+            showLoading('health-results', 'Checking health...');
+
+            try {
+                const response = await fetch(`/api/deployment/health/${appServiceName}`);
+                const result = await response.json();
+                
+                const healthStatus = result.isHealthy ? 
+                    '<span class="health-status health-healthy">✅ HEALTHY</span>' :
+                    '<span class="health-status health-unhealthy">❌ UNHEALTHY</span>';
+                
+                showResults('health-results', {
+                    status: healthStatus,
+                    ...result
+                });
+            } catch (error) {
+                showResults('health-results', `Network error: ${error.message}`, true);
+            }
+        }
+
+        async function triggerDeployment() {
+            const org = document.getElementById('deploy-org').value;
+            const project = document.getElementById('deploy-project').value;
+            const repo = document.getElementById('deploy-repo').value;
+
+            if (!org || !project || !repo) {
+                showResults('deploy-results', 'Please fill in all required fields', true);
+                return;
+            }
+
+            showLoading('deploy-results', 'Triggering deployment...');
+
+            try {
+                const response = await fetch(`/api/deployment/trigger/${org}/${project}/${repo}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const result = await response.json();
+                
+                if (response.ok) {
+                    showResults('deploy-results', {
+                        message: '✅ Deployment triggered successfully!',
+                        ...result
+                    });
+                } else {
+                    showResults('deploy-results', result, true);
+                }
+            } catch (error) {
+                showResults('deploy-results', `Network error: ${error.message}`, true);
+            }
+        }
+    </script>
+</body>
+</html>

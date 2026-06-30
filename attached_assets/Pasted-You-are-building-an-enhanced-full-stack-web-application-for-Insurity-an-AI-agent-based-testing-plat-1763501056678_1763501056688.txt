@@ -1,0 +1,388 @@
+You are building an enhanced full-stack web application for Insurity, an AI agent-based testing platform for insurance products. The existing design (dark navy with cyan accents) is already built. Now expand it with the following new features while maintaining complete design consistency.
+
+## EXISTING DESIGN REFERENCE
+- Dark Navy Background: #0f172a
+- Cyan Accent: #06b6d4
+- Green Success: #10b981
+- Amber Warning: #f59e0b
+- Sidebar: 20% width with navigation
+- Main content: 80% width
+- Typography: Clean, professional, Geist font family
+
+## NEW FEATURE 1: LANDING PAGE (AUTHENTICATION GATE)
+
+### Landing Page Structure
+Create a new public-facing landing page that appears BEFORE login. Users see this first.
+
+**Hero Section:**
+- Full-width, gradient background (navy to slightly lighter navy)
+- Left side (50%): Bold headline "Insurity AI Testing Platform" with subheading "Intelligent Testing Agents for Insurance Products"
+- Right side (50%): AI-generated style hero image (abstract, tech-forward, showing testing/automation themes - use Unsplash/Pexels free images related to: AI, testing, automation, insurance)
+- CTA Button: "Get Started" (cyan, large, bold)
+
+**Features Section:**
+Below hero, show 4 feature cards (each 25% width, responsive grid):
+1. Card Title: "🤖 AI Agent Testing"
+   Description: "Autonomous agents analyze your insurance applications and generate comprehensive test cases automatically."
+   
+2. Card Title: "👁️ Visual Regression"
+   Description: "Compare Figma designs with live websites. Detect layout, color, and spacing discrepancies in real-time."
+   
+3. Card Title: "⚙️ Functional Testing"
+   Description: "Agents test button clicks, form submissions, navigation flows, and user interactions automatically."
+   
+4. Card Title: "♿ Accessibility Compliance"
+   Description: "Automated WCAG AA compliance testing. Detect contrast issues, keyboard navigation problems, and screen reader compatibility."
+
+Each card has:
+- Icon (emoji or SVG)
+- Title (bold, 18px)
+- Description (14px, muted gray)
+- Subtle hover effect (background brightens slightly, shadow increases)
+
+**Login Section:**
+- Below features, center-aligned login card (40% width, centered)
+- Title: "Log In to Insurity"
+- Email input field (with placeholder: "Enter any email")
+- Password input field (with placeholder: "Enter any password")
+- Small text: "Demo mode: Use any credentials"
+- "Login" button (cyan, full width)
+- Smooth fade-in animation on page load
+
+---
+
+## NEW FEATURE 2: COLOR SCHEME SWITCHER
+
+### Theme Toggle in Header
+Add a color scheme selector in the top-right corner of the app (NOT on landing page).
+
+**Color Options:**
+1. "Dark Navy" (current, default) - #0f172a background, #06b6d4 accent
+2. "Deep Pink" - #1f1a2e background, #ec4899 accent
+3. "Ocean Blue" - #0c1e35 background, #3b82f6 accent
+4. "Forest Green" - #0f2818 background, #10b981 accent
+5. "Sunset Orange" - #2a1810 background, #f97316 accent
+
+**Implementation:**
+- Dropdown menu with 5 theme options
+- Each option has a small color swatch preview
+- When selected, entire app (except landing page) switches theme smoothly (0.3s transition)
+- Selected theme persists in localStorage
+- All accent colors used in: buttons, active nav items, task progress nodes, success states
+- All backgrounds adapt to selected theme
+- Text colors remain consistent (high contrast maintained for accessibility)
+
+---
+
+## NEW FEATURE 3: VISUAL REGRESSION TESTING - SCREEN COMPARISON MODE
+
+### New Test Type in Navigation
+Add a third nav item: "Screen Comparison" (alongside Visual Regression Testing and Test Configuration)
+
+**Screen Comparison Feature:**
+When user clicks "Screen Comparison":
+1. Show input form:
+   - Input 1: "Figma Screenshot URL or Upload" (file upload + URL input)
+   - Input 2: "Live Website Screenshot URL or Upload" (file upload + URL input)
+   - Toggle: "Auto-detect differences" (on by default)
+   - Button: "Compare Layouts"
+
+2. After submitting:
+   - Show full-screen comparison view (similar to current design)
+   - LEFT panel: "Figma Design (Baseline)" - display uploaded/provided image
+   - RIGHT panel: "Live Website (Current)" - display uploaded/provided image
+   - CENTER divider: Thin cyan line with "COMPARISON" label
+   
+3. Visual Difference Detection:
+   - AI agents analyze both images
+   - Highlight difference zones with red/amber bounding boxes
+   - Show overlay with difference severity:
+     - 🔴 Critical (layout broken)
+     - 🟠 High (spacing/sizing issue)
+     - 🟡 Medium (minor spacing)
+     - 🟢 Low (sub-pixel difference)
+   - List detected differences below images:
+     - "Header navigation: 8px spacing discrepancy" (High)
+     - "Button color: Design shows #06b6d4, Live shows #0891b2" (Medium)
+     - "Footer alignment: 2px off-center" (Low)
+   
+4. Comparison Metrics:
+   - % match: "94% match between design and live"
+   - Total differences: "7 differences found"
+   - Critical issues: "0 blocking issues"
+   - Download comparison report button
+
+---
+
+## NEW FEATURE 4: FUNCTIONAL TESTING - BUTTON & INTERACTION TESTING
+
+### New Test Type in Navigation
+Add fourth nav item: "Functional Testing"
+
+**Simple URL-Based Testing:**
+When user clicks "Functional Testing":
+1. Show input form:
+   - Input: "Application/Website URL" (only URL, no Figma needed)
+   - Dropdown: "Test Focus" with options:
+     - "All Interactions"
+     - "Buttons Only"
+     - "Form Submissions"
+     - "Navigation Flows"
+     - "Link Validation"
+   - Button: "Analyze & Test"
+
+2. After submitting:
+   - Show agent activity timeline (same as Visual Regression Testing)
+   - Agent tasks for this flow:
+     1. "Authenticating with Application" → Completed
+     2. "Scanning Page for Interactive Elements" → Completed
+     3. "Detecting Buttons, Forms, Links" → Completed
+     4. "Generating Functional Test Cases" → In Progress (spinning)
+     5. "Simulating User Interactions (Clicks)" → Pending
+     6. "Validating Form Submissions" → Pending
+     7. "Testing Navigation Flows" → Pending
+     8. "Detecting Functional Issues" → Pending
+     9. "Generating Test Report" → Pending
+
+3. Test Cases Display:
+   - Once tasks progress, show scrollable list of ~50 generated test cases
+   - Each test case card shows:
+     - Test ID: "FT-001", "FT-002", etc.
+     - Test Name: "Click 'Submit' Button on Contact Form"
+     - Element Type: "Button" / "Link" / "Form Input"
+     - Expected Result: "Form submits and shows success message"
+     - Status: ✓ (Passed / ✗ (Failed / ⏳ (Pending)
+     - Execution Time: "234ms"
+   - Color-code results:
+     - Green: Passed
+     - Red: Failed
+     - Gray: Pending
+   - Sortable columns: By status, by element type, by test ID
+   - Filter options: Show only failed, show only passed, show all
+
+4. Summary Statistics:
+   - Total Test Cases: 50
+   - Passed: 48
+   - Failed: 2
+   - Pending: 0
+   - Success Rate: 96%
+   - Execution Time: 12.4 seconds
+
+---
+
+## NEW FEATURE 5: ACCESSIBILITY TESTING
+
+### New Test Type in Navigation
+Add fifth nav item: "Accessibility Testing"
+
+**Simple URL-Based Testing:**
+When user clicks "Accessibility Testing":
+1. Show input form:
+   - Input: "Application/Website URL" (only URL needed)
+   - Checkbox Group: "Compliance Standards" (multi-select):
+     - [ ] WCAG 2.1 Level A
+     - [x] WCAG 2.1 Level AA (checked by default)
+     - [ ] WCAG 2.1 Level AAA
+     - [ ] Section 508
+   - Button: "Run Accessibility Audit"
+
+2. After submitting:
+   - Show agent activity timeline with tasks:
+     1. "Fetching Application" → Completed
+     2. "Scanning DOM Structure" → Completed
+     3. "Analyzing Color Contrast" → Completed
+     4. "Testing Keyboard Navigation" → In Progress
+     5. "Checking ARIA Labels" → Pending
+     6. "Validating Form Accessibility" → Pending
+     7. "Testing Screen Reader Compatibility" → Pending
+     8. "Generating Accessibility Report" → Pending
+
+3. Accessibility Issues Display:
+   - List of issues grouped by severity:
+   
+   **🔴 Critical Issues (Blocking):** 2 found
+   - "Image without alt text: Logo image on header (Line 45)"
+   - "Form input missing label association (Line 112)"
+   
+   **🟠 High Priority Issues:** 4 found
+   - "Color contrast ratio 3.2:1 on 'Submit' button (needs 4.5:1)"
+   - "Missing focus indicator on navigation links"
+   - "Keyboard trap detected in modal dialog"
+   - "Page title not descriptive (currently: 'Document')"
+   
+   **🟡 Medium Priority Issues:** 7 found
+   - "Heading hierarchy skipped (h1 → h3)"
+   - "Link text not descriptive: 'Click here'"
+   - "Missing page language attribute"
+   
+   **🟢 Low Priority Issues:** 3 found
+   - "Redundant title attributes on links"
+   - "Unnecessary ARIA roles"
+
+   Each issue card shows:
+   - Severity badge (color-coded)
+   - Issue description
+   - Location (line number / element)
+   - WCAG criterion violated
+   - Recommended fix
+   - Evidence/screenshot reference
+
+4. Accessibility Score:
+   - Overall Score: 72/100
+   - WCAG AA Compliance: 68%
+   - Issues by Severity:
+     - 2 Critical (must fix)
+     - 4 High (should fix)
+     - 7 Medium
+     - 3 Low
+
+---
+
+## NEW FEATURE 6: REALISTIC TEST GENERATION TIMING
+
+### Slow Down Artifact Generation
+Current timing makes tests appear instantly. Make them feel REAL by:
+
+**For All Testing Modes:**
+- When tasks reach "Generating Test Cases" phase:
+  - Display progress: "Generating test case 1 of 50..."
+  - Each test case appears with slight delay (200-400ms stagger)
+  - Counter animates: 1, 2, 3... 50 (showing real progress)
+  - Metrics update incrementally (not all at once)
+  - Total time: ~10-15 seconds to generate 50 test cases
+
+**Progress Indicators:**
+- For each major task, show a progress bar (0-100%)
+- Bars fill gradually over realistic time periods:
+  - "Scanning page elements": 3-5 seconds
+  - "Generating test cases": 8-12 seconds
+  - "Analyzing for issues": 4-6 seconds
+  - "Generating report": 2-3 seconds
+
+**Task Timing:**
+- Each task takes minimum 2-3 seconds, maximum 8 seconds
+- Use natural delay variation (not perfectly linear)
+- Total demo flow: 30-45 seconds (not instant)
+
+---
+
+## NEW FEATURE 7: DETAILED TEST CASE DISPLAY (50+ TEST CASES)
+
+### Test Cases List Component
+When test cases are generated, display scrollable list showing all ~50 cases:
+
+**Each Test Case Card (Compact but detailed):**
+- Row layout with columns:
+  1. **ID**: "FT-001" (bold, 12px)
+  2. **Test Name**: "Verify 'Submit' button click navigates to confirmation page" (truncate with ellipsis)
+  3. **Type**: Badge - "Button Click" / "Form Input" / "Navigation" (color-coded)
+  4. **Status**: Icon + text - ✓ Passed / ✗ Failed / ⏳ Pending (color-coded)
+  5. **Time**: "245ms" (small, gray)
+
+**Row Hover Effect:**
+- Slight background brightening
+- Expand button appears on right (arrow icon)
+- Click to expand and see full details:
+  - Full Test Name
+  - Element Selector/XPath
+  - Expected Result
+  - Actual Result (if executed)
+  - Full Execution Time
+  - Screenshots/Evidence
+  - Error Message (if failed)
+
+**Filtering & Sorting:**
+- Filter buttons: "All" / "Passed" / "Failed" / "Pending"
+- Sort dropdown: "By ID" / "By Type" / "By Status" / "By Execution Time"
+- Search box: Filter cases by name/ID
+- Pagination: Show 10 per page with next/previous buttons
+
+**Summary Bar Above List:**
+- "Showing 1-10 of 50 test cases"
+- Stats: "✓ 48 Passed | ✗ 2 Failed | ⏳ 0 Pending | Average Time: 234ms"
+
+---
+
+## TECHNICAL REQUIREMENTS
+
+### Frontend Updates
+- React components: LandingPage, ScreenComparison, FunctionalTesting, AccessibilityTesting, TestCasesList
+- Add ThemeContext for global color scheme management
+- All pages use color scheme variables (not hardcoded colors)
+- LocalStorage: Save selected theme, save test history
+- Responsive: All new features work on desktop (1920x1080 primary target)
+
+### Backend Updates
+- Add mock endpoints:
+  - POST /api/auth/login (accepts any credentials, returns token)
+  - POST /api/tests/functional (generates 50 test cases over 10-15 seconds, streams progress)
+  - POST /api/tests/accessibility (analyzes URL, returns WCAG violations)
+  - POST /api/tests/screen-comparison (compares two images, returns differences)
+  - GET /api/themes (returns available theme colors)
+
+### Navigation Structure
+After login, sidebar shows:
+1. Visual Regression Testing
+2. Screen Comparison (NEW)
+3. Functional Testing (NEW)
+4. Accessibility Testing (NEW)
+5. Test Configuration (existing)
+
+Header (top-right):
+- User name / Avatar
+- Color theme dropdown (NEW)
+- Logout button
+
+### Animation & Polish
+- Page transitions: Smooth fade (0.3s)
+- Theme switching: Smooth color transition (0.3s)
+- Test case appearance: Staggered fade-in (200ms between items)
+- Progress bars: Smooth fill animation (linear-ish, with slight variations)
+- All buttons: Hover effects, active states, loading states
+- Loading states: Use spinning loaders only for visual regression, use progress bars for generation tasks
+
+### Design Consistency
+- Use cyan accent from original design across ALL new features
+- Maintain dark navy background across all pages
+- Typography: Same as existing (Geist, 14px body, 18px titles)
+- Spacing: 16px grid unit
+- Ensure all new features match existing polish level
+
+### User Experience Flow
+1. User lands on Landing Page
+2. Clicks "Get Started" or "Login" button
+3. Login form appears (any credentials work)
+4. Redirected to dashboard with sidebar navigation
+5. Can select any testing type
+6. Fills in required inputs
+7. Clicks "Run Test" / "Analyze" / "Compare"
+8. Watches agent activity in real-time
+9. Sees generated test cases appear over 10-15 seconds
+10. Can filter, sort, and expand test cases
+11. Can switch themes using color selector
+12. Can run another test or navigate to different testing type
+
+---
+
+## CRITICAL NOTES
+
+✅ Maintain existing design quality—new features must match current polish level
+✅ Landing page should be visually stunning (use free images appropriately)
+✅ All timing must feel realistic—no instant results
+✅ Test cases must scroll smoothly with 50+ items
+✅ Color themes must be universally applied (no missed accent colors)
+✅ No real API integrations—all data is mocked
+✅ No fallback error states—everything succeeds
+✅ Animations should be smooth and professional
+✅ Login accepts ANY credentials (no validation needed)
+✅ Responsive design not critical (assume 1920x1080 desktop)
+
+---
+
+## DEPLOYMENT
+When complete, ensure:
+- App runs in single Replit workspace
+- Deploy to Replit hosting with shareable URL
+- All features working in preview (no console errors)
+- Animations smooth at 60fps
+- Load time <2 seconds

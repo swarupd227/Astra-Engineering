@@ -1,0 +1,383 @@
+Here's a concise, clear prompt for Replit AI:
+
+---
+
+## **FEATURE REQUEST: Azure DevOps Backlog Context Awareness**
+
+### **OVERVIEW**
+
+Enhance the artifact generation workflow to fetch and analyze existing Azure DevOps backlog items before generating new artifacts. This ensures the AI avoids duplicates, references existing work items, and intelligently aligns new artifacts with the current backlog structure.
+
+---
+
+### **REQUIREMENTS**
+
+### **1. Fetch Existing ADO Backlog Context**
+
+**When:** Before starting the conversation on Workflow page (after compliance guidelines selection, if any)
+
+**What to Fetch:**
+Using the ADO credentials from Golden Repo, fetch existing backlog items:
+
+**API Calls:**
+
+```
+GET {orgUrl}/{project}/_apis/wit/wiql?api-version=7.0
+
+Query Body:
+{
+  "query": "SELECT [System.Id], [System.Title], [System.Description], [System.WorkItemType], [System.State], [Microsoft.VSTS.Common.Priority], [System.Tags], [System.Parent] FROM WorkItems WHERE [System.TeamProject] = '{project}' AND [System.WorkItemType] IN ('Epic', 'Feature', 'User Story', 'Task') ORDER BY [System.CreatedDate] DESC"
+}
+```
+
+Then fetch details for each work item:
+```
+GET {orgUrl}/{project}/_apis/wit/workitems?ids={comma-separated-ids}&api-version=7.0
+```
+
+**Data to Extract:**
+- Work Item ID
+- Title
+- Work Item Type (Epic, Feature, User Story, Task)
+- Description (first 200 characters)
+- State (New, Active, Resolved, Closed)
+- Priority (1-4)
+- Tags
+- Parent Work Item ID (to understand hierarchy)
+
+---
+
+### **2. Structure Backlog Context**
+
+Transform fetched data into a structured format:
+
+```javascript
+const adoBacklogContext = {
+  epics: [
+    {
+      id: 123,
+      title: "Customer Portal Enhancement",
+      description: "Modernize customer-facing portal...",
+      state: "Active",
+      priority: 1,
+      tags: ["Q1-2025", "Customer-Facing"],
+      features: [456, 457] // Child feature IDs
+    }
+  ],
+  features: [
+    {
+      id: 456,
+      title: "User Onboarding Flow",
+      description: "Streamlined onboarding for new users...",
+      state: "Active",
+      priority: 2,
+      parentEpic: 123,
+      userStories: [789, 790]
+    }
+  ],
+  userStories: [
+    {
+      id: 789,
+      title: "As a new user, I want to complete registration in 3 steps",
+      description: "Simple registration process...",
+      state: "New",
+      priority: 2,
+      parentFeature: 456,
+      tags: ["MVP", "UX"]
+    }
+  ],
+  summary: {
+    totalEpics: 5,
+    totalFeatures: 12,
+    totalUserStories: 47,
+    activeEpics: 3,
+    activeFeatures: 8,
+    activeUserStories: 23
+  }
+};
+```
+
+---
+
+### **3. Inject Backlog Context into AI System Prompt**
+
+Add a new section to the system prompt BEFORE the conversation starts:
+
+```
+## EXISTING AZURE DEVOPS BACKLOG CONTEXT
+
+⚠️ IMPORTANT: The project already has existing backlog items in Azure DevOps. You MUST be aware of this context to avoid duplicates and align new work properly.
+
+### Backlog Summary:
+- **Total Epics:** ${summary.totalEpics} (${summary.activeEpics} Active)
+- **Total Features:** ${summary.totalFeatures} (${summary.activeFeatures} Active)
+- **Total User Stories:** ${summary.totalUserStories} (${summary.activeUserStories} Active)
+
+### Existing Epics:
+${epics.map(epic => `
+**Epic #${epic.id}: ${epic.title}**
+- State: ${epic.state} | Priority: ${epic.priority}
+- Description: ${epic.description}
+- Tags: ${epic.tags.join(', ')}
+- Has ${epic.features.length} child feature(s)
+`).join('\n')}
+
+### Existing Features:
+${features.map(feature => `
+**Feature #${feature.id}: ${feature.title}** (under Epic #${feature.parentEpic})
+- State: ${feature.state} | Priority: ${feature.priority}
+- Description: ${feature.description}
+- Has ${feature.userStories.length} user story/stories
+`).join('\n')}
+
+### Existing User Stories (Recent):
+${userStories.slice(0, 20).map(story => `
+**Story #${story.id}:** ${story.title} (Feature #${story.parentFeature})
+- State: ${story.state} | Priority: ${story.priority}
+`).join('\n')}
+
+---
+
+## HOW TO USE THIS CONTEXT:
+
+### 1. AVOID DUPLICATES
+- Before suggesting a new Epic/Feature/Story, CHECK if something similar already exists
+- If similar work exists, mention it: "I see you already have an Epic called 'Customer Portal Enhancement' (#123). Should we add to that or create something new?"
+
+### 2. INTELLIGENT ALIGNMENT
+- When creating new User Stories, suggest placing them under existing relevant Features
+- Example: "This new story about user registration fits well under your existing Feature 'User Onboarding Flow' (#456). Shall I add it there?"
+
+### 3. REFERENCE EXISTING ITEMS
+- Use work item IDs when referencing: "This connects to Story #789"
+- Acknowledge existing work: "Building on your existing 'Customer Portal' epic..."
+
+### 4. IDENTIFY GAPS
+- Notice patterns and suggest missing pieces
+- Example: "I notice your 'User Onboarding Flow' feature has stories for registration but nothing about email verification. Should we add that?"
+
+### 5. RESPECT HIERARCHY
+- Understand Epic → Feature → User Story → Task hierarchy
+- Don't create orphaned items; always suggest proper parent relationships
+
+### 6. CONSIDER STATE & PRIORITY
+- Be aware of what's already Active vs. New vs. Closed
+- Align priorities with existing items
+- Example: "Your existing onboarding stories are Priority 2. Should these new ones match that priority?"
+
+### 7. CONVERSATIONAL AWARENESS
+During the conversation, proactively:
+- Ask if new requirements relate to existing epics/features
+- Suggest consolidation when appropriate
+- Mention existing work that might be impacted
+- Recommend updates to existing items if relevant
+
+Example Dialogue:
+User: "We need to build a user registration feature"
+Agent: "I noticed you already have a Feature called 'User Onboarding Flow' (#456) which includes registration. Would you like me to:
+1. Add new user stories under that existing feature?
+2. Create a completely separate feature for a different type of registration?
+3. Review and refine the existing registration stories?"
+
+---
+
+## BACKLOG CONTEXT VALIDATION RULES:
+
+Before generating final artifacts:
+- [ ] Checked for duplicate or overlapping epics/features
+- [ ] Identified appropriate parent items for new stories
+- [ ] Referenced existing work item IDs where relevant
+- [ ] Suggested consolidation opportunities
+- [ ] Aligned priorities and tags with existing patterns
+- [ ] Flagged potential impacts on existing backlog items
+
+If user requirements clearly overlap with existing work, ASK before creating duplicates.
+```
+
+---
+
+### **4. Enhanced Conversational Behavior**
+
+**During Requirements Gathering:**
+
+The AI should naturally weave in backlog awareness:
+
+**User says:** "We need a feature for user authentication"
+
+**AI responds:** 
+"I see you already have an Epic called 'Customer Portal Enhancement' (#123) which might be related. Looking at your backlog, I notice you have a Feature 'User Onboarding Flow' (#456) that includes registration but I don't see authentication stories yet. 
+
+Should this new authentication feature:
+1. Be added under the existing 'User Onboarding Flow' feature?
+2. Become a new standalone feature under 'Customer Portal Enhancement' epic?
+3. Be part of a completely new epic focused on security?
+
+Also, will this authentication connect with the existing registration process in Story #789?"
+
+---
+
+**When Identifying Gaps:**
+
+"Based on your backlog, I notice:
+- You have 3 active Epics but 'Customer Portal Enhancement' has the most features (5 features)
+- Your 'User Onboarding Flow' feature has stories for registration and profile setup, but nothing about password recovery or email verification
+- Most of your user stories are Priority 2, with only the payment-related ones at Priority 1
+
+Should we address any of these gaps in what we're building today?"
+
+---
+
+### **5. Display Backlog Context in UI**
+
+**After fetching backlog, show summary in Workflow page:**
+
+```jsx
+{adoBacklogContext && (
+  <Card className="ado-context-card" style={{ marginBottom: '20px' }}>
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <div>
+        <Title level={4}>
+          <DatabaseOutlined /> Existing ADO Backlog
+        </Title>
+        <Text type="secondary">
+          The AI is aware of your current backlog to avoid duplicates and align new work
+        </Text>
+      </div>
+      <Statistic.Group>
+        <Statistic title="Epics" value={adoBacklogContext.summary.totalEpics} />
+        <Statistic title="Features" value={adoBacklogContext.summary.totalFeatures} />
+        <Statistic title="Stories" value={adoBacklogContext.summary.totalUserStories} />
+      </Statistic.Group>
+    </div>
+    
+    <Button type="link" onClick={() => setShowBacklogDetails(true)}>
+      View Backlog Details
+    </Button>
+  </Card>
+)}
+```
+
+**Expandable Details Modal/Drawer:**
+- Shows all epics with their features and stories
+- Allows user to see what AI knows about existing backlog
+- Links to ADO work items (open in new tab)
+
+---
+
+### **6. Artifact Generation with Context**
+
+**When generating final artifacts, include:**
+
+**Parent Relationship Recommendations:**
+```markdown
+## RECOMMENDED BACKLOG STRUCTURE
+
+### New Epic (if needed):
+- **Epic:** [New Epic Title]
+
+### Or Add to Existing Epic:
+- **Parent Epic:** #123 - Customer Portal Enhancement (Existing)
+  - **New Feature:** [New Feature Title]
+    - New User Story 1
+    - New User Story 2
+
+### Or Add to Existing Feature:
+- **Parent Feature:** #456 - User Onboarding Flow (Existing)
+  - New User Story 1
+  - New User Story 2
+  
+**Rationale:** These stories extend the existing onboarding workflow and logically belong under Feature #456 to maintain coherent organization.
+```
+
+**Duplicate Detection Report:**
+```markdown
+## DUPLICATE CHECK RESULTS
+
+✅ No exact duplicates found
+
+⚠️ Similar Items Detected:
+- **Existing Story #789:** "As a new user, I want to complete registration in 3 steps"
+- **Proposed Story:** "As a user, I want a simple registration process"
+- **Recommendation:** These overlap significantly. Consider enhancing Story #789 instead of creating a new story.
+
+💡 Gap Analysis:
+- Your 'User Onboarding Flow' feature lacks stories about email verification
+- Proposed new stories fill this gap effectively
+```
+
+---
+
+### **7. Error Handling**
+
+```javascript
+// Handle empty backlog
+if (adoBacklogContext.summary.totalEpics === 0) {
+  message.info('No existing backlog items found. Starting fresh!');
+}
+
+// Handle fetch failures
+try {
+  const backlogContext = await fetchADOBacklog(adoCredentials);
+} catch (error) {
+  console.error('Failed to fetch backlog:', error);
+  message.warning('Could not load existing backlog. Proceeding without context.');
+  // Continue without backlog context - don't block workflow
+}
+
+// Handle large backlogs (>200 items)
+if (totalItems > 200) {
+  message.info('Large backlog detected. Showing most recent 200 items.');
+  // Limit to recent/active items
+}
+```
+
+---
+
+### **8. Loading States**
+
+```jsx
+{loadingBacklog && (
+  <Spin tip="Loading existing ADO backlog...">
+    <Alert
+      message="Analyzing Your Backlog"
+      description="Fetching existing epics, features, and user stories to provide context-aware suggestions"
+      type="info"
+    />
+  </Spin>
+)}
+```
+
+---
+
+### **ACCEPTANCE CRITERIA**
+
+- [ ] System fetches existing ADO backlog items on Workflow page load
+- [ ] Backlog includes Epics, Features, User Stories with IDs, titles, descriptions, states, priorities
+- [ ] Backlog context injected into AI system prompt before conversation starts
+- [ ] AI proactively mentions existing work items during conversation
+- [ ] AI asks about relationships to existing items when detecting overlap
+- [ ] AI suggests adding to existing epics/features instead of creating duplicates
+- [ ] AI identifies gaps in existing backlog and suggests filling them
+- [ ] UI displays backlog summary (epic/feature/story counts)
+- [ ] User can view detailed backlog information
+- [ ] Generated artifacts include parent relationship recommendations
+- [ ] Duplicate detection report generated with final artifacts
+- [ ] Error handling for: fetch failures, empty backlogs, large backlogs, auth issues
+- [ ] Loading indicators shown during backlog fetch
+- [ ] Works gracefully if backlog fetch fails (continues without context)
+
+---
+
+### **TESTING SCENARIOS**
+
+1. **Empty Backlog:** New project with no items → AI proceeds normally, no duplicate warnings
+2. **Existing Work:** Project with 5 epics, 15 features → AI references them during conversation
+3. **Duplicate Detection:** User requests feature similar to existing one → AI asks about relationship
+4. **Gap Identification:** Backlog missing obvious stories → AI suggests filling gaps
+5. **Large Backlog:** 300+ items → System limits to recent 200, works smoothly
+6. **Fetch Failure:** API error → Warning message, workflow continues without context
+7. **Hierarchy Alignment:** New stories suggested under correct parent features
+
+---
+
+**Goal:** Make the AI contextually aware of the existing Azure DevOps backlog so it generates complementary artifacts that fit naturally into the current project structure, avoiding duplicates and identifying opportunities for consolidation or enhancement.

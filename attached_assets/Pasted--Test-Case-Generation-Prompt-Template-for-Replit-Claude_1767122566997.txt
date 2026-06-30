@@ -1,0 +1,625 @@
+# Test Case Generation Prompt Template for Replit + Claude Integration
+
+## Master Prompt for Comprehensive Test Case Generation
+
+Copy and customize the following prompt for your Replit Claude integration:
+
+---
+
+## 🎯 MASTER PROMPT TEMPLATE
+
+```
+You are an expert QA Engineer with 20+ years of experience in software testing across Insurance, Healthcare, Banking, and Fintech domains. Your task is to generate comprehensive test cases for the given user story covering all testing dimensions.
+
+## USER STORY INPUT:
+[PASTE YOUR USER STORY HERE]
+
+**User Story Format:**
+As a [Role],
+I want to [Action/Feature],
+So that [Business Value/Outcome].
+
+**Acceptance Criteria:**
+[LIST ALL ACCEPTANCE CRITERIA]
+
+---
+
+## TEST CASE GENERATION REQUIREMENTS:
+
+Generate detailed test cases for each of the following categories:
+
+### 1. FUNCTIONAL TEST CASES (Positive Scenarios)
+- Cover all acceptance criteria with happy path scenarios
+- Validate core business logic and workflows
+- Test all input combinations that should work
+- Verify expected outputs and system behavior
+- Include data validation for valid inputs
+
+### 2. NEGATIVE TEST CASES
+- Invalid input handling (empty, null, special characters, SQL injection attempts)
+- Boundary violations (exceed max/min limits)
+- Invalid data formats (wrong date format, invalid email, etc.)
+- Unauthorized access attempts
+- Missing mandatory fields
+- Invalid state transitions
+- Timeout and error handling scenarios
+- Concurrent operation conflicts
+
+### 3. EDGE CASE TEST CASES
+- Boundary value analysis (min, max, min-1, max+1)
+- Empty datasets and single record scenarios
+- Maximum capacity testing
+- Leap year, daylight saving, timezone edge cases
+- Unicode and special character handling
+- Very long strings and large numbers
+- First and last record processing
+- Simultaneous operations at boundaries
+
+### 4. WORKFLOW/INTEGRATION TEST CASES
+- End-to-end workflow validation
+- Multi-step process completion
+- System integration points
+- Data flow between modules
+- State transitions across workflow stages
+- Rollback and recovery scenarios
+- Batch processing workflows
+- Notification and alert workflows
+
+### 5. SECURITY TEST CASES
+- Authentication validation (valid/invalid credentials)
+- Authorization and role-based access control
+- Session management (timeout, concurrent sessions)
+- Data encryption verification
+- Input sanitization (XSS, SQL injection prevention)
+- Sensitive data masking
+- Audit trail integrity
+- API security (token validation, rate limiting)
+- CSRF protection
+- Password policy enforcement
+
+### 6. ACCESSIBILITY TEST CASES (WCAG 2.1 Compliance)
+- Screen reader compatibility
+- Keyboard navigation (Tab, Enter, Escape)
+- Focus indicators and tab order
+- Color contrast validation (4.5:1 ratio)
+- Alt text for images and icons
+- Form label associations
+- Error message accessibility
+- Skip navigation links
+- Responsive design for assistive devices
+- ARIA attributes validation
+
+---
+
+## OUTPUT FORMAT FOR EACH TEST CASE:
+
+```markdown
+| Field | Details |
+|-------|---------|
+| **Test Case ID** | [Category]-[Module]-[Number] (e.g., FUN-REN-001, NEG-REN-001) |
+| **Test Case Name** | Descriptive name of the test |
+| **Category** | Functional / Negative / Edge / Workflow / Security / Accessibility |
+| **Priority** | High / Medium / Low |
+| **Linked AC** | Acceptance Criteria reference |
+| **Description** | Brief description of what is being tested |
+| **Preconditions** | List of prerequisites |
+| **Test Data** | Specific test data required |
+| **Test Steps** | Numbered step-by-step instructions |
+| **Expected Results** | Detailed expected outcomes |
+| **Postconditions** | State after test execution |
+```
+
+---
+
+## NAMING CONVENTIONS:
+
+- **FUN-[MODULE]-[NNN]** - Functional Test Cases
+- **NEG-[MODULE]-[NNN]** - Negative Test Cases  
+- **EDG-[MODULE]-[NNN]** - Edge Case Test Cases
+- **WFL-[MODULE]-[NNN]** - Workflow Test Cases
+- **SEC-[MODULE]-[NNN]** - Security Test Cases
+- **ACC-[MODULE]-[NNN]** - Accessibility Test Cases
+
+---
+
+## ADDITIONAL INSTRUCTIONS:
+
+1. Generate minimum 5-10 test cases per category
+2. Ensure 100% coverage of all acceptance criteria
+3. Include specific test data examples
+4. Make test steps detailed and reproducible
+5. Link each test case to relevant acceptance criteria
+6. Consider both UI and API testing perspectives
+7. Include database validation steps where applicable
+8. Add performance considerations where relevant
+
+---
+
+## DELIVERABLES:
+
+1. **Test Case Summary Table** - Count by category and priority
+2. **Traceability Matrix** - AC to Test Case mapping
+3. **Detailed Test Cases** - Organized by category
+4. **Test Data Requirements** - List of required test data
+
+Please generate the comprehensive test cases now.
+```
+
+---
+
+## 🔧 CATEGORY-SPECIFIC PROMPTS
+
+### Prompt for FUNCTIONAL Test Cases Only:
+
+```
+You are a Senior QA Engineer. Generate detailed FUNCTIONAL test cases for the following user story.
+
+USER STORY:
+[Paste user story]
+
+ACCEPTANCE CRITERIA:
+[List acceptance criteria]
+
+REQUIREMENTS:
+1. Cover ALL acceptance criteria with positive/happy path scenarios
+2. Test valid input combinations
+3. Verify correct business logic execution
+4. Validate expected outputs and data persistence
+5. Include UI and backend validation steps
+
+OUTPUT FORMAT:
+For each test case provide:
+- Test Case ID: FUN-[MODULE]-[NNN]
+- Name, Description, Priority
+- Preconditions
+- Test Data (specific values)
+- Detailed Test Steps (numbered)
+- Expected Results (specific and measurable)
+- Postconditions
+
+Generate minimum 15 functional test cases covering all acceptance criteria.
+```
+
+---
+
+### Prompt for NEGATIVE Test Cases Only:
+
+```
+You are a Senior QA Engineer specializing in negative testing. Generate comprehensive NEGATIVE test cases for the following user story.
+
+USER STORY:
+[Paste user story]
+
+ACCEPTANCE CRITERIA:
+[List acceptance criteria]
+
+FOCUS AREAS:
+1. **Invalid Inputs**: Empty, null, special characters, SQL injection strings
+2. **Boundary Violations**: Values exceeding min/max limits
+3. **Format Errors**: Wrong date formats, invalid emails, malformed data
+4. **Missing Data**: Required fields left blank
+5. **Invalid States**: Actions performed in wrong sequence/status
+6. **Error Handling**: System behavior on failures
+7. **Duplicate Processing**: Attempting same action twice
+8. **Unauthorized Actions**: Actions without proper permissions
+
+OUTPUT FORMAT:
+For each test case provide:
+- Test Case ID: NEG-[MODULE]-[NNN]
+- Name, Description, Priority
+- Preconditions
+- Invalid Test Data (specific values)
+- Test Steps to trigger negative scenario
+- Expected Error Handling (error messages, system behavior)
+- Verify no data corruption occurs
+
+Generate minimum 15 negative test cases.
+```
+
+---
+
+### Prompt for EDGE CASE Test Cases Only:
+
+```
+You are a Senior QA Engineer specializing in boundary and edge case testing. Generate comprehensive EDGE CASE test cases for the following user story.
+
+USER STORY:
+[Paste user story]
+
+ACCEPTANCE CRITERIA:
+[List acceptance criteria]
+
+EDGE CASE CATEGORIES:
+1. **Boundary Values**: Exact min, max, min-1, max+1
+2. **Empty/Single Records**: Zero items, one item scenarios
+3. **Maximum Capacity**: System limits, large datasets
+4. **Date/Time Edges**: Leap year, month boundaries, timezone changes, daylight saving
+5. **String Limits**: Maximum length, minimum length, unicode characters
+6. **Numeric Edges**: Zero, negative numbers, decimal precision
+7. **First/Last Scenarios**: First record, last record, only record
+8. **Concurrent Limits**: Maximum simultaneous users/transactions
+
+OUTPUT FORMAT:
+For each test case provide:
+- Test Case ID: EDG-[MODULE]-[NNN]
+- Name, Description, Priority
+- Edge Condition Being Tested
+- Boundary Values Used
+- Test Steps
+- Expected Behavior at Boundary
+- Verify system stability
+
+Generate minimum 12 edge case test cases.
+```
+
+---
+
+### Prompt for WORKFLOW/INTEGRATION Test Cases Only:
+
+```
+You are a Senior QA Engineer specializing in end-to-end workflow testing. Generate comprehensive WORKFLOW test cases for the following user story.
+
+USER STORY:
+[Paste user story]
+
+ACCEPTANCE CRITERIA:
+[List acceptance criteria]
+
+WORKFLOW FOCUS AREAS:
+1. **End-to-End Flows**: Complete business process from start to finish
+2. **Multi-Step Processes**: Sequential operations with state changes
+3. **Integration Points**: Data exchange between systems/modules
+4. **State Transitions**: All valid status changes in workflow
+5. **Parallel Workflows**: Multiple processes running simultaneously
+6. **Exception Handling**: Workflow behavior on failures
+7. **Rollback Scenarios**: Recovery from failed transactions
+8. **Batch Processing**: Scheduled jobs and bulk operations
+9. **Notification Flows**: Alerts, emails, messages triggered by workflow
+10. **Approval Workflows**: Multi-level approval processes
+
+OUTPUT FORMAT:
+For each test case provide:
+- Test Case ID: WFL-[MODULE]-[NNN]
+- Workflow Name
+- Systems/Modules Involved
+- Preconditions (initial state)
+- End-to-End Test Steps (numbered)
+- Data Validation Points
+- Expected State After Each Step
+- Final Expected Outcome
+
+Generate minimum 10 workflow test cases.
+```
+
+---
+
+### Prompt for SECURITY Test Cases Only:
+
+```
+You are a Senior Security QA Engineer. Generate comprehensive SECURITY test cases for the following user story based on OWASP guidelines.
+
+USER STORY:
+[Paste user story]
+
+ACCEPTANCE CRITERIA:
+[List acceptance criteria]
+
+SECURITY TESTING AREAS:
+1. **Authentication Testing**
+   - Valid/invalid login attempts
+   - Password policy enforcement
+   - Account lockout after failed attempts
+   - Session timeout validation
+
+2. **Authorization Testing**
+   - Role-based access control
+   - Privilege escalation attempts
+   - Accessing unauthorized resources
+   - Function-level access control
+
+3. **Input Validation**
+   - SQL injection prevention
+   - Cross-Site Scripting (XSS) prevention
+   - Command injection testing
+   - Path traversal attempts
+
+4. **Data Protection**
+   - Sensitive data encryption
+   - Data masking in UI and logs
+   - Secure data transmission (HTTPS)
+   - PII handling compliance
+
+5. **Session Management**
+   - Session fixation prevention
+   - Concurrent session handling
+   - Session invalidation on logout
+   - Cookie security attributes
+
+6. **Audit & Logging**
+   - Security event logging
+   - Audit trail integrity
+   - Log injection prevention
+
+OUTPUT FORMAT:
+For each test case provide:
+- Test Case ID: SEC-[MODULE]-[NNN]
+- Security Category (Authentication/Authorization/etc.)
+- Vulnerability Being Tested
+- Attack Vector / Test Approach
+- Test Steps
+- Expected Security Behavior
+- Compliance Reference (if applicable)
+
+Generate minimum 15 security test cases.
+```
+
+---
+
+### Prompt for ACCESSIBILITY Test Cases Only:
+
+```
+You are a Senior QA Engineer specializing in Accessibility Testing (WCAG 2.1 compliance). Generate comprehensive ACCESSIBILITY test cases for the following user story.
+
+USER STORY:
+[Paste user story]
+
+ACCEPTANCE CRITERIA:
+[List acceptance criteria]
+
+ACCESSIBILITY TESTING AREAS (WCAG 2.1):
+
+1. **Perceivable**
+   - Text alternatives for non-text content (images, icons)
+   - Captions for multimedia
+   - Color contrast (4.5:1 for normal text, 3:1 for large text)
+   - Content readable without color dependency
+   - Responsive text sizing (up to 200%)
+
+2. **Operable**
+   - Full keyboard accessibility (Tab, Enter, Escape, Arrow keys)
+   - No keyboard traps
+   - Focus indicators visible
+   - Skip navigation links
+   - Sufficient time for interactions
+   - No content causing seizures
+
+3. **Understandable**
+   - Page language declared
+   - Consistent navigation
+   - Error identification and suggestions
+   - Labels and instructions for inputs
+   - Predictable functionality
+
+4. **Robust**
+   - Valid HTML markup
+   - ARIA attributes correctly implemented
+   - Compatible with assistive technologies
+   - Screen reader compatibility (NVDA, JAWS, VoiceOver)
+
+TESTING TOOLS TO REFERENCE:
+- WAVE, axe DevTools, Lighthouse
+- Screen readers (NVDA, JAWS, VoiceOver)
+- Keyboard-only navigation
+- Color contrast analyzers
+
+OUTPUT FORMAT:
+For each test case provide:
+- Test Case ID: ACC-[MODULE]-[NNN]
+- WCAG Criterion Reference (e.g., 1.1.1, 2.1.1)
+- Accessibility Requirement
+- Testing Tool/Method
+- Test Steps
+- Expected Accessible Behavior
+- Pass/Fail Criteria
+
+Generate minimum 12 accessibility test cases.
+```
+
+---
+
+## 📋 QUICK REFERENCE - TEST CASE CATEGORIES
+
+| Category | Prefix | Focus | Min Count |
+|----------|--------|-------|-----------|
+| Functional | FUN | Happy path, valid scenarios | 15 |
+| Negative | NEG | Invalid inputs, error handling | 15 |
+| Edge Case | EDG | Boundaries, limits, extremes | 12 |
+| Workflow | WFL | E2E flows, integrations | 10 |
+| Security | SEC | Auth, authorization, vulnerabilities | 15 |
+| Accessibility | ACC | WCAG compliance, assistive tech | 12 |
+
+---
+
+## 🚀 REPLIT INTEGRATION TIPS
+
+### Setting Up Claude in Replit:
+
+1. **Create a new Replit project** (Python or Node.js recommended)
+
+2. **Install Anthropic SDK:**
+   ```bash
+   # For Python
+   pip install anthropic
+   
+   # For Node.js
+   npm install @anthropic-ai/sdk
+   ```
+
+3. **Set API Key in Replit Secrets:**
+   - Go to Tools > Secrets
+   - Add key: `ANTHROPIC_API_KEY`
+   - Add your Claude API key as value
+
+4. **Sample Python Code for Replit:**
+
+```python
+import anthropic
+import os
+
+client = anthropic.Anthropic(
+    api_key=os.environ.get("ANTHROPIC_API_KEY")
+)
+
+def generate_test_cases(user_story, acceptance_criteria, test_type="all"):
+    
+    prompt = f"""
+    You are an expert QA Engineer. Generate comprehensive {test_type} test cases.
+    
+    USER STORY:
+    {user_story}
+    
+    ACCEPTANCE CRITERIA:
+    {acceptance_criteria}
+    
+    Generate detailed test cases with:
+    - Test Case ID
+    - Description
+    - Preconditions
+    - Test Steps
+    - Expected Results
+    - Priority
+    """
+    
+    message = client.messages.create(
+        model="claude-sonnet-4-20250514",
+        max_tokens=8000,
+        messages=[
+            {"role": "user", "content": prompt}
+        ]
+    )
+    
+    return message.content[0].text
+
+# Example Usage
+user_story = """
+As a Policy Administrator,
+I want to automatically generate renewal notices for policies approaching expiration,
+So that policyholders receive timely notifications and can renew their coverage without lapse.
+"""
+
+acceptance_criteria = """
+1. System identifies all policies expiring within the next 60 days
+2. Renewal premium is calculated based on current rating factors
+3. Renewal notice is generated with updated premium and coverage details
+4. System sends notice via preferred communication channel
+5. Policy status updates to 'Pending Renewal'
+"""
+
+# Generate all test case types
+test_types = ["functional", "negative", "edge case", "workflow", "security", "accessibility"]
+
+for test_type in test_types:
+    print(f"\n{'='*50}")
+    print(f"GENERATING {test_type.upper()} TEST CASES")
+    print('='*50)
+    result = generate_test_cases(user_story, acceptance_criteria, test_type)
+    print(result)
+```
+
+5. **Sample Node.js Code for Replit:**
+
+```javascript
+const Anthropic = require('@anthropic-ai/sdk');
+
+const client = new Anthropic({
+    apiKey: process.env.ANTHROPIC_API_KEY
+});
+
+async function generateTestCases(userStory, acceptanceCriteria, testType = "all") {
+    
+    const prompt = `
+    You are an expert QA Engineer. Generate comprehensive ${testType} test cases.
+    
+    USER STORY:
+    ${userStory}
+    
+    ACCEPTANCE CRITERIA:
+    ${acceptanceCriteria}
+    
+    Generate detailed test cases with:
+    - Test Case ID
+    - Description  
+    - Preconditions
+    - Test Steps
+    - Expected Results
+    - Priority
+    `;
+    
+    const message = await client.messages.create({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 8000,
+        messages: [
+            { role: "user", content: prompt }
+        ]
+    });
+    
+    return message.content[0].text;
+}
+
+// Example usage
+const userStory = `
+As a Policy Administrator,
+I want to automatically generate renewal notices for policies approaching expiration,
+So that policyholders receive timely notifications.
+`;
+
+const acceptanceCriteria = `
+1. System identifies policies expiring within 60 days
+2. Renewal premium calculated based on rating factors
+3. Notice generated with updated premium
+`;
+
+generateTestCases(userStory, acceptanceCriteria, "functional")
+    .then(result => console.log(result))
+    .catch(error => console.error(error));
+```
+
+---
+
+## 📝 BEST PRACTICES
+
+1. **Be Specific**: Include domain context (Insurance, Healthcare, etc.)
+2. **Provide Examples**: Include sample data formats expected
+3. **Set Constraints**: Specify minimum test case counts
+4. **Request Structure**: Ask for consistent output format
+5. **Iterate**: Generate category by category for better results
+6. **Review & Refine**: Use follow-up prompts for missing scenarios
+
+---
+
+## 🎯 EXAMPLE: COMPLETE PROMPT FOR POLICY RENEWAL
+
+```
+You are an expert QA Engineer with 20+ years in Insurance domain testing. Generate comprehensive test cases for Policy Renewal Processing.
+
+USER STORY:
+As a Policy Administrator,
+I want to automatically generate renewal notices for policies approaching expiration,
+So that policyholders receive timely notifications and can renew their coverage without lapse.
+
+ACCEPTANCE CRITERIA:
+1. System identifies all policies expiring within the next 60 days and flags them for renewal processing
+2. Renewal premium is calculated based on current rating factors, claims history, and any applicable rate changes
+3. Renewal notice is generated with updated premium, coverage details, and payment due date
+4. System sends renewal notice via policyholder's preferred communication channel (email, mail, or portal)
+5. Policy status updates to "Pending Renewal" once notice is dispatched
+6. Policyholder can accept, modify, or decline renewal through the self-service portal
+7. System applies any mid-term endorsements to the renewed policy automatically
+8. Audit trail captures all renewal activities including notice generation, delivery status, and policyholder response
+9. Escalation alert triggers if no response is received within 30 days of notice dispatch
+10. Renewed policy generates new policy documents with updated effective dates upon payment confirmation
+
+GENERATE TEST CASES FOR:
+- Functional (15 minimum)
+- Negative (15 minimum)
+- Edge Cases (12 minimum)
+- Workflow/Integration (10 minimum)
+- Security (15 minimum)
+- Accessibility (12 minimum)
+
+Use standard test case format with ID, Description, Preconditions, Steps, Expected Results, and Priority.
+```
+
+---
+
+*Document Version: 1.0 | Created for NAT 2.0 - Nous Autonomous Tester Platform*

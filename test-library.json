@@ -1,0 +1,61 @@
+{
+  "folders": [
+    {
+      "id": "f-modules",
+      "name": "Modules",
+      "type": "module",
+      "parentId": null,
+      "createdAt": 1778732761091
+    },
+    {
+      "id": "f-suites",
+      "name": "Suites",
+      "type": "suite",
+      "parentId": null,
+      "createdAt": 1778732761091
+    },
+    {
+      "id": "f-smoke",
+      "name": "Smoke",
+      "type": "suite",
+      "parentId": "f-suites",
+      "createdAt": 1778732761091
+    },
+    {
+      "id": "f-regression",
+      "name": "Regression",
+      "type": "suite",
+      "parentId": "f-suites",
+      "createdAt": 1778732761091
+    },
+    {
+      "id": "f-sanity",
+      "name": "Sanity",
+      "type": "suite",
+      "parentId": "f-suites",
+      "createdAt": 1778732761091
+    }
+  ],
+  "tests": [
+    {
+      "id": "1778735904192-2vkti7",
+      "folderId": "f-modules",
+      "name": "Click on \"ServicesDigital Product EngineeringTransforming ou",
+      "url": "",
+      "projectName": "demo",
+      "script": "import { test, expect } from '@playwright/test';\nimport { prepareSite, waitForPageReady, clickNewTab, hoverAndWait, tryLocators, smartFill, smartClick, smartCheck, smartUncheck } from '../helpers/universal';\nimport { selectKendoDropdown, selectKendoDate, checkKendoTreeNode, waitAndDismissAnyKendoAlert, fillKendoGridDates } from '../helpers/kendo';\n\ntest('Recorded flow', async ({ page, context }) => {\n  await page.goto('https://www.nousinfosystems.com/');\n  await prepareSite(page); // dismiss overlays, wait for URL stability\n\n  await smartClick(page.getByText('ServicesDigital Product EngineeringTransforming outcomes wit', { exact: false }).filter({ visible: true }).first());\n});",
+      "nlSteps": [
+        "Step 1: Page loaded — \"Digital Transformation Solutions, IT Consulting | Nous Infosystems\"",
+        "Step 2: Click on \"ServicesDigital Product EngineeringTransforming outcomes wit\"",
+        "Step 3: Click on \"ServicesDigital Product EngineeringTransforming outcomes wit\"",
+        "Step 4: Click on \"span\""
+      ],
+      "tags": [],
+      "lastRunStatus": "passed",
+      "lastRunAt": 1778737019826,
+      "lastRunDuration": 19949,
+      "createdAt": 1778735904191,
+      "updatedAt": 1778735904191
+    }
+  ]
+}

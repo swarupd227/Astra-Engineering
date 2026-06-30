@@ -1,0 +1,459 @@
+{
+  "apiConfig": {
+    "method": "POST",
+    "endpoint": "https://portal.zinghr.com/2015/route/LMS/EmployeeLeaveActionDetails",
+    "baseUrl": "",
+    "description": "Employee Leave Action Details API - fetches leave actions for date range",
+    "authType": "none",
+    "authToken": "",
+    "apiKey": "",
+    "apiKeyHeader": "X-API-Key",
+    "username": "",
+    "password": "",
+    "requestBody": "{\n    \"SubscriptionName\": \"NOUS\",\n    \"Token\": \"51852757aa1542398ad642a4077cf105\",\n    \"Actionfromdate\": \"28-11-2025\",\n    \"Actiontodate\": \"04-12-2025\",\n    \"EmployeeCode\": \"NST221183\"\n}",
+    "responseSchema": "",
+    "expectedStatusCodes": "200, 201, 204"
+  },
+  "testCases": [
+    {
+      "id": "TC_API_FUNC_001",
+      "title": "Validate JSON response structure for https://portal.zinghr.com/2015/route/LMS/EmployeeLeaveActionDetails",
+      "type": "functional",
+      "priority": "P0",
+      "description": "Validate that POST request returns JSON with 3 expected fields: Code, Message, EmployeeLeaveTransactions",
+      "preconditions": [
+        "API server is running",
+        "Valid authentication credentials available",
+        "Test data is prepared"
+      ],
+      "steps": [
+        {
+          "action": "Prepare valid request with all required parameters",
+          "expected": "Request payload is properly formatted"
+        },
+        {
+          "action": "Set appropriate headers including Content-Type",
+          "expected": "Headers are correctly configured"
+        },
+        {
+          "action": "Send POST request to https://portal.zinghr.com/2015/route/LMS/EmployeeLeaveActionDetails",
+          "expected": "Request is sent successfully"
+        },
+        {
+          "action": "Verify response status code is 200",
+          "expected": "Status code is 200"
+        },
+        {
+          "action": "Validate response contains 3 expected fields",
+          "expected": "Fields present: Code, Message, EmployeeLeaveTransactions"
+        },
+        {
+          "action": "Verify field data types match expected schema",
+          "expected": "Types: Code=number, Message=string, EmployeeLeaveTransactions=array"
+        }
+      ],
+      "testData": {
+        "Code": 1,
+        "Message": "Success",
+        "EmployeeLeaveTransactions": 0
+      },
+      "assertions": [
+        "Response status is 200",
+        "Response contains field \"Code\" of type number",
+        "Response contains field \"Message\" of type string",
+        "Response contains field \"EmployeeLeaveTransactions\" of type array",
+        "Content-Type header is application/json"
+      ],
+      "postmanScript": "pm.test(\"Status code is 200\", function () {\n    pm.response.to.have.status(200);\n});\n\npm.test(\"Response time is acceptable\", function () {\n    pm.expect(pm.response.responseTime).to.be.below(2000);\n});\n\npm.test(\"Response has all expected fields\", function () {\n    const jsonData = pm.response.json();\n    pm.expect(jsonData).to.have.property(\"Code\");\n    pm.expect(jsonData).to.have.property(\"Message\");\n    pm.expect(jsonData).to.have.property(\"EmployeeLeaveTransactions\");\n});\n\npm.test(\"Content-Type is JSON\", function () {\n    pm.response.to.have.header(\"Content-Type\");\n    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\n});",
+      "readyApiGroovy": "import groovy.json.JsonSlurper\n\ndef response = context.response\ndef jsonSlurper = new JsonSlurper()\ndef jsonRoot = jsonSlurper.parseText(response.contentAsString)\ndef json = jsonRoot\n\nassert response.statusCode == 200 : \"Expected 200 but got \" + response.statusCode\nassert json.Code instanceof Number : \"Code must be a number\"\nassert json.Message instanceof String : \"Message must be a string\"\nassert json.EmployeeLeaveTransactions instanceof List : \"EmployeeLeaveTransactions must be an array\"\nassert response.responseTime < 2000 : \"Response time exceeded 2s\"",
+      "playwrightScript": "import { test, expect } from '@playwright/test';\n\ntest.describe('https://portal.zinghr.com/2015/route/LMS/EmployeeLeaveActionDetails API Tests', () => {\n  const baseUrl = 'https://portal.zinghr.com/2015/route/LMS/EmployeeLeaveActionDetails';\n  \n  test('should return 200 with valid response structure', async ({ request }) => {\n    const response = await request.post(baseUrl, {\n      data: {\n            \"Code\": 1,\n            \"Message\": \"Success\",\n            \"EmployeeLeaveTransactions\": 0\n      }\n    });\n    \n    // Validate status code\n    expect(response.status()).toBe(200);\n    \n    // Validate Content-Type\n    expect(response.headers()['content-type']).toContain('application/json');\n    \n    // Parse and validate JSON response\n    const json = await response.json();\n    const data = json;\n    \n    // Validate response fields\n    expect(typeof data.Code).toBe('number');\n    expect(typeof data.Message).toBe('string');\n    expect(Array.isArray(data.EmployeeLeaveTransactions)).toBe(true);\n  });\n});"
+    },
+    {
+      "id": "TC_API_FUNC_002",
+      "title": "Verify response schema validation for https://portal.zinghr.com/2015/route/LMS/EmployeeLeaveActionDetails",
+      "type": "functional",
+      "priority": "P1",
+      "description": "Validate that response body matches the expected JSON schema",
+      "preconditions": [
+        "Valid API endpoint accessible",
+        "Schema definition available"
+      ],
+      "steps": [
+        {
+          "action": "Send valid request to endpoint",
+          "expected": "Request executes successfully"
+        },
+        {
+          "action": "Parse response JSON body",
+          "expected": "Valid JSON response received"
+        },
+        {
+          "action": "Validate required fields present",
+          "expected": "All required fields exist"
+        },
+        {
+          "action": "Verify field data types",
+          "expected": "Data types match schema definition"
+        },
+        {
+          "action": "Check nested object structures",
+          "expected": "Nested objects are properly formed"
+        },
+        {
+          "action": "Validate array fields if present",
+          "expected": "Arrays contain expected element types"
+        }
+      ],
+      "testData": {},
+      "assertions": [
+        "Response is valid JSON",
+        "All required fields are present",
+        "Field data types are correct",
+        "Nested structures are valid"
+      ],
+      "postmanScript": "const schema = {\n    type: \"object\",\n    required: [\"id\", \"status\"],\n    properties: {\n        id: { type: \"number\" },\n        status: { type: \"string\" }\n    }\n};\n\npm.test(\"Schema is valid\", function () {\n    pm.response.to.have.jsonSchema(schema);\n});",
+      "readyApiGroovy": "def response = context.response\ndef json = new groovy.json.JsonSlurper().parseText(response.contentAsString)\n\nassert json.id instanceof Number : \"id must be a number\"\nassert json.status instanceof String : \"status must be a string\"",
+      "playwrightScript": "import { test, expect } from '@playwright/test';\n\ntest('should have valid JSON schema structure', async ({ request }) => {\n  const response = await request.post('https://portal.zinghr.com/2015/route/LMS/EmployeeLeaveActionDetails');\n  const json = await response.json();\n  \n  // Validate JSON is parseable\n  expect(json).toBeDefined();\n  \n  // Validate required fields exist\n  expect(json).toHaveProperty('Code');\n  expect(json).toHaveProperty('Message');\n  expect(json).toHaveProperty('EmployeeLeaveTransactions');\n  \n  // Validate data types\n  expect(typeof json.Code).toBe('number');\n  expect(typeof json.Message).toBe('string');\n  expect(Array.isArray(json.EmployeeLeaveTransactions)).toBe(true);\n});"
+    },
+    {
+      "id": "TC_API_NEG_003",
+      "title": "Verify 400 error for invalid request body",
+      "type": "negative",
+      "priority": "P1",
+      "description": "Validate proper error handling when request body contains invalid data",
+      "preconditions": [
+        "API server is running",
+        "Endpoint accepts JSON body"
+      ],
+      "steps": [
+        {
+          "action": "Prepare request with malformed JSON",
+          "expected": "Invalid request is prepared"
+        },
+        {
+          "action": "Send request to endpoint",
+          "expected": "Request is transmitted"
+        },
+        {
+          "action": "Verify 400 status code returned",
+          "expected": "Status code is 400 Bad Request"
+        },
+        {
+          "action": "Check error message in response",
+          "expected": "Descriptive error message present"
+        },
+        {
+          "action": "Validate error response format",
+          "expected": "Error follows standard format"
+        },
+        {
+          "action": "Ensure no data was modified",
+          "expected": "No side effects occurred"
+        }
+      ],
+      "testData": {
+        "invalidField": null
+      },
+      "assertions": [
+        "Response status is 400",
+        "Error message is descriptive",
+        "Error code is present",
+        "No data modification occurred"
+      ],
+      "postmanScript": "pm.test(\"Status code is 400\", function () {\n    pm.response.to.have.status(400);\n});\n\npm.test(\"Error message is present\", function () {\n    const jsonData = pm.response.json();\n    pm.expect(jsonData).to.have.property(\"error\");\n});",
+      "readyApiGroovy": "def response = context.response\n\nassert response.statusCode == 400 : \"Expected 400 but got \" + response.statusCode\ndef json = new groovy.json.JsonSlurper().parseText(response.contentAsString)\nassert json.error != null : \"Error message should be present\"",
+      "playwrightScript": "import { test, expect } from '@playwright/test';\n\ntest('should return 400 for invalid request body', async ({ request }) => {\n  const response = await request.post('https://portal.zinghr.com/2015/route/LMS/EmployeeLeaveActionDetails', {\n    data: { invalidField: null, malformed: 'data' }\n  });\n  \n  // Expect 400 Bad Request for invalid input\n  expect([400, 422]).toContain(response.status());\n  \n  const json = await response.json();\n  expect(json.error || json.message).toBeTruthy();\n});"
+    },
+    {
+      "id": "TC_API_NEG_004",
+      "title": "Verify 401 error for unauthorized access",
+      "type": "negative",
+      "priority": "P0",
+      "description": "Validate that requests without valid authentication return 401 Unauthorized",
+      "preconditions": [
+        "API requires authentication",
+        "No auth token provided"
+      ],
+      "steps": [
+        {
+          "action": "Prepare request without auth headers",
+          "expected": "Request lacks authentication"
+        },
+        {
+          "action": "Send request to protected endpoint",
+          "expected": "Request is transmitted"
+        },
+        {
+          "action": "Verify 401 status code",
+          "expected": "Status code is 401 Unauthorized"
+        },
+        {
+          "action": "Check WWW-Authenticate header",
+          "expected": "Auth challenge header present"
+        },
+        {
+          "action": "Validate error response body",
+          "expected": "Error message indicates auth failure"
+        },
+        {
+          "action": "Ensure protected data not exposed",
+          "expected": "No sensitive data in response"
+        }
+      ],
+      "testData": {},
+      "assertions": [
+        "Response status is 401",
+        "No sensitive data exposed",
+        "Auth error message present",
+        "Security headers present"
+      ],
+      "postmanScript": "pm.test(\"Status code is 401\", function () {\n    pm.response.to.have.status(401);\n});\n\npm.test(\"Unauthorized error returned\", function () {\n    const jsonData = pm.response.json();\n    pm.expect(jsonData.error).to.include(\"unauthorized\");\n});",
+      "readyApiGroovy": "def response = context.response\n\nassert response.statusCode == 401 : \"Expected 401 but got \" + response.statusCode\nassert response.contentAsString.toLowerCase().contains(\"unauthorized\")",
+      "playwrightScript": "import { test, expect } from '@playwright/test';\n\ntest('should return 401 for unauthorized access', async ({ request }) => {\n  // Send request without valid authentication\n  const response = await request.post('https://portal.zinghr.com/2015/route/LMS/EmployeeLeaveActionDetails', {\n    headers: { 'Authorization': 'Bearer invalid_token' }\n  });\n  \n  // Expect 401 Unauthorized or 403 Forbidden\n  expect([401, 403]).toContain(response.status());\n  \n  const text = await response.text();\n  const textLower = text.toLowerCase();\n  expect(textLower.includes('unauthorized') || textLower.includes('forbidden') || textLower.includes('invalid')).toBe(true);\n});"
+    },
+    {
+      "id": "TC_API_SEC_005",
+      "title": "Verify SQL injection prevention",
+      "type": "security",
+      "priority": "P0",
+      "description": "Validate that API properly sanitizes input to prevent SQL injection attacks",
+      "preconditions": [
+        "API accepts user input",
+        "Database backend exists"
+      ],
+      "steps": [
+        {
+          "action": "Prepare SQL injection payload",
+          "expected": "Malicious input ready"
+        },
+        {
+          "action": "Send request with injection in query param",
+          "expected": "Request transmitted"
+        },
+        {
+          "action": "Verify no database error exposed",
+          "expected": "No SQL error in response"
+        },
+        {
+          "action": "Check response for proper handling",
+          "expected": "Input is sanitized or rejected"
+        },
+        {
+          "action": "Verify no data leakage",
+          "expected": "No unauthorized data returned"
+        },
+        {
+          "action": "Test alternative injection patterns",
+          "expected": "All patterns blocked"
+        }
+      ],
+      "testData": {
+        "id": "1; DROP TABLE users;--",
+        "name": "' OR '1'='1"
+      },
+      "assertions": [
+        "No SQL errors in response",
+        "Input is properly sanitized",
+        "No unauthorized data access",
+        "Application remains stable"
+      ],
+      "postmanScript": "pm.test(\"No SQL error exposed\", function () {\n    const body = pm.response.text().toLowerCase();\n    pm.expect(body).to.not.include(\"sql\");\n    pm.expect(body).to.not.include(\"syntax error\");\n});\n\npm.test(\"Request handled safely\", function () {\n    pm.response.to.not.have.status(500);\n});",
+      "readyApiGroovy": "def response = context.response\ndef body = response.contentAsString.toLowerCase()\n\nassert !body.contains(\"sql\") : \"SQL error exposed\"\nassert !body.contains(\"syntax error\") : \"Syntax error exposed\"\nassert response.statusCode != 500 : \"Server error occurred\"",
+      "playwrightScript": "import { test, expect } from '@playwright/test';\n\ntest('should prevent SQL injection attacks', async ({ request }) => {\n  const sqlPayload = \"1; DROP TABLE users;--\";\n  \n  // Test with SQL injection in URL query parameter\n  const urlWithPayload = 'https://portal.zinghr.com/2015/route/LMS/EmployeeLeaveActionDetails' + (('https://portal.zinghr.com/2015/route/LMS/EmployeeLeaveActionDetails'.includes('?') ? '&' : '?') + 'id=' + encodeURIComponent(sqlPayload));\n  \n  const response = await request.post(urlWithPayload, {\n    data: { id: sqlPayload, name: \"' OR '1'='1\" }\n  });\n  \n  const body = await response.text();\n  const bodyLower = body.toLowerCase();\n  \n  // Verify no SQL errors exposed\n  expect(bodyLower).not.toContain('syntax error');\n  expect(bodyLower).not.toContain('mysql_');\n  expect(bodyLower).not.toContain('pg_');\n  \n  // Verify no server crash\n  expect(response.status()).not.toBe(500);\n});"
+    },
+    {
+      "id": "TC_API_SEC_006",
+      "title": "Verify XSS prevention in response",
+      "type": "security",
+      "priority": "P1",
+      "description": "Validate that API properly escapes output to prevent XSS attacks",
+      "preconditions": [
+        "API returns user-generated content",
+        "HTML rendering possible"
+      ],
+      "steps": [
+        {
+          "action": "Prepare XSS payload in input",
+          "expected": "Malicious script ready"
+        },
+        {
+          "action": "Submit payload via API",
+          "expected": "Data submitted"
+        },
+        {
+          "action": "Retrieve stored/reflected data",
+          "expected": "Data retrieved"
+        },
+        {
+          "action": "Verify script tags escaped",
+          "expected": "No raw script tags"
+        },
+        {
+          "action": "Check Content-Type header",
+          "expected": "Proper content type set"
+        },
+        {
+          "action": "Test various XSS vectors",
+          "expected": "All vectors neutralized"
+        }
+      ],
+      "testData": {
+        "content": "<script>alert('xss')</script>",
+        "name": "<img onerror='alert(1)' src='x'>"
+      },
+      "assertions": [
+        "Script tags are escaped",
+        "Event handlers are neutralized",
+        "Content-Type header is correct",
+        "No executable code in response"
+      ],
+      "postmanScript": "pm.test(\"XSS vectors escaped\", function () {\n    const body = pm.response.text();\n    pm.expect(body).to.not.include(\"<script>\");\n    pm.expect(body).to.not.include(\"onerror=\");\n});",
+      "readyApiGroovy": "def response = context.response\ndef body = response.contentAsString\n\nassert !body.contains(\"<script>\") : \"Script tag not escaped\"\nassert !body.contains(\"onerror=\") : \"Event handler not escaped\"",
+      "playwrightScript": "import { test, expect } from '@playwright/test';\n\ntest('should prevent XSS attacks in response', async ({ request }) => {\n  const xssPayload = \"<script>alert('xss')</script>\";\n  \n  const response = await request.post('https://portal.zinghr.com/2015/route/LMS/EmployeeLeaveActionDetails', {\n    data: { content: xssPayload, name: \"<img onerror='alert(1)' src='x'>\" }\n  });\n  \n  const body = await response.text();\n  \n  // Verify XSS vectors are escaped or rejected\n  if (response.ok()) {\n    expect(body).not.toContain('<script>');\n    expect(body).not.toContain('onerror=');\n  }\n  \n  // Check proper content type\n  const contentType = response.headers()['content-type'] || '';\n  expect(contentType).toContain('application/json');\n});"
+    },
+    {
+      "id": "TC_API_BND_007",
+      "title": "Verify handling of empty request body",
+      "type": "boundary",
+      "priority": "P2",
+      "description": "Validate proper handling when request body is empty",
+      "preconditions": [
+        "API endpoint accepts body",
+        "Endpoint is accessible"
+      ],
+      "steps": [
+        {
+          "action": "Prepare request with empty body",
+          "expected": "Empty request ready"
+        },
+        {
+          "action": "Set Content-Type header",
+          "expected": "Header configured"
+        },
+        {
+          "action": "Send request to endpoint",
+          "expected": "Request transmitted"
+        },
+        {
+          "action": "Verify appropriate status code",
+          "expected": "400 or handled gracefully"
+        },
+        {
+          "action": "Check error message clarity",
+          "expected": "Clear error for missing body"
+        },
+        {
+          "action": "Ensure no crash or exception",
+          "expected": "Server remains stable"
+        }
+      ],
+      "testData": {},
+      "assertions": [
+        "Appropriate status code returned",
+        "Clear error message provided",
+        "No server crash",
+        "Response is valid JSON"
+      ],
+      "postmanScript": "pm.test(\"Empty body handled\", function () {\n    pm.response.to.have.status(400);\n});\n\npm.test(\"Error message present\", function () {\n    const json = pm.response.json();\n    pm.expect(json.error || json.message).to.exist;\n});",
+      "readyApiGroovy": "def response = context.response\n\nassert response.statusCode == 400 : \"Should return 400 for empty body\"\ndef json = new groovy.json.JsonSlurper().parseText(response.contentAsString)\nassert json.error != null || json.message != null",
+      "playwrightScript": "import { test, expect } from '@playwright/test';\n\ntest('should handle empty request body gracefully', async ({ request }) => {\n  const response = await request.post('https://portal.zinghr.com/2015/route/LMS/EmployeeLeaveActionDetails', {\n    data: {}\n  });\n  \n  // For methods with body, should return 400 for empty body\n  // For GET/DELETE, this is valid - just check no crash\n  expect(response.status()).not.toBe(500);\n  \n  // Server should remain stable\n  expect(response.ok() || [400, 422].includes(response.status())).toBe(true);\n});"
+    },
+    {
+      "id": "TC_API_BND_008",
+      "title": "Verify maximum payload size handling",
+      "type": "boundary",
+      "priority": "P2",
+      "description": "Validate API behavior with very large request payloads",
+      "preconditions": [
+        "API accepts request body",
+        "Max payload limit configured"
+      ],
+      "steps": [
+        {
+          "action": "Generate oversized payload",
+          "expected": "Large payload created"
+        },
+        {
+          "action": "Attempt to send large payload",
+          "expected": "Request attempted"
+        },
+        {
+          "action": "Verify 413 status or graceful handling",
+          "expected": "Payload rejected appropriately"
+        },
+        {
+          "action": "Check error message",
+          "expected": "Size limit error indicated"
+        },
+        {
+          "action": "Verify partial data not processed",
+          "expected": "No partial processing"
+        },
+        {
+          "action": "Confirm server stability",
+          "expected": "Server remains responsive"
+        }
+      ],
+      "testData": {
+        "largeField": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+      },
+      "assertions": [
+        "413 or 400 status returned",
+        "Error indicates size limit",
+        "No partial data saved",
+        "Server remains stable"
+      ],
+      "postmanScript": "pm.test(\"Large payload rejected\", function () {\n    pm.expect([400, 413]).to.include(pm.response.code);\n});\n\npm.test(\"Server is stable\", function () {\n    pm.response.to.not.have.status(500);\n});",
+      "readyApiGroovy": "def response = context.response\n\nassert response.statusCode in [400, 413] : \"Should reject large payload\"\nassert response.statusCode != 500 : \"Server should remain stable\"",
+      "playwrightScript": "import { test, expect } from '@playwright/test';\n\ntest('should handle oversized payload appropriately', async ({ request }) => {\n  const largePayload = 'x'.repeat(100000); // 100KB payload\n  \n  const response = await request.post('https://portal.zinghr.com/2015/route/LMS/EmployeeLeaveActionDetails', {\n    data: { largeField: largePayload }\n  });\n  \n  // Should reject with 400/413 or handle gracefully\n  expect(response.status()).not.toBe(500);\n  \n  // Server should remain stable (not crash)\n  expect(response.status()).toBeDefined();\n});"
+    },
+    {
+      "id": "TC_API_PERF_009",
+      "title": "Verify response time under normal load",
+      "type": "performance",
+      "priority": "P1",
+      "description": "Validate that API response time is within acceptable limits",
+      "preconditions": [
+        "API is accessible",
+        "System under normal load"
+      ],
+      "steps": [
+        {
+          "action": "Prepare standard request",
+          "expected": "Request ready"
+        },
+        {
+          "action": "Record start timestamp",
+          "expected": "Timer started"
+        },
+        {
+          "action": "Send request to endpoint",
+          "expected": "Request sent"
+        },
+        {
+          "action": "Record response timestamp",
+          "expected": "Timer stopped"
+        },
+        {
+          "action": "Calculate response time",
+          "expected": "Time calculated"
+        },
+        {
+          "action": "Compare against threshold",
+          "expected": "Time < 2000ms"
+        }
+      ],
+      "testData": {},
+      "assertions": [
+        "Response time < 2000ms",
+        "Request completes successfully",
+        "No timeout occurred",
+        "Consistent response times"
+      ],
+      "postmanScript": "pm.test(\"Response time is acceptable\", function () {\n    pm.expect(pm.response.responseTime).to.be.below(2000);\n});\n\npm.test(\"Request successful\", function () {\n    pm.response.to.have.status(200);\n});",
+      "readyApiGroovy": "def response = context.response\n\nassert response.responseTime < 2000 : \"Response time exceeded 2000ms\"\nassert response.statusCode == 200 : \"Request should succeed\"",
+      "playwrightScript": "import { test, expect } from '@playwright/test';\n\ntest('should respond within acceptable time limits', async ({ request }) => {\n  const startTime = Date.now();\n  \n  const response = await request.post('https://portal.zinghr.com/2015/route/LMS/EmployeeLeaveActionDetails');\n  \n  const responseTime = Date.now() - startTime;\n  \n  // Response time should be under 2000ms\n  expect(responseTime).toBeLessThan(2000);\n  \n  // Request should be successful\n  expect(response.ok()).toBe(true);\n  \n  console.log(`Response time: ${responseTime}ms`);\n});\n\ntest('should maintain consistent response times', async ({ request }) => {\n  const times: number[] = [];\n  \n  // Run 3 sequential requests\n  for (let i = 0; i < 3; i++) {\n    const start = Date.now();\n    await request.post('https://portal.zinghr.com/2015/route/LMS/EmployeeLeaveActionDetails');\n    times.push(Date.now() - start);\n  }\n  \n  // All requests should complete under 2000ms\n  times.forEach(time => {\n    expect(time).toBeLessThan(2000);\n  });\n  \n  // Standard deviation should be reasonable (consistent times)\n  const avg = times.reduce((a, b) => a + b, 0) / times.length;\n  console.log(`Average response time: ${avg.toFixed(0)}ms`);\n});"
+    }
+  ],
+  "generatedAt": "2026-02-05T13:12:50.127Z"
+}

@@ -1,0 +1,85 @@
+Project Context
+Create a modern, fully functional 3-step workflow prototype for an AI-powered SDLC application focused on insurance domain development. This is a demo application that showcases intelligent requirements processing, agile artifact generation with persona-based user stories, and Azure DevOps integration.
+
+Technical Stack
+Frontend: React 18.2.0 with modern hooks
+Styling: Tailwind CSS with gradient designs
+Icons: lucide-react
+State Management: React Context API
+Notifications: react-hot-toast
+AI Integration: Azure OpenAI API (already configured)
+DevOps: Azure DevOps REST API
+Core Requirements
+1. Three-Step Workflow Component Structure
+Create a main component called WorkflowDemo.js with three distinct steps:
+
+Step 1: Requirements Input & Generation
+
+Clean, modern input interface with two options:
+Text area for manual requirement input (insurance domain focused)
+File upload button (PDF, DOCX, TXT support)
+Pre-filled example: "I need a system to ingest bureau rating algorithms. As an actuary, I will import filing to create rating calculations using AI for premium calculations."
+"Generate Guidelines & Artifacts" button (gradient blue-to-purple)
+Loading state with animated spinner and progress indicator
+Completion checkmark (green) when generation is done
+Step 2: Generated Content Display
+
+Split view with two panels:
+
+Left Panel - AI Design Guidelines:
+
+Markdown-rendered content in a scrollable card
+"Copy to Clipboard" and "Download" buttons
+Preview of Figma-ready guidelines
+Right Panel - Agile Artifacts:
+
+Epics Section (2-3 epics)
+
+Red gradient cards with epic icon
+Title, description, priority badge
+Expandable to show linked features
+Features Section (5-8 features)
+
+Blue gradient cards with feature icon
+Title, description, related epic reference
+Story count badge
+Click to expand user stories
+User Stories Grid (15-25 stories)
+
+Green gradient cards with persona avatar/icon
+Story title with persona name (e.g., "As a Senior Developer...")
+Persona badge with color coding:
+Developer (blue)
+QA Engineer (green)
+Project Manager (purple)
+Business Analyst (orange)
+DevOps Engineer (red)
+Priority indicator (High/Medium/Low)
+Story points badge
+Click to open detailed modal with:
+Full description
+Acceptance criteria (Given/When/Then format with bold keywords)
+Linked epic and feature context
+Persona details with empathy phase data
+Smooth animations for card interactions
+
+Search and filter functionality
+
+"Proceed to DevOps Push" button (emerald gradient)
+
+Step 3: Azure DevOps Integration
+
+Configuration panel (collapsible) with pre-filled values:
+Organization: InsurityPOC
+Project: InsurityPOC
+Repository: InsurityPocAIFigma
+Branch: main
+PAT: (hidden input with validation)
+Selection interface:
+Checkboxes for epics, features, and user stories
+"Select All" / "Deselect All" options
+Item count summary
+"Preview Content" button to show markdown output
+"Push to Azure DevOps" button (orange gradient)
+Progress indicator during push
+Success confirmation with animation and link to Azure DevOps

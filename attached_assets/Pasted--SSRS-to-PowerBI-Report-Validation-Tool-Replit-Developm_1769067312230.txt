@@ -1,0 +1,931 @@
+# SSRS to PowerBI Report Validation Tool - Replit Development Prompt
+
+## Copy and paste this entire prompt into Replit Agent
+
+---
+
+```
+FEATURE REQUEST: Build SSRS to PowerBI Report Validation Tool with AI Agent
+
+PROJECT OVERVIEW:
+Build a comprehensive report validation tool for SSRS to PowerBI migration projects. The tool compares source reports (SSRS exports) against target reports (PowerBI exports) in Excel or PDF format, using Claude AI Agent for intelligent comparison and detailed validation reporting.
+
+TECH STACK:
+- Frontend: React with TypeScript
+- Backend: Node.js/Express
+- AI: Claude API (Anthropic) for intelligent comparison
+- File Processing: xlsx library for Excel, pdf-parse/pdf-lib for PDF
+- UI Framework: Tailwind CSS
+- Visualization: Custom circular progress indicators, side-by-side diff viewer
+
+=============================================================================
+SECTION 1: APPLICATION ARCHITECTURE
+=============================================================================
+
+FOLDER STRUCTURE:
+/src
+  /components
+    /Navigation
+    /Dashboard
+    /FileUpload
+    /Comparison
+    /AgentProgress
+    /Reports
+    /SideBySideViewer
+  /services
+    /fileProcessor
+    /comparisonEngine
+    /aiAgent
+    /reportGenerator
+  /algorithms
+    /cellComparison
+    /statisticalValidation
+    /pdfExtraction
+    /excelParser
+  /utils
+  /types
+/api
+  /routes
+  /controllers
+  /services
+
+=============================================================================
+SECTION 2: USER INTERFACE DESIGN
+=============================================================================
+
+THEME:
+- Dark theme matching NAT 2.0 (#0a0a0a background, #1a1a2e panels)
+- Primary accent: Cyan/Teal (#00d4aa)
+- Secondary accent: Orange (#ff6b35) for warnings
+- Error: Red (#ff4757)
+- Success: Green (#2ed573)
+- Glassmorphism cards with subtle borders
+
+LEFT SIDEBAR NAVIGATION:
+1. Dashboard (home icon) - Overview and quick stats
+2. Single File Validation (file icon) - Compare one source vs one target
+3. Batch Validation (folder icon) - Multiple file comparisons
+4. Validation History (history icon) - Past validation runs
+5. Reports (document icon) - Generated validation reports
+6. Settings (gear icon) - Configuration and thresholds
+
+TOP HEADER:
+- Tool Logo: "Report Validator" with migration icon
+- Project selector dropdown
+- User profile
+- Dark/Light mode toggle (optional)
+
+=============================================================================
+SECTION 3: DASHBOARD PAGE
+=============================================================================
+
+DASHBOARD LAYOUT:
+
+ROW 1 - QUICK STATS CARDS:
+- Total Validations Run (count)
+- Pass Rate (percentage with trend arrow)
+- Files Processed Today (count)
+- Active Projects (count)
+
+ROW 2 - RECENT ACTIVITY:
+- Last 5 validation runs with status badges
+- Quick action buttons: "New Validation", "View Reports"
+
+ROW 3 - VALIDATION HEALTH:
+- Pie chart: Pass/Fail/Warning distribution
+- Bar chart: Validations per day (last 7 days)
+
+=============================================================================
+SECTION 4: SINGLE FILE VALIDATION PAGE
+=============================================================================
+
+PAGE HEADER:
+"Single File Validation"
+Subheader: "Compare one SSRS report against its PowerBI equivalent"
+
+STEP 1 - SOURCE FILE (SSRS):
+Card Title: "Source Report (SSRS Export)"
+
+Input Mode Tabs:
+- Tab 1: "Upload File"
+- Tab 2: "Local Path"
+
+UPLOAD FILE TAB:
+- Drag & drop zone with dashed border
+- "Drop SSRS export here or click to browse"
+- Supported formats badge: "Excel (.xlsx, .xls) | PDF (.pdf)"
+- Max file size: 50MB
+- After upload show:
+  - File name with icon (Excel/PDF)
+  - File size
+  - Remove button (X)
+  - Preview button (eye icon)
+
+LOCAL PATH TAB:
+- Text input: "Enter full file path"
+- Placeholder: "C:\Reports\SSRS\SalesReport_2024.xlsx"
+- "Browse" button (opens file dialog if possible, or validates path)
+- "Load File" button
+- Path validation indicator (green check / red X)
+
+FILE INFO DISPLAY (after loading):
+- File Name
+- File Type (Excel/PDF)
+- File Size
+- Sheet Count (for Excel)
+- Page Count (for PDF)
+- Data Preview (first 10 rows for Excel, first page thumbnail for PDF)
+
+STEP 2 - TARGET FILE (PowerBI):
+Card Title: "Target Report (PowerBI Export)"
+(Same structure as Source File section)
+
+STEP 3 - VALIDATION CONFIGURATION:
+Card Title: "Validation Settings"
+
+Configuration Options:
+- Comparison Mode (dropdown):
+  - Strict (exact match required)
+  - Tolerant (configurable thresholds)
+  - Smart (AI-assisted matching)
+
+- Numeric Tolerance (slider + input): 0.00 to 1.00 (default 0.01)
+  - Helper text: "Allow differences up to this value for numeric comparisons"
+
+- Percentage Tolerance (slider + input): 0% to 5% (default 0.1%)
+  - Helper text: "Allow percentage differences for calculated fields"
+
+- Date Format Handling (dropdown):
+  - Strict (exact format match)
+  - Flexible (different formats, same date)
+
+- Ignore Columns (multi-select or text input):
+  - Helper text: "Columns to skip during comparison (e.g., timestamps, IDs)"
+
+- Case Sensitivity (toggle): ON/OFF
+  - Helper text: "Enable for exact text matching"
+
+- Whitespace Handling (dropdown):
+  - Strict (exact whitespace)
+  - Trim (ignore leading/trailing)
+  - Normalize (collapse multiple spaces)
+
+- Sheet/Page Mapping (for multi-sheet/page files):
+  - Auto-detect (by name matching)
+  - Manual mapping interface
+
+STEP 4 - INITIATE VALIDATION:
+"Start Validation" button (primary, large, cyan)
+- Disabled until both files loaded
+- Shows "Validating..." with spinner when clicked
+
+=============================================================================
+SECTION 5: AI AGENT PROGRESS VISUALIZATION (CRITICAL)
+=============================================================================
+
+AGENT PROGRESS PANEL:
+Display during validation with stunning circular progress visualization
+
+LAYOUT:
+- Full-width panel with dark gradient background
+- Matrix-style subtle animation in background
+
+CIRCULAR PROGRESS STAGES (5 circles in horizontal row):
+
+CIRCLE 1 - FILE PARSING:
+- Icon: Document/Parse icon
+- Label: "File Parsing"
+- States:
+  - Pending: Gray circle, 0%
+  - Active: Cyan pulsing border, percentage filling clockwise
+  - Complete: Green filled circle with checkmark
+- Sub-status text: "Reading SSRS Excel...", "Extracting PowerBI data..."
+
+CIRCLE 2 - DATA EXTRACTION:
+- Icon: Database/Extract icon
+- Label: "Data Extraction"
+- States: Same as above
+- Sub-status: "Extracting 15,420 cells...", "Parsing 23 columns..."
+
+CIRCLE 3 - AI ANALYSIS:
+- Icon: Brain/AI icon
+- Label: "AI Analysis"
+- States: Same as above
+- Sub-status: "Claude analyzing structure...", "Detecting patterns..."
+
+CIRCLE 4 - COMPARISON:
+- Icon: Compare/Diff icon
+- Label: "Comparison"
+- States: Same as above
+- Sub-status: "Comparing row 1,200 of 5,000...", "Validating calculations..."
+
+CIRCLE 5 - REPORT GENERATION:
+- Icon: Report/Document icon
+- Label: "Report Generation"
+- States: Same as above
+- Sub-status: "Generating detailed report...", "Creating visualizations..."
+
+CIRCLE DESIGN SPECIFICATIONS:
+- Circle size: 80px diameter
+- Stroke width: 6px
+- Background stroke: Dark gray (#2d3436)
+- Progress stroke: Gradient from cyan (#00d4aa) to teal (#00b894)
+- Active circle: Pulsing glow animation
+- Completed circle: Green (#2ed573) with scale-up animation
+- Center icon: 24px, white
+- Percentage text: Below icon, bold, 14px
+- Connection lines between circles (dotted when pending, solid when active/complete)
+
+OVERALL PROGRESS:
+- Below circles: Large progress bar showing total completion
+- "Overall Progress: 67%" text
+- Estimated time remaining: "~45 seconds remaining"
+
+REAL-TIME LOG PANEL (below circles):
+- Scrolling log area with timestamps
+- Color coded entries:
+  - Blue: Info
+  - Green: Success
+  - Yellow: Warning
+  - Red: Error
+- Auto-scroll to latest
+- Example entries:
+  [10:45:23] INFO: Loaded SSRS report - 5,420 rows, 23 columns
+  [10:45:25] INFO: Loaded PowerBI report - 5,420 rows, 23 columns
+  [10:45:27] SUCCESS: Row count matches ✓
+  [10:45:30] WARNING: Column "Revenue" has 3 differences
+  [10:45:35] INFO: AI Agent analyzing discrepancies...
+
+=============================================================================
+SECTION 6: COMPARISON ALGORITHMS (CRITICAL)
+=============================================================================
+
+ALGORITHM 1: CELL-BY-CELL COMPARISON
+```
+Function: compareCells(sourceCell, targetCell, config)
+
+Input: 
+  - sourceCell: { value, type, format, formula }
+  - targetCell: { value, type, format, formula }
+  - config: { numericTolerance, percentageTolerance, caseSensitive }
+
+Process:
+  1. Determine cell type (numeric, text, date, boolean, formula)
+  2. Apply type-specific comparison:
+  
+     NUMERIC COMPARISON:
+     - If both are numbers:
+       - absoluteDiff = |source - target|
+       - percentDiff = |source - target| / |source| * 100
+       - Pass if absoluteDiff <= numericTolerance OR percentDiff <= percentageTolerance
+       - Return: { match: boolean, diff: absoluteDiff, percentDiff: percentDiff }
+     
+     TEXT COMPARISON:
+     - Apply whitespace handling based on config
+     - Apply case sensitivity based on config
+     - Use Levenshtein distance for similarity score
+     - Return: { match: boolean, similarity: percentage, differences: [positions] }
+     
+     DATE COMPARISON:
+     - Parse both dates to timestamp
+     - If flexible mode: Compare timestamps only
+     - If strict mode: Compare format string as well
+     - Return: { match: boolean, daysDiff: number, formatMatch: boolean }
+     
+     FORMULA COMPARISON:
+     - Compare formula strings
+     - Compare calculated results separately
+     - Return: { formulaMatch: boolean, resultMatch: boolean }
+
+Output:
+  {
+    match: boolean,
+    matchType: 'exact' | 'within_tolerance' | 'mismatch',
+    details: { ... type-specific details }
+  }
+```
+
+ALGORITHM 2: ROW MATCHING
+```
+Function: matchRows(sourceRows, targetRows, keyColumns)
+
+Input:
+  - sourceRows: Array of row objects
+  - targetRows: Array of row objects
+  - keyColumns: Array of column names to use as keys
+
+Process:
+  1. If keyColumns specified:
+     - Create composite key from keyColumns for each row
+     - Build hash maps for O(1) lookup
+     - Match rows by key
+  
+  2. If no keyColumns (positional matching):
+     - Match by row index
+     - Flag if row counts differ
+  
+  3. For unmatched rows:
+     - Use fuzzy matching (Jaccard similarity on row values)
+     - Suggest potential matches with confidence score
+
+Output:
+  {
+    matchedPairs: [{ sourceIdx, targetIdx, matchConfidence }],
+    unmatchedSource: [rowIndices],
+    unmatchedTarget: [rowIndices],
+    suggestedMatches: [{ sourceIdx, targetIdx, confidence }]
+  }
+```
+
+ALGORITHM 3: COLUMN ALIGNMENT
+```
+Function: alignColumns(sourceColumns, targetColumns)
+
+Input:
+  - sourceColumns: [{ name, dataType, sampleValues }]
+  - targetColumns: [{ name, dataType, sampleValues }]
+
+Process:
+  1. Exact name match (case-insensitive)
+  2. Fuzzy name match (Levenshtein distance < threshold)
+  3. Data type matching for unmatched columns
+  4. Sample value correlation analysis
+  5. AI-assisted column mapping for ambiguous cases
+
+Output:
+  {
+    mappings: [{ sourceCol, targetCol, confidence, method }],
+    unmappedSource: [colNames],
+    unmappedTarget: [colNames]
+  }
+```
+
+ALGORITHM 4: STATISTICAL VALIDATION
+```
+Function: statisticalValidation(sourceData, targetData)
+
+Input:
+  - sourceData: Numeric column data
+  - targetData: Numeric column data
+
+Process:
+  1. Calculate summary statistics for both:
+     - Sum, Count, Average, Min, Max, StdDev
+  2. Compare statistics within tolerance
+  3. Identify outlier differences
+  4. Calculate correlation coefficient
+
+Output:
+  {
+    summaryMatch: boolean,
+    statistics: {
+      source: { sum, avg, min, max, stdDev },
+      target: { sum, avg, min, max, stdDev },
+      differences: { sumDiff, avgDiff, ... }
+    },
+    correlation: number,
+    outliers: [{ rowIdx, sourceval, targetVal, zScore }]
+  }
+```
+
+ALGORITHM 5: PDF COMPARISON
+```
+Function: comparePDFs(sourcePDF, targetPDF)
+
+Input:
+  - sourcePDF: PDF buffer/path
+  - targetPDF: PDF buffer/path
+
+Process:
+  1. Extract text content using pdf-parse
+  2. Extract tables using tabula-js or pdf-table-extractor
+  3. For each page:
+     - Compare text blocks (position-aware)
+     - Compare extracted tables using cell comparison
+     - Render page to image for visual comparison
+     - Calculate SSIM for visual similarity
+  4. Aggregate results across pages
+
+Output:
+  {
+    pageCount: { source, target },
+    textComparison: { matchPercentage, differences },
+    tableComparison: { tablesFound, matchResults },
+    visualSimilarity: { perPage: [scores], overall: score }
+  }
+```
+
+=============================================================================
+SECTION 7: SIDE-BY-SIDE COMPARISON VIEWER
+=============================================================================
+
+VIEWER LAYOUT:
+Split-screen view (50/50 or adjustable via drag handle)
+
+LEFT PANEL - SOURCE (SSRS):
+Header: "Source: [filename]" with SSRS badge
+- File info: Rows, Columns, File size
+- Zoom controls (+/-)
+
+RIGHT PANEL - TARGET (PowerBI):
+Header: "Target: [filename]" with PowerBI badge
+- File info: Rows, Columns, File size
+- Zoom controls (+/-)
+- Sync scroll toggle (lock icon)
+
+FOR EXCEL FILES:
+- Spreadsheet-like grid view
+- Sheet tabs at bottom (if multiple sheets)
+- Cell highlighting:
+  - Green: Exact match
+  - Yellow: Within tolerance
+  - Red: Mismatch
+  - Gray: Ignored column
+- Click on cell to see detailed comparison popup
+- Row/Column headers
+- Freeze panes for headers
+
+FOR PDF FILES:
+- Page-by-page view
+- Page navigation (prev/next, page number input)
+- Highlight differences with colored overlays
+- Toggle between:
+  - Text view (extracted text with diff highlighting)
+  - Visual view (rendered pages with difference overlay)
+  - Table view (extracted tables)
+
+DIFFERENCE NAVIGATION:
+- "Previous Difference" / "Next Difference" buttons
+- Difference counter: "Viewing difference 5 of 23"
+- Jump to specific difference dropdown
+- Filter differences by type (numeric, text, missing, etc.)
+
+CELL DETAIL POPUP (on click):
+- Source Value
+- Target Value
+- Difference (if numeric: actual diff and percentage)
+- Cell Type
+- Cell Location (row, column)
+- AI Analysis (if applicable): "Possible rounding difference", "Format mismatch"
+
+=============================================================================
+SECTION 8: BATCH VALIDATION PAGE
+=============================================================================
+
+PAGE HEADER:
+"Batch Validation"
+Subheader: "Compare multiple SSRS reports against PowerBI equivalents"
+
+STEP 1 - FILE MAPPING:
+
+INPUT MODE TABS:
+- Tab 1: "Upload Files"
+- Tab 2: "Directory Paths"
+- Tab 3: "Mapping File"
+
+UPLOAD FILES TAB:
+Two upload zones side by side:
+- Left zone: "Drop SSRS Reports Here" (multiple files)
+- Right zone: "Drop PowerBI Reports Here" (multiple files)
+- Auto-match by filename (stripped of _SSRS/_PowerBI suffixes)
+
+DIRECTORY PATHS TAB:
+- Source Directory input: "C:\Reports\SSRS\"
+- Target Directory input: "C:\Reports\PowerBI\"
+- "Scan Directories" button
+- File pattern filter: "*.xlsx" or "*.pdf"
+
+MAPPING FILE TAB:
+- Upload CSV/Excel with columns: SourceFile, TargetFile
+- Template download link
+
+FILE MAPPING REVIEW:
+Table showing:
+| # | Source File | Target File | Status | Action |
+|---|-------------|-------------|--------|--------|
+| 1 | Sales_Q1.xlsx | Sales_Q1.xlsx | Mapped ✓ | Unlink |
+| 2 | Revenue.xlsx | Revenue_PBI.xlsx | Mapped ✓ | Unlink |
+| 3 | Inventory.xlsx | - | Unmapped ⚠ | Map |
+| 4 | - | NewReport.xlsx | Unmapped ⚠ | Map |
+
+- Manual mapping modal for unmapped files
+- "Map Remaining" AI-assisted button
+
+STEP 2 - BATCH CONFIGURATION:
+- Same validation settings as single file
+- Additional options:
+  - Stop on first error (toggle)
+  - Parallel processing (toggle): Run multiple comparisons simultaneously
+  - Max concurrent: 1-5 slider
+
+STEP 3 - EXECUTE BATCH:
+"Start Batch Validation" button
+
+BATCH PROGRESS VIEW:
+- Overall progress bar: "Processing 5 of 12 files"
+- Per-file progress table:
+| File | Status | Progress | Result |
+|------|--------|----------|--------|
+| Sales_Q1.xlsx | Complete | 100% | Pass ✓ |
+| Revenue.xlsx | Processing | 67% | - |
+| Inventory.xlsx | Pending | 0% | - |
+
+- Each row expandable to show agent circle progress for that file
+- Cancel button to stop batch
+
+=============================================================================
+SECTION 9: AI AGENT INTEGRATION (CLAUDE API)
+=============================================================================
+
+AI AGENT RESPONSIBILITIES:
+
+1. INTELLIGENT COLUMN MAPPING:
+Prompt: "Given source columns [list] and target columns [list], suggest the best mapping considering column names, data types, and sample values."
+
+2. DISCREPANCY ANALYSIS:
+Prompt: "Analyze these cell differences and determine likely causes: [differences]. Consider rounding, formatting, calculation method differences, timezone issues, etc."
+
+3. VALIDATION SUMMARY:
+Prompt: "Summarize this validation result for a migration QA report. Highlight critical issues, warnings, and confirm successful migrations."
+
+4. SMART MATCHING:
+Prompt: "These rows couldn't be matched by key. Analyze and suggest matches based on content similarity: Source rows [data], Target rows [data]."
+
+AI AGENT SERVICE:
+```javascript
+// services/aiAgent.js
+
+const Anthropic = require('@anthropic-ai/sdk');
+
+class AIAgent {
+  constructor(apiKey) {
+    this.client = new Anthropic({ apiKey });
+  }
+
+  async analyzeDiscrepancies(differences, context) {
+    const response = await this.client.messages.create({
+      model: "claude-sonnet-4-20250514",
+      max_tokens: 2000,
+      messages: [{
+        role: "user",
+        content: `You are a data migration QA expert. Analyze these differences between SSRS and PowerBI reports:
+
+Context: ${context}
+
+Differences found:
+${JSON.stringify(differences, null, 2)}
+
+For each difference, provide:
+1. Likely cause (rounding, formatting, calculation method, data type conversion, etc.)
+2. Severity (Critical/Warning/Info)
+3. Recommended action
+
+Format as JSON array.`
+      }]
+    });
+    return JSON.parse(response.content[0].text);
+  }
+
+  async suggestColumnMapping(sourceColumns, targetColumns) {
+    // Implementation
+  }
+
+  async generateValidationSummary(results) {
+    // Implementation
+  }
+}
+```
+
+=============================================================================
+SECTION 10: VALIDATION REPORT GENERATION
+=============================================================================
+
+REPORT SECTIONS:
+
+1. EXECUTIVE SUMMARY:
+- Validation Date/Time
+- Source File(s) info
+- Target File(s) info
+- Overall Status: PASS / FAIL / WARNINGS
+- Match Percentage
+- Critical Issues Count
+- Warnings Count
+
+2. CONFIGURATION USED:
+- Comparison mode
+- Tolerances applied
+- Ignored columns
+- Other settings
+
+3. DATA STRUCTURE COMPARISON:
+- Row count comparison
+- Column count comparison
+- Column mapping table
+- Data type comparison
+
+4. DETAILED COMPARISON RESULTS:
+Table format:
+| Row | Column | Source Value | Target Value | Diff | Status | AI Analysis |
+
+5. STATISTICAL SUMMARY:
+For numeric columns:
+- Sum comparison
+- Average comparison
+- Min/Max comparison
+- Standard deviation comparison
+
+6. DISCREPANCY ANALYSIS:
+AI-generated analysis of key differences
+
+7. RECOMMENDATIONS:
+AI-generated recommendations for addressing issues
+
+EXPORT OPTIONS:
+- Download as PDF (formatted report)
+- Download as Excel (detailed data)
+- Download as JSON (raw results)
+- Email report (if configured)
+
+=============================================================================
+SECTION 11: VALIDATION HISTORY PAGE
+=============================================================================
+
+HISTORY LIST VIEW:
+Table with columns:
+| Date/Time | Project | Source File | Target File | Status | Match % | Actions |
+
+Filters:
+- Date range picker
+- Status filter (All, Pass, Fail, Warning)
+- Project filter
+- Search by filename
+
+Actions per row:
+- View Report
+- Re-run Validation
+- Delete
+
+HISTORY DETAIL VIEW:
+- Full validation report
+- Side-by-side viewer access
+- Re-run with same/modified settings
+
+=============================================================================
+SECTION 12: SETTINGS PAGE
+=============================================================================
+
+SETTINGS SECTIONS:
+
+1. DEFAULT VALIDATION SETTINGS:
+- Default numeric tolerance
+- Default percentage tolerance
+- Default comparison mode
+- Default ignored columns
+
+2. AI CONFIGURATION:
+- Claude API Key input (masked)
+- Model selection (claude-sonnet, etc.)
+- Enable/Disable AI features
+
+3. FILE HANDLING:
+- Max file size limit
+- Supported formats toggle
+- Temp file cleanup interval
+
+4. NOTIFICATION SETTINGS:
+- Email notifications (on completion)
+- Slack webhook integration
+
+5. APPEARANCE:
+- Theme selection
+- Date/Time format
+- Number format (locale)
+
+=============================================================================
+SECTION 13: DATABASE SCHEMA
+=============================================================================
+
+TABLES:
+
+validations:
+- id (UUID, primary key)
+- project_id (UUID, foreign key)
+- source_filename (string)
+- target_filename (string)
+- source_file_type (enum: excel, pdf)
+- target_file_type (enum: excel, pdf)
+- status (enum: pending, processing, completed, failed)
+- result (enum: pass, fail, warning)
+- match_percentage (decimal)
+- config (JSON - validation settings used)
+- created_at (timestamp)
+- completed_at (timestamp)
+
+validation_results:
+- id (UUID, primary key)
+- validation_id (UUID, foreign key)
+- row_number (integer)
+- column_name (string)
+- source_value (string)
+- target_value (string)
+- difference (string)
+- match_status (enum: exact, tolerance, mismatch)
+- ai_analysis (text)
+
+projects:
+- id (UUID, primary key)
+- name (string)
+- description (text)
+- created_at (timestamp)
+
+=============================================================================
+SECTION 14: API ENDPOINTS
+=============================================================================
+
+POST /api/validate/single
+- Upload source and target files
+- Start single file validation
+- Returns: validation_id
+
+POST /api/validate/batch
+- Upload multiple file mappings
+- Start batch validation
+- Returns: batch_id
+
+GET /api/validate/:id/status
+- Get validation progress
+- Returns: { status, progress, currentStep }
+
+GET /api/validate/:id/results
+- Get validation results
+- Returns: full validation report data
+
+GET /api/validate/history
+- Get validation history
+- Query params: page, limit, status, project_id
+
+POST /api/ai/analyze
+- Send differences for AI analysis
+- Returns: AI analysis results
+
+GET /api/reports/:id/export
+- Export report
+- Query params: format (pdf, excel, json)
+
+=============================================================================
+SECTION 15: VISUAL DESIGN SPECIFICATIONS
+=============================================================================
+
+COLOR PALETTE:
+- Background: #0a0a0a (darkest), #1a1a2e (panels)
+- Cards: rgba(255,255,255,0.05) with backdrop-blur
+- Primary: #00d4aa (cyan/teal)
+- Secondary: #ff6b35 (orange)
+- Success: #2ed573
+- Warning: #ffa502
+- Error: #ff4757
+- Text: #ffffff (primary), #a0a0a0 (secondary)
+
+CIRCULAR PROGRESS COMPONENT CSS:
+```css
+.progress-circle {
+  width: 80px;
+  height: 80px;
+  position: relative;
+}
+
+.progress-circle svg {
+  transform: rotate(-90deg);
+}
+
+.progress-circle .track {
+  stroke: #2d3436;
+  stroke-width: 6;
+  fill: none;
+}
+
+.progress-circle .progress {
+  stroke: url(#gradient);
+  stroke-width: 6;
+  fill: none;
+  stroke-linecap: round;
+  stroke-dasharray: 251; /* 2 * PI * 40 */
+  stroke-dashoffset: calc(251 - (251 * var(--progress)) / 100);
+  transition: stroke-dashoffset 0.3s ease;
+}
+
+.progress-circle.active {
+  animation: pulse 2s infinite;
+}
+
+.progress-circle.complete .progress {
+  stroke: #2ed573;
+}
+
+@keyframes pulse {
+  0%, 100% { filter: drop-shadow(0 0 5px #00d4aa); }
+  50% { filter: drop-shadow(0 0 15px #00d4aa); }
+}
+```
+
+ANIMATIONS:
+- Circle fill: Smooth clockwise fill animation
+- Stage transition: Scale and glow effect on completion
+- Connection lines: Dash animation for active, solid for complete
+- Log entries: Slide-in from left with fade
+- Difference highlights: Gentle pulse animation
+
+=============================================================================
+SECTION 16: ERROR HANDLING
+=============================================================================
+
+ERROR SCENARIOS:
+
+1. FILE ERRORS:
+- Invalid file format → Show error message, suggest correct formats
+- File too large → Show size limit, suggest compression
+- Corrupted file → Show parse error, allow retry
+
+2. COMPARISON ERRORS:
+- Column mismatch → Show mapping UI, allow manual mapping
+- Row count mismatch → Show warning, proceed with available rows
+- Data type mismatch → Flag cells, include in report
+
+3. AI ERRORS:
+- API rate limit → Queue requests, show retry countdown
+- API error → Fallback to non-AI comparison, show warning
+- Timeout → Allow manual skip of AI analysis
+
+4. SYSTEM ERRORS:
+- Database error → Show error, allow retry
+- Session timeout → Auto-save progress, restore on login
+
+=============================================================================
+SECTION 17: IMPLEMENTATION PRIORITY
+=============================================================================
+
+PHASE 1 (Core):
+1. File upload and parsing (Excel and PDF)
+2. Basic cell-by-cell comparison algorithm
+3. Side-by-side viewer for Excel
+4. Circular progress visualization
+5. Basic validation report
+
+PHASE 2 (AI Integration):
+1. Claude API integration
+2. AI-assisted column mapping
+3. Discrepancy analysis
+4. Smart matching for unmatched rows
+
+PHASE 3 (Batch & History):
+1. Batch validation
+2. Directory scanning
+3. Validation history
+4. Report export (PDF, Excel)
+
+PHASE 4 (Advanced):
+1. PDF comparison with visual diff
+2. Statistical validation
+3. Notifications
+4. Settings management
+
+=============================================================================
+
+This prompt is ready to paste into Replit Agent. Build with focus on:
+1. Stunning circular progress visualization
+2. Accurate comparison algorithms
+3. AI-powered analysis
+4. Professional side-by-side viewer
+5. Comprehensive reporting
+```
+
+---
+
+## Quick Reference: Key Features
+
+| Feature | Description |
+|---------|-------------|
+| **Single File Validation** | Compare one SSRS vs one PowerBI report |
+| **Batch Validation** | Process multiple file pairs |
+| **Input Modes** | Upload, Local Path, Directory Scan |
+| **File Formats** | Excel (.xlsx, .xls), PDF (.pdf) |
+| **AI Agent** | Claude-powered intelligent analysis |
+| **Progress Visualization** | 5-stage circular progress indicators |
+| **Side-by-Side Viewer** | Synchronized diff view with highlighting |
+| **Algorithms** | Cell comparison, Row matching, Statistical validation |
+| **Reports** | PDF, Excel, JSON export options |
+
+## Circular Progress Stages
+
+```
+○ ──── ○ ──── ○ ──── ○ ──── ○
+│      │      │      │      │
+File   Data   AI     Compare Report
+Parse  Extract Analysis Engine  Gen
+```
+
+Each circle progresses from 0% to 100% with:
+- Gray (pending) → Cyan pulsing (active) → Green (complete)
+- Real-time percentage display
+- Sub-status text updates
+- Connection line animations between stages

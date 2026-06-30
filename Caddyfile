@@ -1,0 +1,14 @@
+# NAT 2.0 — Reverse Proxy with automatic TLS
+# Replace nat.yourcompany.com with your actual domain.
+
+nat.yourcompany.com {
+	reverse_proxy nat-server:4000
+
+	# WebSocket upgrade support (Caddy handles this automatically,
+	# but explicit header pass-through ensures compatibility)
+	@websocket {
+		header Connection *Upgrade*
+		header Upgrade    websocket
+	}
+	reverse_proxy @websocket nat-server:4000
+}

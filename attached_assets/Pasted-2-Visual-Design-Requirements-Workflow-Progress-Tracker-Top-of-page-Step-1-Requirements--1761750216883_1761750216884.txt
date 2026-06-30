@@ -1,0 +1,142 @@
+2. Visual Design Requirements
+Workflow Progress Tracker (Top of page):
+
+[✓ Step 1: Requirements] → [✓ Step 2: Generated Content] → [○ Step 3: DevOps Push]
+Horizontal stepper with:
+Step numbers in circles
+Green checkmarks for completed steps
+Current step highlighted with pulse animation
+Connecting lines between steps
+Step labels below icons
+Color Scheme:
+
+Primary: Blue-to-purple gradients (#4F46E5 to #7C3AED)
+Success: Emerald (#10B981)
+Warning: Orange (#F59E0B)
+Error: Red (#EF4444)
+Background: Slate gray gradients with white cards
+Shadows: Soft, layered (shadow-xl, shadow-2xl)
+Card Designs:
+
+Rounded corners (rounded-2xl, rounded-3xl)
+Border with subtle gradients
+Hover effects with scale transform
+Smooth transitions (duration-300)
+Glass-morphism effects for overlays
+3. Integration Requirements
+API Endpoints (use from src/config/api.js):
+
+Guidelines Generation: ${API_BASE}/generate-guidelines
+Agile Artifacts: ${API_BASE}/generate-agile-artifacts
+DevOps Push: Custom implementation using Azure DevOps REST API
+Request Format for Generation:
+// Guidelines
+POST /generate-guidelines
+{ "input": "user requirement text" }
+
+// Agile Artifacts
+POST /generate-agile-artifacts
+{ "requirement": "user requirement text" }
+Response Parsing:
+
+Guidelines: String or { guidelines: string }
+Artifacts: Parse into structured format: 
+{
+  epics: [{ id, title, description, priority }],
+  features: [{ id, title, description, epicId, priority, storyCount }],
+  userStories: [{ 
+    id, title, description, persona, personaId, 
+    acceptanceCriteria: [], priority, storyPoints, 
+    featureId, epicId 
+  }]
+}
+4. Persona Integration
+Use these personas with empathy phase data:
+
+Senior Developer (Michael Chen)
+
+Focus: Code quality, architecture, performance
+Pain points: Legacy systems, technical debt
+Goals: Scalable solutions, clean code
+QA Engineer (Sarah Johnson)
+
+Focus: Test coverage, automation, quality gates
+Pain points: Manual testing, regression
+Goals: Comprehensive testing, early bug detection
+Project Manager (David Williams)
+
+Focus: Timeline, resource allocation, stakeholder communication
+Pain points: Scope creep, delays
+Goals: On-time delivery, clear milestones
+Business Analyst (Emily Rodriguez)
+
+Focus: Requirements clarity, user needs, business value
+Pain points: Ambiguous requirements, changing priorities
+Goals: Clear specifications, stakeholder alignment
+DevOps Engineer (Alex Kumar)
+
+Focus: CI/CD, infrastructure, deployment automation
+Pain points: Manual deployments, environment inconsistencies
+Goals: Automated pipelines, reliable releases
+
+5. User Experience Flow
+Initial State: Empty workflow with Step 1 active
+User Action: Enter requirement or upload file
+Generation: Show loading animation (10-15 seconds simulation)
+Step 1 Complete: Checkmark appears, Step 2 becomes active
+Content Display: Animated reveal of guidelines and artifacts
+Interaction: Users explore epics/features/stories with smooth transitions
+Navigation: Click "Proceed to DevOps" → Step 3 activates
+Configuration: Users verify/edit Azure DevOps settings
+Selection: Choose items to push
+Push: Progress indicator → Success message → Completion
+
+6. Mock Data (for demo)
+Include realistic insurance domain examples:
+
+Epic: "Claims Processing Automation System"
+Features:
+"Automated Claim Intake"
+"AI-Powered Damage Assessment"
+"Fraud Detection Engine"
+User Stories:
+"As a Claims Processor, I want to automatically intake claims from multiple channels..."
+"As a Senior Developer, I want to implement ML models for damage assessment..."
+
+7. Key Features to Highlight
+Smooth Transitions: Fade-in, slide-up animations
+Responsive Design: Works on desktop and tablet
+Error Handling: Toast notifications for errors
+Loading States: Skeleton screens, spinners
+Accessibility: ARIA labels, keyboard navigation
+Copy/Download: One-click content export
+Real-time Validation: Input validation, PAT verification
+9. Demo-Specific Enhancements
+Pre-populate with sample data on load
+"Quick Demo" button to auto-complete steps
+Simulated API delays (2-3 seconds) for realistic feel
+Success animations (confetti, checkmarks)
+Professional error messages
+Mobile-responsive but optimized for desktop demo
+Deliverables
+Fully functional React component with all three steps
+Styled with Tailwind CSS matching the design system
+Mock API integration with realistic delays
+Sample insurance domain data
+Smooth animations and transitions
+Toast notifications for user feedback
+Responsive layout (desktop-first)
+Clean, commented code
+README with demo instructions
+Success Criteria
+Complete workflow navigable in under 2 minutes
+All UI elements render correctly
+Animations are smooth (60fps)
+Mock data is realistic and relevant
+Buttons and cards are interactive
+Step completion is visually clear
+DevOps integration UI is professional
+Persona-based stories are properly displayed
+Code is production-quality and maintainable
+
+Additional Context: This is for a client demo to showcase an AI-powered SDLC tool for insurance domain applications. The focus should be on visual polish, smooth UX, and demonstrating the complete end-to-end workflow from requirements to DevOps deployment.

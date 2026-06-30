@@ -1,0 +1,6 @@
+apiVersion: v2
+name: devx
+description: DevX 2.0 API (Node) on EKS
+type: application
+version: 0.4.0
+appVersion: "2.0"

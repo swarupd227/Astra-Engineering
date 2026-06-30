@@ -1,0 +1,34 @@
+[Unit]
+Description=DevX 2.0 Platform
+After=network.target
+
+[Service]
+Type=simple
+User=devx
+Group=devx
+WorkingDirectory=/opt/devx
+
+# Bootstrap env vars — everything else comes from Secrets Manager
+Environment=NODE_ENV=production
+Environment=DEVX_HOSTING=aws
+Environment=VITE_DEVX_HOSTING=aws
+Environment=AWS_REGION=ap-south-1
+Environment=AWS_SECRET_NAME=devx/platform/qa
+
+ExecStart=/usr/bin/node dist/index.cjs
+Restart=always
+RestartSec=5
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=devx
+
+# Security hardening
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/devx
+
+[Install]
+WantedBy=multi-user.target

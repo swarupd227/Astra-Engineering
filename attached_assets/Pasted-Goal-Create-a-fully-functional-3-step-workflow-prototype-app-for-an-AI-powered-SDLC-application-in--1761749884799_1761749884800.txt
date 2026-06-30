@@ -1,0 +1,280 @@
+Goal:
+Create a fully functional 3-step workflow prototype app for an AI-powered SDLC application in the insurance domain. The app should demonstrate intelligent requirements processing, agile artifact generation with persona-based user stories, and Azure DevOps integration.
+
+⚙️ Technical Stack
+
+Frontend: React 18.2.0 (with hooks)
+
+Styling: Tailwind CSS (modern gradient and glassmorphism designs)
+
+Icons: lucide-react
+
+State Management: React Context API
+
+Notifications: react-hot-toast
+
+AI Integration: Azure OpenAI API (already configured)
+
+DevOps: Azure DevOps REST API
+
+🧩 Core Component Structure
+
+Main Component: WorkflowDemo.js
+
+Step 1 – Requirements Input & Generation
+
+Two input options:
+
+Textarea for manual requirement entry (insurance domain examples)
+
+File upload: .pdf, .docx, .txt
+
+Example pre-filled requirement:
+
+“I need a system to ingest bureau rating algorithms. As an actuary, I will import filing to create rating calculations using AI for premium calculations.”
+
+Button: “Generate Guidelines & Artifacts” (blue→purple gradient)
+
+Show loading spinner + progress indicator (10–15s simulated delay)
+
+On success → show green checkmark, proceed to Step 2
+
+Step 2 – Generated Content Display
+
+Split-screen layout:
+
+Left Panel: AI Design Guidelines
+
+Markdown-rendered content in scrollable card
+
+“Copy” and “Download” buttons
+
+Figma-ready preview format
+
+Right Panel: Agile Artifacts
+
+Epics (2–3 items): red gradient cards
+
+Features (5–8 items): blue gradient cards
+
+User Stories (15–25 items): green gradient cards
+
+Each user story:
+
+Persona-based (see list below)
+
+Priority (High/Medium/Low)
+
+Story points badge
+
+Expandable modal with:
+
+Full description
+
+Acceptance criteria (Given/When/Then)
+
+Linked Epic + Feature context
+
+Persona empathy details
+
+Additional:
+
+Search + Filter functionality
+
+“Proceed to DevOps Push” (emerald gradient button)
+
+Step 3 – Azure DevOps Integration
+
+Collapsible configuration panel (with prefilled demo values):
+
+Organization: InsurityPOC
+
+Project: InsurityPOC
+
+Repository: InsurityPocAIFigma
+
+Branch: main
+
+PAT: hidden input (validated)
+
+User actions:
+
+Select Epics, Features, or Stories via checkboxes
+
+“Select All” / “Deselect All”
+
+“Preview Content” → Markdown view
+
+“Push to Azure DevOps” (orange gradient button)
+
+Progress indicator + success animation + Azure DevOps link
+
+🎨 Visual Design Requirements
+
+Workflow Progress Tracker (top bar):
+Horizontal stepper showing:
+✅ Step 1 → ✅ Step 2 → ⚪ Step 3
+
+Step circles with icons and connecting lines
+
+Completed: Green checkmark
+
+Active step: Pulse animation
+
+Labels under icons
+
+Color Scheme
+
+Purpose	Color
+Primary	Blue→Purple gradient (#4F46E5 → #7C3AED)
+Success	Emerald (#10B981)
+Warning	Orange (#F59E0B)
+Error	Red (#EF4444)
+Background	Slate gray gradient + white cards
+
+Cards & Effects
+
+Rounded corners (rounded-2xl / rounded-3xl)
+
+Subtle gradient borders
+
+Hover scale transform
+
+Smooth transitions (duration-300)
+
+Shadow: shadow-xl, shadow-2xl
+
+Glassmorphism overlays
+
+🔗 Integration & API Configuration
+
+Use endpoints from src/config/api.js:
+
+// Guidelines
+POST /generate-guidelines
+{ "input": "user requirement text" }
+
+// Agile Artifacts
+POST /generate-agile-artifacts
+{ "requirement": "user requirement text" }
+
+
+Response Parsing
+
+{
+  "epics": [{ "id": 1, "title": "...", "description": "...", "priority": "High" }],
+  "features": [{ "id": 1, "title": "...", "description": "...", "epicId": 1, "priority": "Medium", "storyCount": 5 }],
+  "userStories": [{
+    "id": 1,
+    "title": "...",
+    "description": "...",
+    "persona": "Senior Developer",
+    "personaId": 1,
+    "acceptanceCriteria": ["Given ...", "When ...", "Then ..."],
+    "priority": "High",
+    "storyPoints": 5,
+    "featureId": 1,
+    "epicId": 1
+  }]
+}
+
+👤 Personas (with Empathy Data)
+Persona	Focus	Pain Points	Goals	Color
+Senior Developer (Michael Chen)	Code quality, performance	Legacy systems	Scalable solutions	Blue
+QA Engineer (Sarah Johnson)	Test coverage, automation	Manual regression	Early bug detection	Green
+Project Manager (David Williams)	Timelines, resources	Scope creep	On-time delivery	Purple
+Business Analyst (Emily Rodriguez)	Requirement clarity	Ambiguity	Stakeholder alignment	Orange
+DevOps Engineer (Alex Kumar)	CI/CD automation	Manual deployments	Reliable releases	Red
+🧠 User Experience Flow
+
+Step 1 active → empty state
+
+User inputs requirement or uploads file
+
+Simulated AI generation (with progress animation)
+
+Step 2 auto-activates with animated reveal
+
+User explores generated artifacts
+
+Click “Proceed to DevOps Push” → Step 3 opens
+
+Configure & select items → push to DevOps
+
+Show success state with confetti/checkmark animation
+
+🧾 Mock Data (Insurance Domain)
+
+Epic: “Claims Processing Automation System”
+Features:
+
+“Automated Claim Intake”
+
+“AI-Powered Damage Assessment”
+
+“Fraud Detection Engine”
+
+User Stories:
+
+“As a Claims Processor, I want to automatically intake claims from multiple channels...”
+
+“As a Senior Developer, I want to implement ML models for damage assessment...”
+
+🚀 Key Features
+
+Smooth fade/slide animations
+
+Responsive desktop-first design
+
+Toast-based error/success feedback
+
+Skeleton loading states
+
+Accessible (ARIA & keyboard)
+
+Real-time input/PAT validation
+
+Copy/Download buttons
+
+Simulated API delays (2–3s)
+
+Confetti on success
+
+“Quick Demo” button for auto-flow
+
+🧩 Deliverables
+
+Fully functional React prototype
+
+Styled with Tailwind CSS (gradient & glass effects)
+
+Realistic mock data & API simulation
+
+Smooth transitions + progress states
+
+Clear workflow navigation
+
+Production-quality, maintainable code
+
+README.md with setup instructions
+
+✅ Success Criteria
+
+End-to-end workflow < 2 minutes
+
+All UI elements render perfectly
+
+Animations smooth (60 FPS)
+
+Data structured and realistic
+
+Persona-based stories accurate
+
+Step progression visually clear
+
+DevOps UI polished and interactive
+
+🔮 Prompt Instruction
+
+Build this complete React prototype on Replit, following all sections above exactly — including visual design, workflows, animations, personas, and mock integrations.
+The focus is on clarity, interactivity, and modern UI polish.

@@ -1,0 +1,124 @@
+```mermaid
+erDiagram
+  USERS {
+    varchar id PK
+    varchar email
+    varchar display_name
+    varchar tenant_id
+    varchar provider
+    boolean is_deleted
+  }
+
+  ORGANIZATIONS {
+    varchar id PK
+    varchar tenant_id
+    varchar name
+    varchar owner_user_id FK
+  }
+
+  ORGANIZATION_MEMBERS {
+    varchar id PK
+    varchar organization_id FK
+    varchar user_id FK
+    varchar tenant_id
+    varchar role
+    varchar invited_by FK
+  }
+
+  SDLC_PROJECTS {
+    varchar id PK
+    text name
+    text organization
+    varchar project_id
+    varchar integration_type
+    varchar jira_connection_id FK
+    text jira_instance_url
+    varchar jira_project_key
+    varchar owner_user_id FK
+  }
+
+  PROJECT_MEMBERS {
+    varchar id PK
+    varchar project_id FK
+    varchar user_id FK
+    varchar tenant_id
+    varchar role
+    varchar invited_by FK
+  }
+
+  JIRA_CONNECTIONS {
+    varchar id PK
+    varchar name
+    varchar instance_url
+    varchar email
+    text api_token_encrypted
+    tinyint is_active
+    tinyint is_admin_connection
+  }
+
+  ARTIFACT_ORGANIZATIONS {
+    varchar id PK
+    text project_name
+    text organization_url
+    text pat_token
+  }
+
+  USER_JIRA_CREDENTIALS {
+    varchar id PK
+    varchar user_id FK
+    varchar instance_url
+    varchar email
+    text api_token_encrypted
+    varchar account_id
+    timestamp last_tested_at
+    tinyint is_active
+  }
+
+  USER_GIT_CREDENTIALS {
+    varchar id PK
+    varchar user_id FK
+    varchar provider
+    varchar base_url
+    text token_encrypted
+    timestamp last_tested_at
+    tinyint is_active
+  }
+
+  PROJECT_GIT_CONFIG {
+    varchar id PK
+    varchar project_id FK
+    enum provider
+    varchar branch
+    varchar ado_repository_id
+    varchar ado_repository_name
+    text token
+  }
+
+  USER_PROJECT_INTEGRATION_CREDENTIALS {
+    varchar id PK
+    varchar user_id FK
+    varchar project_id FK
+    varchar integration_kind
+    varchar integration_id
+    varchar provider_key
+    varchar last_test_status
+  }
+
+  USERS ||--o{ ORGANIZATIONS : owns
+  USERS ||--o{ ORGANIZATION_MEMBERS : member
+  USERS ||--o{ PROJECT_MEMBERS : member
+  USERS ||--o{ SDLC_PROJECTS : owns
+  USERS ||--o{ USER_JIRA_CREDENTIALS : has
+  USERS ||--o{ USER_GIT_CREDENTIALS : has
+  USERS ||--o{ USER_PROJECT_INTEGRATION_CREDENTIALS : validates
+
+  ORGANIZATIONS ||--o{ ORGANIZATION_MEMBERS : grants_access
+  ORGANIZATIONS ||--|| JIRA_CONNECTIONS : same_id_for_jira_org
+
+  JIRA_CONNECTIONS ||--o{ SDLC_PROJECTS : contains_jira_projects
+  ARTIFACT_ORGANIZATIONS ||--o{ SDLC_PROJECTS : contains_ado_projects
+
+  SDLC_PROJECTS ||--o{ PROJECT_MEMBERS : grants_project_access
+  SDLC_PROJECTS ||--o{ PROJECT_GIT_CONFIG : repo_config
+  SDLC_PROJECTS ||--o{ USER_PROJECT_INTEGRATION_CREDENTIALS : per_user_project_readiness
+```

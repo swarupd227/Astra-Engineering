@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 72" fill="none">
+  <!-- Red ribbon wave - top stroke -->
+  <path d="M16 22 C30 10, 54 32, 76 18 C94 6, 114 26, 134 14" stroke="#CC2229" stroke-width="6.5" fill="none" stroke-linecap="round"/>
+  <!-- Red ribbon wave - bottom stroke -->
+  <path d="M22 34 C36 22, 60 44, 82 30 C100 18, 120 38, 140 26" stroke="#CC2229" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+  <!-- AMERISURE text -->
+  <text x="16" y="60" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="800" fill="white" letter-spacing="2.5">AMERISURE</text>
+  <!-- Registered trademark -->
+  <text x="198" y="48" font-family="Arial, Helvetica, sans-serif" font-size="9" fill="white">®</text>
+</svg>

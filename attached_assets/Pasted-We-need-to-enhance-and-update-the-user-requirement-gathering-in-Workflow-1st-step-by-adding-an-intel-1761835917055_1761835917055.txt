@@ -1,0 +1,98 @@
+We need to enhance and update the user requirement gathering in Workflow 1st step by adding an intelligent conversational agent view in place of directly taking requirements that acts as a team of backlog refinement experts between the user and the final backlog or artifact generation. Come up with an intuitive UI and design for the same. Rest steps functionality would remain same. 
+OBJECTIVE:
+Build a conversational refinement layer as a 1st step that collaborates with users through a natural dialogue to gather comprehensive requirements before generating high-quality agile artifacts.
+CORE FUNCTIONALITY:
+
+Conversational Requirements Gathering
+
+Engage users in a natural, collaborative dialogue (like experienced Product Owners and Business Analysts working together)
+Ask ONE question at a time in a conversational tone
+Wait for user response before proceeding
+Build upon previous answers to ask contextually relevant follow-up questions
+Continue until sufficient detail is gathered to create comprehensive artifacts
+
+
+Intelligent Question Flow
+
+Probe for business value and objectives
+Identify target users/stakeholders
+Understand technical constraints and dependencies
+Clarify functional and non-functional requirements
+Explore edge cases and acceptance criteria
+Determine priority and scope boundaries
+
+
+Artifact Generation with Design Thinking
+
+Create detailed user personas based on gathered information
+Generate properly structured epics, user stories, and subtasks
+Apply proper user story format: "As a [persona], I want [goal], so that [benefit]"
+
+
+Estimation Standards
+
+User stories: Estimated in story points (1 point = 1 ideal day)
+Break down stories so none exceed 5 points
+Subtasks: Estimated in hours
+Each epic should contain multiple user stories with complete subtask breakdowns
+
+
+Story Quality Requirements
+Each user story MUST include:
+
+Proper persona-based format
+Detailed description
+Comprehensive acceptance criteria
+Test cases
+Subtasks with hour estimates
+Story point estimate (1-5 points max)
+
+
+Export Functionality
+
+Ask user preferred output format (Azure DevOps or Jira)
+Generate downloadable file in the correct format for chosen platform
+Ensure all fields map correctly to platform specifications
+
+
+
+TECHNICAL REQUIREMENTS:
+
+Integrate with existing OpenAI workflow
+Store conversation context throughout the refinement session
+Validate that all generated artifacts meet quality standards before export
+Support file generation for:
+
+Azure DevOps (CSV/JSON format)
+Jira (CSV/JSON format)
+
+
+
+USER EXPERIENCE FLOW:
+
+User enters initial requirement
+Conversational agent engages with ONE question at a time
+Agent builds comprehensive understanding through dialogue
+Agent summarizes understanding and confirms with user
+Agent asks for preferred export format (Azure DevOps/Jira)
+System generates complete backlog with all artifacts
+System provides downloadable file in requested format
+System then moves to 2nd step of selecting artifacts to be pushed to Azure DevOps
+Rest All workflow should be like existing. 
+
+KEY PRINCIPLES:
+
+Natural, conversational tone (avoid robotic or overly formal language)
+Patient and collaborative approach
+One question at a time - never overwhelm the user
+Context-aware questioning based on previous answers
+Thorough but efficient - gather what's needed without unnecessary questions
+Quality over speed - ensure artifacts are comprehensive and actionable
+
+SUCCESS CRITERIA:
+
+Generated artifacts are complete, detailed,  high quality and ready for sprint planning
+All user stories follow proper format with personas
+Estimates are realistic and granular
+Export files work seamlessly in target platforms
+User experience feels collaborative, not interrogative

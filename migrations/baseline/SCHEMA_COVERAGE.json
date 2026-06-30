@@ -1,0 +1,27 @@
+{
+  "generatedAt": "2026-06-15T00:00:00.000Z",
+  "outputFile": "migrations\\baseline\\00_full_schema.sql",
+  "source": "manual-update-post-2026-06-05",
+  "tableCount": 189,
+  "expectedCount": 189,
+  "missingTables": [],
+  "complete": true,
+  "addedAfter20260605": [
+    "organization_members",
+    "universal_ai_usage_logs",
+    "jira_team_members",
+    "jira_user_overrides",
+    "productivity_targets",
+    "user_project_repo_credentials",
+    "user_project_integration_credentials",
+    "project_members",
+    "user_git_credentials",
+    "user_gitlab_credentials",
+    "dev_brd_document_versions",
+    "dev_brd_review_threads",
+    "dev_brd_review_messages",
+    "dev_brd_review_events",
+    "dev_brd_review_completions",
+    "dev_brd_review_applied_comments"
+  ]
+}

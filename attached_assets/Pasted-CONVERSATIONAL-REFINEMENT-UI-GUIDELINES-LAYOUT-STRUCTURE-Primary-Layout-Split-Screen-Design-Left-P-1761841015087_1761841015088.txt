@@ -1,0 +1,239 @@
+CONVERSATIONAL REFINEMENT UI GUIDELINES
+LAYOUT STRUCTURE
+Primary Layout: Split-Screen Design
+
+Left Panel (60%): Conversation area
+Right Panel (40%): Context & progress tracker (collapsible on smaller screens)
+
+Alternative: Single Column with Sticky Context
+
+Full-width conversation with floating progress card
+Better for mobile/tablet responsiveness
+
+
+CONVERSATION AREA DESIGN
+Message Display:
+
+Agent messages: Left-aligned, distinct background (soft blue/gray)
+User messages: Right-aligned, different color (white/light accent)
+Avatar indicators: Small icons for agent (team/robot icon) vs user
+Timestamp: Subtle, below each message
+Typing indicator: Animated dots when agent is "thinking"
+
+Input Area:
+
+Fixed bottom position with subtle shadow for depth
+Auto-expanding text field (grows with content, max 5-6 lines)
+Character counter (optional, shown only when approaching limit)
+Send button: Prominent, disabled until input exists
+Keyboard shortcut: Enter to send, Shift+Enter for new line
+Voice input option (microphone icon) for accessibility
+
+Visual Hierarchy:
+
+Clear visual separation between messages
+Adequate white space (padding: 16-24px between messages)
+Readable typography (16-18px body text)
+Line height: 1.5-1.6 for comfortable reading
+
+
+RIGHT PANEL: CONTEXT & PROGRESS
+Components to Include:
+
+Progress Indicator
+
+Visual progress bar or step indicator
+Phases: "Understanding Requirements" → "Refining Details" → "Creating Personas" → "Generating Artifacts"
+Current phase highlighted with checkmarks for completed phases
+
+
+Key Information Captured
+
+Collapsible sections showing:
+
+Project name/objective
+Identified personas
+Key features mentioned
+Technical constraints
+Priority items
+
+
+Real-time updates as conversation progresses
+Each item with small edit icon for quick corrections
+
+
+Quick Actions Panel
+
+"Start Over" button (with confirmation)
+"Skip to Summary" (if user wants to accelerate)
+"Save Progress" (auto-save with manual option)
+"Export Conversation" transcript
+
+
+Estimated Artifacts Counter
+
+Live preview: "X Epics, Y Stories identified so far"
+Builds confidence and shows progress
+
+
+
+
+INTERACTION PATTERNS
+Smart Suggestions:
+
+Quick Reply Chips: For yes/no or multiple choice questions
+
+Example: Agent asks "Is this a mobile or web application?"
+Show chips: [Mobile] [Web] [Both] [Other]
+
+
+Buttons should be large enough for easy tapping (min 44px height)
+
+Clarification Mechanism:
+
+"Need clarification" button below each agent question
+Opens tooltip explaining why this question matters
+Helps users understand the refinement process
+
+Rich Input Options:
+
+Support for file attachments (requirements docs, wireframes)
+Link pasting with auto-preview
+Drag-and-drop for files
+
+Example Prompts:
+
+When input field is empty, show subtle placeholder examples:
+
+"e.g., Yes, it should support multiple user roles..."
+Rotates through different example responses
+
+
+
+
+VISUAL FEEDBACK & MICRO-INTERACTIONS
+Loading States:
+
+Smooth typing animation when agent responds
+"Agent is analyzing your response..." with subtle animation
+Skeleton screens for initial load
+
+Success Indicators:
+
+Checkmark animations when key info is captured
+Subtle pulse on right panel when new item is added
+Encouraging micro-copy: "Great! That helps clarify..."
+
+Error Handling:
+
+Friendly error messages in conversational tone
+"Hmm, I didn't quite catch that. Could you rephrase?"
+Retry button for connection issues
+
+Transitions:
+
+Smooth scroll to new messages
+Fade-in animations for new content
+No jarring jumps or page refreshes
+
+
+ACCESSIBILITY FEATURES
+
+High contrast mode option
+Keyboard navigation fully supported
+Screen reader optimized with ARIA labels
+Focus indicators clearly visible
+Text scaling support (respect browser/OS settings)
+Reduced motion option for users with vestibular disorders
+
+
+MOBILE RESPONSIVENESS
+Mobile-Specific Adjustments:
+
+Right panel becomes bottom sheet (swipe up to view)
+Larger touch targets (minimum 48x48px)
+Floating action button for quick actions
+Sticky header with hamburger menu
+Full-screen input mode when typing (optional)
+Native share functionality for export
+
+
+CONVERSATION FLOW ENHANCEMENTS
+Confirmation Checkpoints:
+
+After 5-7 questions, show summary card:
+
+"Here's what I understand so far..."
+Bullet points of captured requirements
+"Does this look correct?" [Yes, continue] [Let me clarify]
+
+
+
+Visual Breaks:
+
+Section dividers when moving to new topic areas
+Example: "Great! Now let's talk about your users..." with visual separator
+
+Tone Indicators:
+
+Friendly agent personality with occasional encouraging phrases
+"Excellent point!" / "That's really helpful!" / "Almost there!"
+Avoid excessive enthusiasm (keep it professional but warm)
+
+
+FINAL GENERATION PHASE
+Preview Before Export:
+
+Modal/Full screen overlay showing generated artifacts
+Tabbed view: [Epics] [Stories] [Personas] [Summary]
+Edit capability: Click any item to modify before export
+Visual hierarchy showing epic → story → subtask relationships
+
+Export Options:
+
+Format selector: Large cards for Azure DevOps vs Jira
+Preview sample of exported format
+Download button with file size indicator
+Copy to clipboard option
+Email to me option with input field
+
+Post-Export:
+
+Success confirmation with confetti animation (subtle)
+Options: "Start New Refinement" / "Download Again" / "View Summary"
+Feedback prompt: "How was your experience?" with simple rating
+
+
+COLOR PALETTE SUGGESTIONS
+Professional & Calming:
+
+Primary: Deep blue (#2563EB) for trust and professionalism
+Secondary: Soft teal (#14B8A6) for agent messages
+Neutral: Warm grays (#F9FAFB, #E5E7EB) for backgrounds
+Accent: Orange/amber (#F59E0B) for CTAs and highlights
+Success: Green (#10B981) for confirmations
+Error: Red (#EF4444) for errors
+
+Modern & Vibrant Alternative:
+
+Primary: Purple (#8B5CF6) for creativity
+Secondary: Pink (#EC4899) for energy
+Keep backgrounds neutral for readability
+
+
+TYPOGRAPHY
+
+Headings: Sans-serif, bold (Inter, Poppins, or SF Pro)
+Body: Sans-serif, regular (16-18px for readability)
+Code/Technical: Monospace (for user stories, acceptance criteria in preview)
+Line Height: 1.5-1.6 for body text
+Font Weight: Use weight variations (400, 500, 600, 700) instead of bold/italic overuse
+
+
+PERFORMANCE CONSIDERATIONS
+
+Lazy loading for conversation history
+Virtual scrolling for long conversations
+Optimistic UI updates (show user message immediately)
+Debounced auto-save (save progress every 30 seconds)
+Local storage fallback if connection is lost

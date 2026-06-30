@@ -1,0 +1,138 @@
+FEATURE REQUEST: Add Test Execution Mode to NAT 2.0 Platform
+
+CONTEXT:
+I have an existing NAT 2.0 (Nous Autonomous Tester 2.0) application with Functional Testing that generates test cases. Now I need to add a new "Execution Mode" feature that allows users to execute these generated test cases.
+
+EXISTING STRUCTURE:
+- Left sidebar with: Visual Regression Testing, Test Configuration, Functional Testing, Sprint Testing, Project History
+- Functional Testing generates test cases by analyzing application URLs
+- Domain selection: Insurance, Healthcare, Banking, Fintech
+- Test cases are generated and stored per project
+
+NEW FEATURE: EXECUTION MODE TAB
+
+ADD TO SIDEBAR:
+- Add "Execution Mode" menu item with play/execute icon after Sprint Testing
+
+EXECUTION MODE PAGE STRUCTURE:
+
+1. PROJECT LISTING VIEW (Initial View):
+   - Display all projects as cards/tiles with project name, URL, domain, and test case count
+   - Each project card shows: Project Name, Application URL, Domain Badge, Total Test Cases count, Last Execution Date
+   - Clicking a project card navigates to that project's test case view
+   - Search/filter bar to find projects
+
+2. PROJECT TEST CASES VIEW (After clicking a project):
+   - Header showing: Project Name, Application URL, Domain
+   - Back button to return to project listing
+   
+   FILTER PANEL (Horizontal filter bar):
+   - Filter chips/buttons for test categories:
+     • Smoke (Quick critical path tests)
+     • Sanity (Basic functionality validation)
+     • Regression (Full feature coverage)
+     • Security (Authentication, authorization, XSS, SQL injection tests)
+     • Accessibility (WCAG compliance, screen reader, keyboard navigation tests)
+   - Multiple filters can be selected simultaneously
+   - "Clear All" button to reset filters
+   - Show count of tests matching current filter
+   
+   TEST CASES TABLE:
+   - Columns: Checkbox, Test ID, Test Name, Category Tags, Priority, Status, Last Run
+   - Select All checkbox in header
+   - Individual checkboxes for each test case
+   - Category tags displayed as colored badges (Smoke=Green, Sanity=Blue, Regression=Purple, Security=Red, Accessibility=Orange)
+   - Sorting capability on columns
+   - Pagination for large test sets
+
+3. EXECUTION CONTROLS PANEL (Bottom sticky bar):
+   - Selected test count display: "X tests selected"
+   - Execution Mode toggle: "Headed" (visible browser) | "Headless" (background)
+   - Browser selection dropdown: Chrome, Firefox, Edge, Safari
+   - "Execute Selected Tests" button (prominent cyan/teal color matching existing theme)
+   - "Execute All Filtered" button (secondary style)
+
+4. EXECUTION DASHBOARD (Appears when execution starts):
+   - Split screen or modal overlay
+   - LEFT SIDE - Agent Activity Panel:
+     • Show AI Agent avatar/icon with pulsing animation
+     • Real-time agent activity log with timestamps
+     • Agent status messages like:
+       - "Initializing browser session..."
+       - "Navigating to application URL..."
+       - "Executing Test TC-001: Login Validation..."
+       - "Capturing screenshot for step 3..."
+       - "Test TC-001 PASSED - Moving to next test..."
+     • Progress bar showing overall execution progress
+     • Current test being executed highlighted
+   
+   - RIGHT SIDE - Visual Feedback Panel:
+     • If Headed mode: Show browser preview/screenshot stream
+     • If Headless mode: Show step-by-step screenshots as they're captured
+     • Current step indicator
+     • Live status: Running, Passed, Failed for each step
+   
+   - BOTTOM - Execution Summary:
+     • Total Tests, Passed, Failed, Skipped counters (animated updates)
+     • Execution time elapsed
+     • Stop/Pause/Resume controls
+     • "View Detailed Report" button (enabled after completion)
+
+5. EXECUTION RESULTS VIEW (After execution completes):
+   - Summary cards: Total Executed, Passed (green), Failed (red), Skipped (gray)
+   - Pass rate percentage with circular progress indicator
+   - Execution duration
+   - Detailed results table with expandable rows
+   - For each test: Test Name, Status, Duration, Steps, Screenshots, Error details (if failed)
+   - Export options: PDF Report, Excel, JSON
+   - "Re-run Failed Tests" quick action button
+
+VISUAL DESIGN REQUIREMENTS:
+- Match existing NAT 2.0 dark theme (#0a0a0a background, cyan/teal accents)
+- Smooth transitions and animations for agent activity
+- Glassmorphism effect on cards and panels
+- Pulsing/glowing effects on active elements during execution
+- Progress indicators with gradient fills
+- Category badges with distinct colors
+- Status indicators: Green checkmark (pass), Red X (fail), Gray dash (skipped), Spinning loader (running)
+
+AGENT VISUAL REPRESENTATION:
+- Create an animated AI agent character/avatar that appears during execution
+- Show agent "thinking" animation when analyzing
+- Show agent "typing" animation when logging activities
+- Particle effects or connection lines showing agent actions
+- The agent should feel intelligent and autonomous, not just a progress bar
+
+TECHNICAL IMPLEMENTATION:
+- Use existing project/test case data structure
+- Store test execution results with timestamps
+- Implement real Playwright or Puppeteer execution (or simulate for demo)
+- WebSocket or polling for real-time execution updates
+- Screenshot capture at each test step
+- Support parallel test execution option
+
+DATA FLOW:
+1. User selects project → Load test cases from database
+2. User applies filters → Filter test cases client-side
+3. User selects tests → Store selection in state
+4. User clicks Execute → 
+   a. Create execution session
+   b. Launch browser (headed/headless based on selection)
+   c. Navigate to application URL
+   d. Execute each selected test sequentially
+   e. Capture screenshots at each step
+   f. Update UI in real-time
+   g. Store results
+5. Execution complete → Show results view
+
+STUNNING VISUAL EFFECTS:
+- Matrix-style code rain animation in background during execution
+- Neon glow effects on active elements
+- Smooth slide-in animations for agent messages
+- Confetti or success animation when all tests pass
+- Error shake animation when tests fail
+- Loading skeleton animations
+- Typing effect for agent status messages
+- Connection line animations from agent to browser preview
+
+Make this feature visually impressive and demonstrate the autonomous, agentic nature of NAT 2.0. The execution experience should feel like watching an intelligent agent work, not just a script running.

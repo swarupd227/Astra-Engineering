@@ -1,0 +1,95 @@
+{
+  "version": 2,
+  "description": "Full prod schema in baseline/00_full_schema.sql (regenerate: npm run generate:full-schema). Incrementals: npm run migrate:order:generate",
+  "phases": [
+    {
+      "name": "legacy_schema_prep",
+      "description": "Fix legacy schema mismatches before baseline (e.g. INT subscription_types.id)",
+      "mode": "statements",
+      "ignoreExists": true,
+      "strict": true,
+      "files": [
+        "manual/fix-subscription-types-id-type.sql"
+      ]
+    },
+    {
+      "name": "full_schema_baseline",
+      "description": "All tables — prod parity (176+ CREATE TABLE IF NOT EXISTS)",
+      "mode": "multiStatement",
+      "ignoreExists": true,
+      "strict": true,
+      "files": [
+        "baseline/00_full_schema.sql"
+      ]
+    },
+    {
+      "name": "incremental_manual",
+      "description": "Column and constraint patches after baseline",
+      "mode": "statements",
+      "ignoreExists": true,
+      "strict": true,
+      "files": [
+        "manual/add-automated-test-cases-scripts-runs.sql",
+        "manual/add-automated-test-tables.sql",
+        "manual/add-brd-file-columns.sql",
+        "manual/add-brd-generated-content-columns.sql",
+        "manual/add-crawl-runs-project-org-columns.sql",
+        "manual/add-design-guidelines-table.sql",
+        "manual/add-enable-tdd-column.sql",
+        "manual/add-figma-link-column-migration.sql",
+        "manual/add-golden-repo-columns-migration.sql",
+        "manual/add-golden-repo-reference-column.sql",
+        "manual/add-integration-organization-id.sql",
+        "manual/add-jira-action-logs.sql",
+        "manual/add-jira-admin-connection-flag.sql",
+        "manual/add-linked-golden-repo-name-column.sql",
+        "manual/add-mfa-columns.sql",
+        "manual/add-orchestrator-columns.sql",
+        "manual/add-phase-column-migration.sql",
+        "manual/add-project-git-config-table.sql",
+        "manual/add-pushed-to-ado-column.sql",
+        "manual/add-requirement-ids-to-workflow-artifacts.sql",
+        "manual/add-status-to-test-plans.sql",
+        "manual/add-sdlc-project-owner-user-id.sql",
+        "manual/add-sync-columns.sql",
+        "manual/add-user-jira-credentials.sql",
+        "manual/add-user-project-integration-readiness.sql",
+        "manual/add-user-project-repo-credentials.sql",
+        "manual/add-user-stories-json-column.sql",
+        "manual/add-vector-cache-tables.sql",
+        "manual/add-workflow-artifacts-migration.sql",
+        "manual/add-workflow-artifacts-status-columns-migration.sql",
+        "manual/add-workflow-columns.sql",
+        "manual/create-dev-brd-documents-table.sql",
+        "manual/create-conversation-titles-table.sql",
+        "manual/fix-conversation-tables-case.sql",
+        "manual/fix-user-roles-legacy-azure-provider.sql",
+        "manual/create-integrations-table.sql",
+        "manual/create-modernization-persistence-tables.sql",
+        "manual/create-modernization-token-usage.sql",
+        "manual/create-provisioning-instances-table.sql",
+        "manual/create-test-plan-documents-table.sql",
+        "manual/fix-automated-test-pages-page-signature-hash-nullable.sql",
+        "manual/fix-page-dom-versions-dom-hash-nullable.sql",
+        "manual/mysql-vector-cache-tables.sql",
+        "manual/remove-created-by-column.sql",
+        "manual/ensure-ask-astra-chat-tables.sql",
+        "manual/ensure-integrations-columns.sql",
+        "manual/drop-organizations-tenant-unique.sql",
+        "manual/add-tables-after-2026-06-05.sql",
+        "manual/add-dev-brd-review-tables.sql"
+      ]
+    },
+    {
+      "name": "seed_reference_data",
+      "description": "Roles, subscription types, default personas (idempotent)",
+      "mode": "multiStatement",
+      "ignoreExists": true,
+      "optional": true,
+      "env": "RUN_DB_SEED",
+      "files": [
+        "manual/02_seed.sql"
+      ]
+    }
+  ]
+}

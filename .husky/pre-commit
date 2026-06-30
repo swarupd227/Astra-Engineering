@@ -1,0 +1,51 @@
+#!/bin/sh
+# Husky pre-commit hook
+
+set -e
+echo "Running pre-commit checks..."
+
+# Check for SQL files outside migrations folder
+MISPLACED_SQL=$(git diff --cached --name-only --diff-filter=A | grep '\.sql$' | grep -v '^migrations/' || true)
+
+if [ -n "$MISPLACED_SQL" ]; then
+  echo ""
+  echo "❌ COMMIT BLOCKED: SQL files detected outside migrations/ folder!"
+  echo ""
+  echo "The following SQL files are in wrong locations:"
+  echo "$MISPLACED_SQL"
+  echo ""
+  echo "Please move SQL files to migrations/manual/ or migrations/auto-generated/"
+  echo ""
+  echo "ERROR MESSAGE LOGGED TO: $HOOK_LOG"
+  exit 1
+fi
+
+# Check if schema.ts was modified
+if git diff --cached --name-only | grep -q "shared/schema.ts"; then
+  echo "⚠️  schema.ts was modified. Checking database sync..."
+  
+  if ! npm run check:schema 2>&1; then
+    SCHEMA_ERROR=$?
+    echo ""
+    echo "❌ COMMIT BLOCKED: Schema changes detected without migration!"
+    echo "Exit Code: $SCHEMA_ERROR"
+    echo "Please create a migration or run: npm run check:schema"
+    echo ""
+    echo "ERROR MESSAGE LOGGED TO: $HOOK_LOG"
+    exit 1
+  fi
+  
+  echo "✅ Schema sync check passed!"
+fi
+
+if git diff --cached --name-only | grep -q "server/pipelineAutomationRoutes.ts"; then
+  echo "Checking duplicate pipeline route table declarations..."
+  if ! node -e "const fs=require('fs'); const src=fs.readFileSync('server/pipelineAutomationRoutes.ts','utf8'); const ids=['pipelineTemplates','pipelineTemplateVersions','pipelineSecrets','pipelineCreationAudit','provisioningInstances']; const dup=ids.filter((id)=>((src.match(new RegExp('\\\\bconst\\\\s+'+id+'\\\\s*=','g'))||[]).length>1)); if(dup.length){console.error('❌ COMMIT BLOCKED: Duplicate const declarations in pipelineAutomationRoutes.ts -> '+dup.join(', ')); process.exit(1); }"; then
+    exit 1
+  fi
+  echo "✅ Pipeline route declaration check passed!"
+fi
+
+echo "✅ Pre-commit checks passed"
+echo ""
+

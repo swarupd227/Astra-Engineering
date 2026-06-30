@@ -1,0 +1,123 @@
+Project: Selenium to Playwright Migration Module for NAT 2.0 (Nous Autonomous Tester 2.0)
+
+CONTEXT:
+I am building an AI-powered migration module as part of NAT 2.0's AI Engine. This module should automatically convert Selenium WebDriver automation scripts written in Java to Playwright scripts in JavaScript/TypeScript. The target users are QA Engineers migrating legacy test suites to modern Playwright framework.
+
+OBJECTIVE:
+Create a web-based migration tool with the following capabilities:
+
+1. CODE PARSER & ANALYZER
+   - Parse Selenium Java code and build an Abstract Syntax Tree (AST)
+   - Identify Selenium-specific patterns: WebDriver commands, locators, waits, assertions
+   - Extract page object structures if present
+   - Detect test framework annotations (@Test, @BeforeMethod, @AfterMethod)
+
+2. TRANSFORMATION ENGINE
+   Build mapping rules for these conversions:
+   
+   a) Driver Initialization:
+      - WebDriver driver = new ChromeDriver() → const { chromium } = require('playwright'); const browser = await chromium.launch(); const page = await browser.newPage();
+   
+   b) Locator Strategies:
+      - By.id("x") → page.locator('#x')
+      - By.name("x") → page.locator('[name="x"]')
+      - By.className("x") → page.locator('.x')
+      - By.xpath("//x") → page.locator('//x')
+      - By.cssSelector("x") → page.locator('x')
+      - By.linkText("x") → page.locator('text=x')
+      - By.partialLinkText("x") → page.locator('text=x') // partial match
+   
+   c) Actions:
+      - element.click() → await locator.click()
+      - element.sendKeys("text") → await locator.fill('text')
+      - element.clear() → await locator.clear()
+      - element.getText() → await locator.textContent()
+      - element.getAttribute("x") → await locator.getAttribute('x')
+      - element.isDisplayed() → await locator.isVisible()
+      - element.isEnabled() → await locator.isEnabled()
+      - new Select(element).selectByVisibleText("x") → await locator.selectOption({ label: 'x' })
+      - new Select(element).selectByValue("x") → await locator.selectOption({ value: 'x' })
+   
+   d) Navigation:
+      - driver.get(url) → await page.goto(url)
+      - driver.navigate().back() → await page.goBack()
+      - driver.navigate().forward() → await page.goForward()
+      - driver.navigate().refresh() → await page.reload()
+      - driver.getCurrentUrl() → page.url()
+      - driver.getTitle() → await page.title()
+   
+   e) Waits (Transform to Playwright's auto-wait or explicit):
+      - WebDriverWait + ExpectedConditions.visibilityOfElementLocated → await locator.waitFor({ state: 'visible' })
+      - WebDriverWait + ExpectedConditions.elementToBeClickable → await locator.waitFor({ state: 'visible' })
+      - Thread.sleep(ms) → await page.waitForTimeout(ms) // with warning comment
+      - implicitWait → Remove (Playwright auto-waits)
+   
+   f) Assertions (TestNG/JUnit to Playwright expect):
+      - Assert.assertEquals(actual, expected) → expect(actual).toBe(expected)
+      - Assert.assertTrue(condition) → expect(condition).toBeTruthy()
+      - Assert.assertFalse(condition) → expect(condition).toBeFalsy()
+      - Assert.assertNotNull(obj) → expect(obj).not.toBeNull()
+   
+   g) Frames & Windows:
+      - driver.switchTo().frame("x") → const frame = page.frameLocator('#x')
+      - driver.switchTo().defaultContent() → // Return to main page context
+      - driver.getWindowHandles() → const pages = context.pages()
+      - driver.switchTo().window(handle) → // Use page from pages array
+   
+   h) Alerts:
+      - driver.switchTo().alert().accept() → page.on('dialog', dialog => dialog.accept())
+      - driver.switchTo().alert().dismiss() → page.on('dialog', dialog => dialog.dismiss())
+   
+   i) Screenshots:
+      - ((TakesScreenshot)driver).getScreenshotAs() → await page.screenshot({ path: 'screenshot.png' })
+   
+   j) Browser Management:
+      - driver.quit() → await browser.close()
+      - driver.close() → await page.close()
+
+3. PAGE OBJECT MODEL (POM) CONVERTER
+   - Convert Java Page Object classes to Playwright Page Object pattern
+   - Transform @FindBy annotations to Playwright locator definitions
+   - Maintain method structure with async/await syntax
+
+4. TEST FRAMEWORK MAPPING
+   - @Test → test('test name', async ({ page }) => { })
+   - @BeforeMethod → test.beforeEach(async ({ page }) => { })
+   - @AfterMethod → test.afterEach(async ({ page }) => { })
+   - @BeforeClass → test.beforeAll(async () => { })
+   - @AfterClass → test.afterAll(async () => { })
+   - @DataProvider → Playwright test.describe with parameterization
+
+5. USER INTERFACE REQUIREMENTS
+   - Split-screen editor: Left (Selenium Java input), Right (Playwright output)
+   - Syntax highlighting for both Java and JavaScript/TypeScript
+   - Real-time conversion preview
+   - Option to select output language: JavaScript or TypeScript
+   - Download converted files option
+   - Batch upload for multiple files
+   - Migration report showing:
+     * Lines converted
+     * Patterns detected
+     * Manual review items flagged
+     * Conversion confidence score
+
+6. AI ENHANCEMENT FEATURES
+   - Smart locator suggestions (convert fragile XPath to robust CSS or text locators)
+   - Code optimization recommendations
+   - Best practice warnings (e.g., flag Thread.sleep usage)
+   - Generate Playwright-specific improvements (network interception, API mocking suggestions)
+
+7. VALIDATION & QUALITY
+   - Syntax validation of generated Playwright code
+   - Generate executable test structure
+   - Include necessary imports automatically
+   - Add TODO comments for manual review items
+
+TECH STACK:
+- Frontend: React.js with Monaco Editor (VS Code editor component)
+- Backend: Node.js with Express
+- Parser: Use java-parser or custom regex patterns for Selenium pattern detection
+- Code Generation: Template-based with AST manipulation
+- Styling: Tailwind CSS for modern UI
+
+OUTPUT STRUCTURE:

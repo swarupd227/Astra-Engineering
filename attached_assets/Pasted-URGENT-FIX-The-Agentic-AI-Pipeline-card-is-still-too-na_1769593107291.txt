@@ -1,0 +1,44 @@
+URGENT FIX: The Agentic AI Pipeline card is still too narrow with excessive black space on both sides. The previous fix did not work. I need you to find and modify the EXACT CSS classes causing this issue.
+
+PROBLEM (See Screenshot):
+- The pipeline card is centered in a narrow column (approximately 50-60% of screen width)
+- There is ~20% black/empty space on the LEFT side
+- There is ~20% black/empty space on the RIGHT side
+- The 6 agent icons (Orchestrator, Story Analyzer, Planner, Generator, QA Refiner, Script Generator) are squeezed together
+
+FIND AND FIX THESE SPECIFIC ISSUES:
+
+1. FIND THE PARENT CONTAINER of the entire "Generated Test Cases" page section and change:
+   - FROM: max-w-4xl, max-w-3xl, max-w-2xl, or w-[800px], w-[900px] etc.
+   - TO: max-w-full or w-full with px-6
+
+2. FIND THE PIPELINE CARD WRAPPER (the dark card containing "Agentic AI Pipeline") and change:
+   - FROM: any max-width constraint like max-w-2xl, max-w-3xl, max-w-4xl
+   - TO: w-full or max-w-none
+
+3. FIND THE AGENT ICONS CONTAINER (the flex/grid holding the 6 agent icons) and change:
+   - Add: justify-between or justify-evenly
+   - Add: w-full
+   - Add: gap-6 or gap-8 for proper spacing
+
+4. CHECK FOR THESE COMMON ISSUES:
+   - A parent div with `className="mx-auto max-w-4xl"` or similar - REMOVE the max-width
+   - A container with `className="container"` that has a max-width in CSS - Override it
+   - Inline styles with maxWidth or width set to fixed pixels - Remove them
+   - A wrapper div with `px-20` or `px-24` or large padding - Reduce to `px-4` or `px-6`
+
+5. ALSO EXPAND THE DETAIL CARDS BELOW (Orchestrator card, Generator card):
+   - These should also be full width to match the expanded pipeline
+
+SEARCH IN THESE FILES:
+- The component file rendering "Generated Test Cases" or "Agentic AI Pipeline"
+- Any parent layout component wrapping this section
+- Global CSS or Tailwind config that might set container max-widths
+
+THE GOAL:
+- Pipeline card should span ~95% of the screen width
+- All 6 agent icons should be spread out evenly with clear spacing
+- No wasted black space on left/right sides
+- The tabs at top (All, Functional, Negative, Edge, Security, A11y) are already full width - the pipeline card should match that width
+
+Please find the exact file and line numbers, show me what you're changing, and make sure the fix actually applies.

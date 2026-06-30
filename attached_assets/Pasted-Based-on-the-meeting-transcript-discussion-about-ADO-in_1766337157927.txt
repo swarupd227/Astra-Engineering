@@ -1,0 +1,641 @@
+Based on the meeting transcript discussion about ADO integration, backlog selection, and user story based test generation, here's a comprehensive Replit prompt for Sprint Testing enhancements.
+
+---
+
+## **Replit Prompt for Sprint Testing Enhancement**
+
+```
+FEATURE REQUEST: Enhance Sprint Testing Module with ADO Integration, User Story Sync & Test Case Editing
+
+CONTEXT:
+I have an existing NAT 2.0 (Nous Autonomous Tester 2.0) application built in Replit. The Sprint Testing module currently allows creating projects, sprints, and user stories manually, then generates test cases. I need to enhance this module to integrate with Azure DevOps (ADO), allow pointing to specific backlogs, sync user stories automatically, and provide full test case editing capabilities.
+
+EXISTING STRUCTURE:
+- Left sidebar with: Visual Regression Testing, Test Configuration, Functional Testing, Sprint Testing, Execution Mode, Project History, Agent Configurations
+- Sprint Testing currently: Create projects, create sprints, add user stories manually, generate test cases
+- Agent Configurations already has ADO connection setup (project-level)
+- Dark theme with glassmorphism UI, matrix-style agent animations
+
+ENHANCEMENT: SPRINT TESTING MODULE
+
+MODIFY SPRINT TESTING PAGE STRUCTURE:
+
+1. PROJECT SELECTION/CREATION SECTION (Step 1):
+
+   PROJECT LIST VIEW (Default Landing):
+   - Display existing projects as cards in grid layout
+   - Each project card shows:
+     - Project Name
+     - Application URL
+     - Domain badge (Insurance, Healthcare, Banking, Fintech)
+     - ADO Connection status (Connected/Not Connected)
+     - Total Sprints count
+     - Total User Stories count
+     - Total Test Cases count
+     - Last Activity date
+     - Quick actions: Open, Edit, Delete
+   - "Create New Project" card with + icon
+   - Search and filter bar for projects
+
+   CREATE/EDIT PROJECT MODAL:
+   - Project Name (text input, required)
+   - Application URL (text input, required)
+   - Domain Selection (dropdown): Insurance, Healthcare, Banking, Fintech
+   - Application Type (dropdown): SaaS, Custom, Packaged, Web Portal, E-Commerce
+   - Description (textarea, optional)
+   
+   ADO INTEGRATION SECTION (within project):
+   - Toggle: "Enable Azure DevOps Integration"
+   - If enabled, show:
+     - ADO Connection dropdown (populated from Agent Configurations)
+       - Shows configured ADO connections
+       - "Configure New Connection" link → navigates to Agent Configurations
+     - If connection selected:
+       - ADO Project dropdown (fetch from ADO API)
+       - "Test Connection" button with status indicator
+     - Connection Status: Connected/Disconnected/Error
+
+2. SPRINT MANAGEMENT SECTION (Step 2):
+
+   When user opens a project, show Sprint Management view:
+
+   SPRINT LIST VIEW:
+   - Tabs or toggle: "All Sprints" | "Active Sprint" | "Completed Sprints"
+   - Sprint cards displayed in timeline or list view
+   - Each sprint card shows:
+     - Sprint Name
+     - Sprint dates (Start - End)
+     - Status badge (Planning, Active, Completed)
+     - ADO Sprint Link indicator (if linked)
+     - User Stories count
+     - Test Cases count (Generated/Total)
+     - Progress bar (test cases generated vs pending)
+     - Quick actions: Open, Edit, Delete, Sync with ADO
+   - "Create New Sprint" button
+
+   CREATE/EDIT SPRINT MODAL:
+   - Sprint Name (text input, required)
+   - Sprint Goal (textarea, optional)
+   - Start Date (date picker, required)
+   - End Date (date picker, required)
+   - Status (dropdown): Planning, Active, Completed
+   
+   ADO BACKLOG LINKING SECTION (Critical New Feature):
+   - Section Title: "Link to Azure DevOps Backlog"
+   - Toggle: "Sync User Stories from ADO"
+   - If ADO integration enabled at project level, show:
+     
+     BACKLOG SOURCE SELECTION:
+     - Radio buttons:
+       - "Sprint Backlog" (Iteration Path based)
+       - "Product Backlog" (Area Path based)
+       - "Custom Query" (JQL/WIQL based)
+     
+     IF SPRINT BACKLOG SELECTED:
+     - Iteration Path dropdown (fetch from ADO):
+       - Shows ADO iteration hierarchy (Release > Sprint)
+       - Example: "Release 1\Sprint 1", "Release 1\Sprint 2"
+       - Search/filter iterations
+     - Area Path filter (optional, multi-select)
+     
+     IF PRODUCT BACKLOG SELECTED:
+     - Area Path dropdown (fetch from ADO):
+       - Shows ADO area hierarchy
+       - Multi-select supported
+     - Iteration filter (optional): "Current Sprint", "Future Sprints", "All"
+     
+     IF CUSTOM QUERY SELECTED:
+     - WIQL Query textarea
+       - Placeholder: "SELECT [System.Id], [System.Title], [System.Description] FROM WorkItems WHERE..."
+     - "Validate Query" button
+     - OR
+     - Saved Query dropdown (fetch saved queries from ADO)
+     
+     WORK ITEM TYPES TO SYNC (checkboxes):
+     - [x] User Story
+     - [ ] Bug
+     - [ ] Task
+     - [ ] Feature
+     - [ ] Epic
+     
+     SYNC OPTIONS:
+     - Auto-sync frequency dropdown: Manual, Hourly, Daily, On Sprint Start
+     - "Sync Now" button
+     - Last synced timestamp display
+     
+   - "Save Sprint" button
+   - "Save & Sync User Stories" button (saves and immediately syncs)
+
+3. USER STORY MANAGEMENT SECTION (Step 3):
+
+   When user opens a sprint, show User Story Management view:
+
+   USER STORY HEADER BAR:
+   - Sprint Name and dates display
+   - Back to Sprints button
+   - View toggle: Card View | List View | Kanban View
+   - "Sync from ADO" button (if ADO linked)
+   - "Add User Story Manually" button
+   - Sync status: "Last synced: [timestamp]" or "Not linked to ADO"
+
+   USER STORY SOURCE TABS:
+   - Tab 1: "From ADO" (synced stories) - if ADO integration enabled
+   - Tab 2: "Manual" (manually added stories)
+   - Tab 3: "All Stories" (combined view)
+
+   USER STORY FILTERS:
+   - Filter by Status: New, Active, Resolved, Closed, All
+   - Filter by Priority: Critical, High, Medium, Low, All
+   - Filter by Test Generation Status: Pending, Generated, Partial, All
+   - Search box for title/description
+   - "Clear Filters" button
+
+   USER STORY CARDS/LIST:
+   Each user story displayed with:
+   
+   COLLAPSED VIEW:
+   - Checkbox for selection
+   - ADO Work Item ID (if from ADO, clickable link to ADO)
+   - Story Title (editable for manual stories)
+   - Story Points badge
+   - Priority badge (clickable to change)
+   - Status badge
+   - Source badge: "ADO" or "Manual"
+   - Test Cases count badge (X generated)
+   - Quick actions: View, Edit, Generate Tests, Delete
+   - Expand arrow
+
+   EXPANDED VIEW:
+   - Full user story details:
+     
+     A. STORY INFORMATION:
+     - ID (ADO ID or manual ID)
+     - Title (editable for manual, read-only for ADO synced)
+     - Description (rich text display)
+     - Story Points (editable)
+     - Priority dropdown
+     - Status dropdown
+     - Assigned To (from ADO or manual entry)
+     - Tags/Labels
+     - ADO Link (if from ADO) - opens in new tab
+     
+     B. ACCEPTANCE CRITERIA SECTION (Critical for Test Generation):
+     - Display acceptance criteria from ADO or manual entry
+     - Format: Numbered list or Given/When/Then format
+     - If from ADO: Read-only with "Refresh from ADO" button
+     - If manual: Editable with rich text editor
+     - "Parse Acceptance Criteria" button - AI extracts testable criteria
+     
+     C. ATTACHMENTS FROM ADO:
+     - Display linked attachments from ADO
+     - Preview capability for images/documents
+     - Download option
+     
+     D. ADDITIONAL CONTEXT (New Feature):
+     - "Add Supporting Documents" section
+       - Upload additional documents (same as Functional Testing)
+       - Add reference URLs
+       - These provide extra context for test generation
+     
+     E. GENERATED TEST CASES PREVIEW:
+     - Collapsible section showing test cases generated for this story
+     - Count badge
+     - "View All Test Cases" link
+     - "Regenerate Test Cases" button
+     
+     F. STORY ACTIONS:
+     - "Generate Test Cases" button (primary)
+     - "Save Changes" button (for manual stories)
+     - "Refresh from ADO" button (for ADO stories)
+     - "Delete" button (for manual stories only)
+
+   ADD MANUAL USER STORY MODAL:
+   - Story ID (auto-generated or manual entry)
+   - Title (text input, required)
+   - Description (rich text editor)
+   - Acceptance Criteria (rich text editor with template options):
+     - Blank
+     - Given/When/Then template
+     - Numbered criteria template
+   - Story Points (number input)
+   - Priority (dropdown)
+   - Status (dropdown)
+   - Tags (multi-select chips)
+   - "Save" and "Save & Generate Tests" buttons
+
+   BULK OPERATIONS:
+   - Select multiple user stories
+   - "Generate Tests for Selected" button
+   - "Export Selected" button
+   - "Delete Selected" button (manual stories only)
+
+4. TEST GENERATION CONFIGURATION (Step 4):
+
+   When user clicks "Generate Test Cases" for one or more user stories:
+
+   TEST GENERATION MODAL/PANEL:
+   
+   STORIES SELECTED SECTION:
+   - List of selected user stories with acceptance criteria preview
+   - Option to remove stories from selection
+   - Total stories count
+   
+   ADDITIONAL CONTEXT SECTION:
+   - "Include Project Documents" toggle (documents uploaded at project level)
+   - "Include Sprint Documents" toggle
+   - "Add More Context" expandable:
+     - Document upload zone
+     - URL references input
+   
+   GENERATION OPTIONS:
+   - Test Types to Generate (checkboxes):
+     - [x] Functional Tests
+     - [x] Edge Case Tests
+     - [x] Negative Tests
+     - [ ] Boundary Tests
+     - [x] Security Tests
+     - [x] Accessibility Tests
+     - [ ] Performance Tests
+   
+   - Coverage Level (radio):
+     - Basic (1-2 test cases per acceptance criterion)
+     - Standard (2-4 test cases per acceptance criterion)
+     - Comprehensive (4+ test cases per acceptance criterion)
+   
+   - Test Case Format:
+     - Include Preconditions (checkbox)
+     - Include Test Data (checkbox)
+     - Include Traceability to User Story (checkbox, default on)
+     - Step-level Expected Results (checkbox)
+   
+   - "Generate Test Cases" button
+
+   GENERATION PROGRESS:
+   - Agent animation panel (matrix-style)
+   - Progress messages:
+     - "Analyzing user story: [Story Title]..."
+     - "Parsing acceptance criteria..."
+     - "Reading additional context..."
+     - "Generating functional test cases..."
+     - "Generating edge case tests..."
+     - "Generating security tests..."
+     - "Linking test cases to user story..."
+     - "Generation complete! X test cases created."
+
+5. TEST CASE RESULTS & EDITING SECTION (Step 5):
+
+   TEST CASES VIEW (After Generation or from Sprint Dashboard):
+
+   HEADER BAR:
+   - Title: "Test Cases for [Sprint Name]"
+   - View toggle: By User Story | All Test Cases | By Type
+   - "Add New Test Case" button
+   - Export dropdown
+   - Auto-save indicator
+
+   FILTER BAR:
+   - Filter by User Story (dropdown of stories in sprint)
+   - Filter by Priority (Smoke, Sanity, Regression, etc.)
+   - Filter by Type (Functional, Edge, Negative, Security, etc.)
+   - Filter by Status (Original, Modified, New)
+   - Search box
+   - "Clear Filters" button
+
+   VIEW: BY USER STORY (Default):
+   - Accordion/collapsible sections per user story
+   - Each section header shows:
+     - User Story ID and Title
+     - Test case count
+     - Expand/collapse all button
+   - Inside each section: Test case cards for that story
+
+   VIEW: ALL TEST CASES:
+   - Flat list of all test cases
+   - Each card shows User Story reference
+
+   VIEW: BY TYPE:
+   - Grouped by test type (Functional, Edge, Security, etc.)
+   - Collapsible sections per type
+
+   TEST CASE CARDS (Full CRUD - Same as Functional Testing):
+   Each test case displayed as expandable card:
+   
+   COLLAPSED VIEW:
+   - Checkbox for selection
+   - Test Case ID
+   - Test Case Title (inline editable)
+   - Priority badge (clickable)
+   - Type badge (clickable)
+   - Linked User Story badge (clickable, shows story ID)
+   - Status indicator (Original/Modified/New)
+   - Quick actions: Edit, Duplicate, Delete
+   - Expand arrow
+
+   EXPANDED VIEW (Full Edit Mode):
+   
+   A. BASIC INFORMATION:
+   - Test Case ID (editable)
+   - Title (text input, required)
+   - Description (textarea)
+   - Priority dropdown
+   - Type dropdown
+   - Status (read-only)
+   - Linked User Story dropdown (can change linkage)
+   - Linked Acceptance Criteria (multi-select from parent story's criteria)
+   - Tags (chips input)
+
+   B. PRECONDITIONS:
+   - Textarea (editable)
+   - "Add from Template" button
+
+   C. TEST STEPS (Full CRUD):
+   
+   STEP LIST:
+   - Each step as draggable row:
+     - Drag handle for reordering
+     - Step number (auto-calculated)
+     - Step description (inline editable textarea)
+     - Expected result (inline editable textarea)
+     - Actions:
+       - Add Step Above
+       - Add Step Below
+       - Duplicate Step
+       - Delete Step
+       - Move Up / Move Down
+   
+   ADD STEP OPTIONS:
+   - "Add Step at Beginning" button
+   - "Add Step at End" button
+   - Hover between steps reveals "Insert Step Here"
+   - Right-click context menu on steps
+   - Keyboard: Ctrl+Enter adds step below
+   
+   DRAG & DROP:
+   - Drag handle to reorder
+   - Visual drop indicator
+   - Auto-renumber on reorder
+   - "Undo Reorder" option
+   
+   STEP TEMPLATES:
+   - "Insert from Template" button
+   - Domain-specific templates (Insurance, Healthcare, Banking)
+   - Common templates: Login, Navigation, Form Fill, Validation
+
+   D. EXPECTED RESULTS:
+   - Overall expected results textarea
+   - Toggle: Use per-step expected results
+
+   E. TEST DATA:
+   - Textarea for test data
+   - "Generate Test Data" button (AI generates sample data)
+   - Structured data table option
+
+   F. TRACEABILITY:
+   - Linked User Story (with link to story)
+   - Linked Acceptance Criteria items
+   - Source Document reference
+
+   G. HISTORY & NOTES:
+   - Change history (expandable)
+   - Notes textarea
+   - Created/Modified timestamps
+
+   H. ACTION BUTTONS:
+   - Save Changes
+   - Revert to Original
+   - Duplicate Test Case
+   - Delete Test Case
+   - Collapse
+
+   CREATE NEW TEST CASE:
+   - "Add New Test Case" opens blank expanded card
+   - Must link to user story (dropdown)
+   - All fields editable
+   - Save creates the test case
+
+   BULK OPERATIONS:
+   - Select All checkbox
+   - Export Selected (Excel, CSV, JSON, PDF)
+   - Add to Test Suite
+   - Duplicate Selected
+   - Delete Selected
+   - Revert Selected
+
+   AUTO-SAVE:
+   - Changes auto-saved every 5 seconds
+   - "Saving..." indicator
+   - "All changes saved" confirmation
+   - Offline handling
+
+   UNDO/REDO:
+   - Ctrl+Z / Ctrl+Y
+   - Toolbar buttons
+   - Last 20 actions tracked
+
+6. SPRINT DASHBOARD (Overview):
+
+   When viewing a sprint, show dashboard with:
+   
+   SPRINT SUMMARY CARDS:
+   - Total User Stories (from ADO + Manual)
+   - Total Test Cases Generated
+   - Test Coverage % (stories with tests / total stories)
+   - Sync Status (last ADO sync time)
+   
+   CHARTS:
+   - User Stories by Status (pie chart)
+   - Test Cases by Type (bar chart)
+   - Test Cases by Priority (bar chart)
+   - Generation Progress (stories tested vs pending)
+   
+   QUICK ACTIONS:
+   - "Sync User Stories from ADO" button
+   - "Generate Tests for All Pending Stories" button
+   - "Export All Test Cases" button
+   - "View in Execution Mode" button
+
+7. ADO SYNC FUNCTIONALITY:
+
+   SYNC PROCESS:
+   - Call ADO API to fetch work items based on configured query
+   - Match by Work Item ID to detect new, updated, deleted
+   - For new items: Create user story in NAT
+   - For updated items: Update NAT story (preserve manual edits in notes)
+   - For deleted items: Mark as "Removed from ADO" (don't delete tests)
+   
+   SYNC CONFLICT HANDLING:
+   - If story updated in both ADO and NAT, show conflict resolution modal
+   - Options: Keep NAT version, Use ADO version, Merge
+   
+   SYNC STATUS INDICATORS:
+   - Per story: "Synced", "Pending Sync", "Conflict", "Removed from ADO"
+   - Sprint level: Last sync time, sync errors if any
+
+8. PROTOTYPE/PLACEHOLDER FOR DEMO:
+
+   If ADO integration is not fully implemented:
+   - Show UI elements with "Coming Soon" or "Prototype" badges
+   - Mock data for ADO iterations, backlogs
+   - Clickable but shows toast: "ADO integration coming soon!"
+   - Demonstrates the concept to stakeholders
+
+BACKEND LOGIC REQUIREMENTS:
+
+1. ADO API INTEGRATION:
+   - Use Azure DevOps REST API
+   - Endpoints needed:
+     - GET /_apis/wit/wiql - Execute WIQL queries
+     - GET /_apis/wit/workitems - Get work item details
+     - GET /_apis/work/teamsettings/iterations - Get iterations
+     - GET /_apis/wit/classificationnodes - Get area/iteration paths
+   - OAuth or PAT authentication
+   - Rate limiting handling
+   - Error handling for API failures
+
+2. USER STORY SYNC LOGIC:
+   ```
+   async function syncFromADO(sprintConfig) {
+     // Build WIQL based on sprint config
+     // Execute query against ADO
+     // Compare results with existing NAT stories
+     // Create/Update/Mark removed
+     // Return sync summary
+   }
+   ```
+
+3. LLM TEST GENERATION FOR USER STORIES:
+   ```
+   PROMPT:
+   You are an expert QA Test Engineer specializing in [DOMAIN] applications.
+   
+   USER STORY:
+   ID: [story_id]
+   Title: [story_title]
+   Description: [story_description]
+   
+   ACCEPTANCE CRITERIA:
+   [acceptance_criteria_list]
+   
+   ADDITIONAL CONTEXT:
+   [uploaded_documents_content]
+   [reference_urls_content]
+   
+   TASK:
+   Generate comprehensive test cases that verify all acceptance criteria are met.
+   
+   REQUIREMENTS:
+   - Create [coverage_level] test cases per acceptance criterion
+   - Include: [selected_test_types]
+   - Each test case must:
+     - Map to specific acceptance criteria
+     - Include clear steps with expected results
+     - Cover positive, negative, and edge cases
+   
+   OUTPUT FORMAT:
+   [JSON array of test cases with traceability to acceptance criteria]
+   ```
+
+4. DATABASE SCHEMA:
+   ```
+   Project {
+     id, name, url, domain, applicationType
+     adoConnectionId, adoProjectId
+     createdAt, modifiedAt
+   }
+   
+   Sprint {
+     id, projectId, name, goal
+     startDate, endDate, status
+     adoIterationPath, adoAreaPath, adoQuery
+     syncFrequency, lastSyncAt
+     createdAt, modifiedAt
+   }
+   
+   UserStory {
+     id, sprintId
+     adoWorkItemId (nullable)
+     title, description, acceptanceCriteria
+     storyPoints, priority, status
+     source (ADO/Manual)
+     adoSyncStatus, adoLastSyncAt
+     createdAt, modifiedAt
+   }
+   
+   TestCase {
+     id, sprintId, userStoryId
+     testCaseId, title, description
+     priority, type, status
+     preconditions
+     steps: [{stepNumber, description, expectedResult}]
+     expectedResults, testData
+     linkedAcceptanceCriteria: [indices]
+     tags, attachments, notes
+     originalVersion, changeHistory
+     createdAt, modifiedAt
+   }
+   ```
+
+5. API ENDPOINTS:
+   - Projects: CRUD
+   - Sprints: CRUD + sync
+   - User Stories: CRUD + bulk sync from ADO
+   - Test Cases: CRUD + bulk generate + step operations
+   - ADO: Get iterations, Get areas, Validate query, Test connection
+
+UI/UX REQUIREMENTS:
+- Maintain existing dark theme with glassmorphism cards
+- Smooth transitions and animations
+- Loading states for all async operations
+- Toast notifications for actions
+- Responsive design
+- Drag and drop for step reordering
+- Inline editing with visual feedback
+- Progress indicators for sync and generation
+- Modal dialogs for forms and confirmations
+- Breadcrumb navigation (Project > Sprint > User Stories > Test Cases)
+
+AGENT VISUALIZATION:
+- During test generation and ADO sync
+- Matrix-style animation background
+- Agent avatar with status
+- Real-time progress messages
+- Progress bar and ETA
+
+ERROR HANDLING:
+- ADO connection failures
+- API rate limiting
+- Sync conflicts
+- Generation failures
+- Save failures
+- User-friendly error messages
+- Retry logic
+
+KEYBOARD SHORTCUTS:
+- Ctrl+S: Save
+- Ctrl+N: New item
+- Ctrl+D: Duplicate
+- Ctrl+Enter: Add step below
+- Escape: Cancel edit
+- Arrow keys: Navigate
+
+NAVIGATION FLOW:
+1. User clicks "Sprint Testing" in sidebar
+2. User sees project list, selects or creates project
+3. User configures ADO integration for project
+4. User creates sprint, links to ADO backlog
+5. User syncs user stories from ADO or adds manually
+6. User selects stories and generates test cases
+7. User views, edits, adds steps to test cases
+8. All changes auto-saved
+9. User exports or sends to Execution Mode
+
+INTEGRATION POINTS:
+- Test cases accessible from Execution Mode
+- Export to test management tools (Zephyr, TestRail, qTest)
+- ADO work item links open in new tab
+- Project history tracks all activities
+```
+
+---
+
+This prompt covers the complete Sprint Testing enhancement with ADO integration, backlog selection, user story sync, and full test case editing functionality as discussed in your meeting with Jay. Ready to paste into Replit Agent, Chandra!

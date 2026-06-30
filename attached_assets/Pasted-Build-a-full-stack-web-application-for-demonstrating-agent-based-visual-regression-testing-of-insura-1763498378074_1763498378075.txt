@@ -1,0 +1,201 @@
+Build a full-stack web application for demonstrating agent-based visual regression testing of insurance products. This is a DEMO/PROOF-OF-CONCEPT platform meant to be shown to stakeholders. Focus on spectacular visual feedback and real-time agent activity visualization. No error fallbacks needed—assume everything works perfectly.
+
+## CORE REQUIREMENTS
+
+### Part 1: Frontend Dashboard (React + TypeScript)
+Create a professional, modern dashboard with:
+
+**Layout Structure:**
+- Left Sidebar (20% width): Navigation and test configuration panel
+- Main Content Area (80% width): Real-time agent activity visualization
+
+**Color Scheme & Design:**
+- Use a sophisticated dark theme: Deep navy (#0f172a) background with accent colors
+- Primary accent: Vibrant cyan (#06b6d4) for agent actions and "in-progress" states
+- Success state: Emerald green (#10b981)
+- Alert/Issue state: Amber (#f59e0b)
+- Typography: Use "Geist" or system fonts, professional and clean
+- All borders: Subtle, use rgba with low opacity
+- Spacing: Use 16px base unit grid
+
+**Navigation Panel:**
+- Logo/Brand name at top (centered, professional)
+- Two main navigation items:
+  1. "Visual Regression Testing" (active by default)
+  2. "Test Configuration" (shows form to input Figma URL and website URL)
+- A "START DEMO" button at the bottom (large, cyan, with hover effect)
+
+**Test Configuration Form:**
+- Input field for Figma design file URL (with placeholder example)
+- Input field for website/application URL (with placeholder example)
+- Dropdown: "Test Scope" (Full Page, Component, Accessibility Scan)
+- Dropdown: "Browser Target" (Chrome, Firefox, Safari)
+- Small info text explaining what agents will do
+- "Begin Testing" button (triggers the main demo)
+
+---
+
+### Part 2: Real-Time Agent Activity Feed (CENTER STAGE)
+This is the HERO of the demo. Build a vertical timeline showing exactly what agents are doing RIGHT NOW.
+
+**Agent Activity Timeline Design:**
+- Vertical line running down the center with circular nodes (like a process flow)
+- Each node represents a completed or in-progress agent task
+- Nodes are color-coded: Gray (pending) → Cyan (in-progress) → Green (completed)
+- Task cards display on BOTH sides of the timeline (alternating left/right for visual interest)
+
+**Each Task Card Shows:**
+1. **Task Title** (bold, large text): e.g., "Fetching Figma Design Specification"
+2. **Agent Name** (smaller, colored badge): "🤖 Design Agent", "🤖 Visual Comparison Agent", etc.
+3. **Status Indicator** (animated):
+   - Pending: Static gray circle
+   - In Progress: Cyan circle with spinning animation (subtle, 2s rotation)
+   - Completed: Green checkmark with subtle pulse animation
+4. **Progress Detail** (supporting text):
+   - For in-progress: "Loading Figma API... 73% complete" or "Analyzing 2,847 pixels..."
+   - For completed: "✓ Found 24 design tokens", "✓ Generated 156 test cases"
+5. **Timestamp**: Small, right-aligned, shows relative time ("2 seconds ago")
+
+**Example Timeline Flow (what agents will pretend to do):**
+
+1. "Authenticating with Figma API" → Status: Completed (2 sec ago)
+2. "Extracting Design Specifications" → Status: Completed (1.5 sec ago)
+3. "Analyzing Visual Hierarchy & Component Library" → Status: Completed (1.2 sec ago)
+4. "Generating Visual Regression Test Cases" → Status: Completed (0.8 sec ago)
+5. "Launching Browser Automation (Playwright)" → Status: In Progress (spinning)
+6. "Capturing Baseline Screenshots" → Status: Pending
+7. "Fetching Live Website & Comparing Layouts" → Status: Pending
+8. "Analyzing Color Contrast & Accessibility" → Status: Pending
+9. "Detecting Visual Discrepancies" → Status: Pending
+10. "Generating Detailed Visual Diff Report" → Status: Pending
+
+---
+
+### Part 3: Live Data Stream Visualization (Right Panel)
+When a task is in-progress, show live "metrics" that update to simulate agent work:
+
+**Visual Metrics Display:**
+- Component called "LiveMetrics" that shows:
+  - "Design Tokens Extracted": Counter incrementing from 0 to 24 (emoji: 🎨)
+  - "Test Cases Generated": Counter incrementing from 0 to 156 (emoji: 📝)
+  - "Screenshots Captured": Counter incrementing from 0 to 47 (emoji: 📸)
+  - "Visual Differences Found": Counter incrementing to final number (emoji: ⚠️)
+
+- Use animated number counters (smooth transitions, not jumpy)
+- Each metric has a small circular progress indicator (0-100%) beside it
+
+**Details Display:**
+- When "Analyzing Visual Hierarchy" task is active, show:
+  - "Current Focus: Analyzing header components"
+  - "Components Scanned: 12 of 47"
+  - "Accessibility Violations: 0"
+
+---
+
+### Part 4: Visual Comparison Preview Area
+When task "Fetching Live Website & Comparing Layouts" starts showing, display a comparison view:
+
+**Split Screen Comparison:**
+- Left side: "Figma Design (Baseline)" - show a clean image/mock-up
+- Right side: "Live Website (Current)" - show another clean image/mock-up
+- Middle divider: Thin cyan line
+- Add a subtle animation: slight zoom in on any "difference" areas with red bounding boxes
+- Below: Text showing "4 differences detected in header region", "1 minor spacing issue in footer"
+
+---
+
+### Part 5: Final Results Panel (Appears at End)
+When all tasks complete, show a polished results summary:
+
+**Results Card:**
+- Title: "Visual Regression Analysis Complete ✓"
+- Subtitle: "Testing completed in 42 seconds"
+- Key Findings (as cards):
+  1. "✓ 100% Design Compliance" (green checkmark)
+  2. "⚠️ 2 Accessibility Warnings" (amber)
+  3. "✓ 156 Test Cases Generated" (green)
+  4. "Download Full Report" button (cyan)
+
+---
+
+### Part 6: Backend Logic (Node.js/Express + In-Memory Simulation)
+
+**DO NOT connect to real Figma API or real browsers.** Instead:
+- Simulate all API calls with hardcoded success responses
+- Simulate task progression with timed delays (each task has a random delay 2-8 seconds)
+- Use Server-Sent Events (SSE) or WebSockets to push updates to frontend in real-time
+
+**Express Routes:**
+- POST /api/start-demo: Receives Figma URL, website URL, test scope
+  - Respond with demo ID and start SSE stream
+  - Begin streaming task updates every 500-2000ms
+- GET /api/demo/:id/stream: SSE endpoint that streams real-time task updates
+
+**Task Update Format (JSON):**
+```json
+{
+  "taskId": "task-5",
+  "taskName": "Capturing Baseline Screenshots",
+  "agentName": "Visual Agent",
+  "status": "in-progress",
+  "progress": 73,
+  "details": "Capturing 47 screenshots across Chrome, Firefox, Safari...",
+  "timestamp": "2025-11-19T14:23:45Z"
+}
+```
+
+---
+
+### Part 7: Animations & Micro-Interactions
+- Smooth fade-in for new task cards
+- Spinning loader for in-progress nodes (subtle, professional)
+- Pulse animation for completed nodes (1.5s cycle)
+- Counter animations for metrics (easing function, 500ms per increment)
+- Hover effects on task cards: slight background brightening, subtle shadow increase
+- When switching from one section to another, use smooth opacity transitions
+
+---
+
+### Part 8: Professional Polish
+- Use Framer Motion or React Spring for animations (smooth, not jarring)
+- Add subtle background gradient (navy to slightly lighter navy)
+- Icons for each agent type (🤖, 🎨, 📊, 🔍) - use emoji or simple SVG
+- Responsive: Must look great on 1920x1080 (assume desktop display)
+- Typography: Use 14px base for body, 18px for task titles, 12px for metadata
+- Ensure contrast ratios exceed WCAG AA standards
+- No loading spinners that look broken—use professional, minimal spinners only
+
+---
+
+### Part 9: Application Flow
+1. User lands on dashboard
+2. Optionally fills in Figma URL and website URL (or uses defaults)
+3. Clicks "Begin Testing"
+4. Frontend makes POST to /api/start-demo
+5. Backend starts SSE stream with task updates
+6. Frontend receives updates every 500-2000ms and renders timeline in real-time
+7. Tasks progress from "pending" → "in-progress" → "completed"
+8. Metrics counter updates as agents "work"
+9. Visual comparison preview appears mid-way
+10. Final results panel appears when all tasks complete
+11. User can optionally click "Run Another Test" to reset
+
+---
+
+### Part 10: Technical Stack
+- Frontend: React 18+, TypeScript, Tailwind CSS (or styled-components), Framer Motion
+- Backend: Express.js (Node.js), Server-Sent Events (SSE) for real-time updates
+- No external API calls to Figma, Playwright, or any real service
+- Use mock data and hardcoded responses
+- Entire app runs within single Replit workspace
+- Deploy to Replit's hosting automatically
+
+---
+
+### CRITICAL NOTES
+- This is a DEMO. Perfect user experience is the goal. No error handling needed.
+- All tasks WILL succeed. No failure states needed.
+- Real-time feeling is critical—use SSE or WebSockets, NOT polling
+- Visual design must be polished and professional (this will impress Insurity stakeholders)
+- Smooth animations throughout—no janky transitions
+- The goal: When someone watches this demo, they see "wow, agents are intelligently analyzing and comparing designs in real-time"

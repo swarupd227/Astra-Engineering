@@ -1,0 +1,954 @@
+
+## **WIKI DOCUMENTATION GENERATION STANDARDS**
+
+After gathering requirements and generating the backlog, create comprehensive Wiki documentation suitable for Azure DevOps that serves as the single source of truth for the project.
+
+---
+
+### WIKI STRUCTURE & ORGANIZATION
+
+**Create a hierarchical Wiki with the following pages:**
+
+```
+📁 Project Home
+├── 📄 Overview & Vision
+├── 📄 Business Requirements
+├── 📄 User Personas
+├── 📄 Technical Architecture
+├── 📄 Feature Specifications
+│   ├── 📄 [Feature 1 Name]
+│   ├── 📄 [Feature 2 Name]
+│   └── 📄 [Feature N Name]
+├── 📄 API Documentation
+├── 📄 Data Models
+├── 📄 User Workflows
+├── 📄 Security & Compliance
+├── 📄 Testing Strategy
+├── 📄 Deployment Guide
+└── 📄 Glossary & References
+```
+
+---
+
+### PAGE 1: OVERVIEW & VISION
+
+**Purpose:** Executive summary and project vision
+
+**Required Sections:**
+
+```markdown
+# [Project Name] - Overview & Vision
+
+## Executive Summary
+[2-3 paragraphs summarizing the project, problem being solved, and expected impact]
+
+**Project Timeline:** [Start Date] - [Target Launch Date]
+**Project Status:** [Planning/In Development/Testing/Deployed]
+**Project Owner:** [Name/Role]
+**Development Team:** [Team names or size]
+
+## Vision Statement
+[1-2 paragraphs describing the long-term vision and strategic goals]
+
+## Problem Statement
+### Current Challenges
+- [Challenge 1 with specific pain points]
+- [Challenge 2 with quantified impact]
+- [Challenge 3 with affected users/processes]
+
+### Opportunity
+[Description of the opportunity this project addresses]
+
+## Business Objectives
+1. **[Objective 1]:** [Specific, measurable goal]
+   - Success Metric: [How we'll measure success]
+   - Target: [Quantifiable target]
+
+2. **[Objective 2]:** [Specific, measurable goal]
+   - Success Metric: [How we'll measure success]
+   - Target: [Quantifiable target]
+
+3. **[Objective 3]:** [Specific, measurable goal]
+   - Success Metric: [How we'll measure success]
+   - Target: [Quantifiable target]
+
+## Key Stakeholders
+| Role | Name | Responsibility | Contact |
+|------|------|----------------|---------|
+| Project Sponsor | [Name] | [Responsibility] | [Email] |
+| Product Owner | [Name] | [Responsibility] | [Email] |
+| Technical Lead | [Name] | [Responsibility] | [Email] |
+| Business Analyst | [Name] | [Responsibility] | [Email] |
+
+## Success Criteria
+- [ ] [Specific criterion 1 with measurement]
+- [ ] [Specific criterion 2 with measurement]
+- [ ] [Specific criterion 3 with measurement]
+
+## Project Scope
+### In Scope
+- [Feature/capability 1]
+- [Feature/capability 2]
+- [Feature/capability 3]
+
+### Out of Scope (Future Phases)
+- [Excluded feature 1 with reasoning]
+- [Excluded feature 2 with reasoning]
+
+## Project Risks & Mitigation
+| Risk | Impact | Probability | Mitigation Strategy |
+|------|--------|-------------|---------------------|
+| [Risk 1] | High/Medium/Low | High/Medium/Low | [Strategy] |
+| [Risk 2] | High/Medium/Low | High/Medium/Low | [Strategy] |
+```
+
+---
+
+### PAGE 2: BUSINESS REQUIREMENTS
+
+**Purpose:** Detailed business requirements and constraints
+
+**Required Sections:**
+
+```markdown
+# Business Requirements
+
+## Functional Requirements
+
+### FR-001: [Requirement Name]
+**Priority:** High/Medium/Low
+**Epic Link:** [Link to Epic in Azure DevOps]
+
+**Description:**
+[Detailed description of the functional requirement]
+
+**Business Rules:**
+- [Rule 1 with specific conditions]
+- [Rule 2 with specific conditions]
+- [Rule 3 with specific conditions]
+
+**Acceptance Criteria:**
+- [Criterion 1]
+- [Criterion 2]
+
+**Dependencies:**
+- [Dependency on other requirements or systems]
+
+---
+
+### FR-002: [Requirement Name]
+[Repeat structure above]
+
+---
+
+## Non-Functional Requirements
+
+### Performance Requirements
+- **Response Time:** [e.g., Page load < 2 seconds for 95% of requests]
+- **Throughput:** [e.g., Support 1000 concurrent users]
+- **Data Processing:** [e.g., Process 10,000 transactions per hour]
+
+### Scalability Requirements
+- **User Scale:** [e.g., Support 50,000 registered users initially, scale to 200,000]
+- **Data Volume:** [e.g., Handle 1TB of data in year 1, 5TB by year 3]
+- **Geographic Distribution:** [e.g., Multi-region deployment for US and EU]
+
+### Security Requirements
+- **Authentication:** [e.g., Multi-factor authentication for admin users]
+- **Authorization:** [e.g., Role-based access control with 5 user roles]
+- **Data Encryption:** [e.g., AES-256 encryption at rest, TLS 1.3 in transit]
+- **Compliance:** [e.g., HIPAA, GDPR, SOC 2 compliance required]
+- **Audit Logging:** [e.g., All data access and modifications logged with 7-year retention]
+
+### Reliability & Availability
+- **Uptime SLA:** [e.g., 99.9% uptime (43 minutes downtime/month max)]
+- **Recovery Time Objective (RTO):** [e.g., 4 hours]
+- **Recovery Point Objective (RPO):** [e.g., 1 hour - max 1 hour of data loss]
+- **Backup Strategy:** [e.g., Daily automated backups with 30-day retention]
+
+### Usability Requirements
+- **Browser Support:** [e.g., Chrome 90+, Firefox 88+, Safari 14+, Edge 90+]
+- **Mobile Support:** [e.g., Responsive design for tablets and phones, iOS 14+, Android 10+]
+- **Accessibility:** [e.g., WCAG 2.1 AA compliance]
+- **Internationalization:** [e.g., Support English, Spanish, French languages]
+
+### Integration Requirements
+| System | Integration Type | Data Flow | Frequency |
+|--------|------------------|-----------|-----------|
+| [System 1] | REST API | Bidirectional | Real-time |
+| [System 2] | Batch File Transfer | Inbound | Daily at 2 AM |
+| [System 3] | Webhook | Outbound | Event-driven |
+
+## Business Constraints
+- **Budget:** [Amount and approval status]
+- **Timeline:** [Fixed deadlines or milestones]
+- **Resources:** [Team size limitations or skill constraints]
+- **Technology:** [Required or prohibited technologies]
+- **Regulatory:** [Compliance requirements affecting design]
+
+## Assumptions
+- [Assumption 1 that requirements are based on]
+- [Assumption 2 that requirements are based on]
+- [Assumption 3 that requirements are based on]
+```
+
+---
+
+### PAGE 3: USER PERSONAS
+
+**Purpose:** Detailed user personas for design and development reference
+
+**Required Sections:**
+
+```markdown
+# User Personas
+
+## Persona 1: [Persona Name]
+
+### Demographics
+- **Name:** [Full name]
+- **Age:** [Age range]
+- **Role/Title:** [Job title]
+- **Location:** [Geographic location]
+- **Education:** [Education level]
+- **Tech Savviness:** [Low/Medium/High]
+
+### Background & Context
+[2-3 paragraphs describing their work environment, daily responsibilities, and relationship to the system]
+
+### Goals & Motivations
+**Primary Goals:**
+1. [Goal 1 with specific desired outcome]
+2. [Goal 2 with specific desired outcome]
+3. [Goal 3 with specific desired outcome]
+
+**Secondary Goals:**
+- [Supporting goal 1]
+- [Supporting goal 2]
+
+### Pain Points & Frustrations
+1. **[Pain Point 1]:** [Description and impact]
+   - Current workaround: [How they handle it today]
+   - Frequency: [How often this occurs]
+
+2. **[Pain Point 2]:** [Description and impact]
+   - Current workaround: [How they handle it today]
+   - Frequency: [How often this occurs]
+
+3. **[Pain Point 3]:** [Description and impact]
+   - Current workaround: [How they handle it today]
+   - Frequency: [How often this occurs]
+
+### Typical Day & Workflows
+**Morning (9 AM - 12 PM):**
+- [Activity 1 and how system will be used]
+- [Activity 2 and how system will be used]
+
+**Afternoon (1 PM - 5 PM):**
+- [Activity 1 and how system will be used]
+- [Activity 2 and how system will be used]
+
+### Key User Stories
+- [Link to User Story #1 in Azure DevOps]
+- [Link to User Story #2 in Azure DevOps]
+- [Link to User Story #3 in Azure DevOps]
+
+### Technology Usage
+- **Devices:** [Desktop/laptop/tablet/mobile preferences]
+- **Primary Tools:** [Software/platforms they use daily]
+- **Preferred Communication:** [Email/chat/phone/in-person]
+- **System Usage Pattern:** [How often they'll use this system]
+
+### Design Considerations
+- [Consideration 1 - e.g., "Needs large, easy-to-click buttons due to field work with gloves"]
+- [Consideration 2 - e.g., "Values speed over features - wants minimal clicks"]
+- [Consideration 3 - e.g., "Requires offline capability for remote locations"]
+
+### Quote
+> "[A representative quote that captures their attitude or main concern]"
+
+---
+
+## Persona 2: [Persona Name]
+[Repeat structure above for each persona - typically 3-5 personas total]
+```
+
+---
+
+### PAGE 4: TECHNICAL ARCHITECTURE
+
+**Purpose:** System architecture and technical design decisions
+
+**Required Sections:**
+
+```markdown
+# Technical Architecture
+
+## Architecture Overview
+
+### High-Level Architecture Diagram
+```mermaid
+graph TB
+    A[User Browser] --> B[Load Balancer]
+    B --> C[Web Application Servers]
+    C --> D[API Gateway]
+    D --> E[Microservices]
+    E --> F[(Database)]
+    E --> G[Cache Layer]
+    E --> H[Message Queue]
+    E --> I[External APIs]
+```
+[Insert actual architecture diagram or ASCII representation]
+
+### Architecture Principles
+1. **[Principle 1]:** [e.g., "Microservices for scalability and independent deployment"]
+2. **[Principle 2]:** [e.g., "API-first design for future integrations"]
+3. **[Principle 3]:** [e.g., "Cloud-native architecture for flexibility"]
+
+## Technology Stack
+
+### Frontend
+- **Framework:** [e.g., React 18.2.0]
+- **State Management:** [e.g., Redux Toolkit]
+- **UI Library:** [e.g., Material-UI v5]
+- **Build Tool:** [e.g., Vite 4.0]
+- **Testing:** [e.g., Jest + React Testing Library]
+
+**Rationale:** [Why these technologies were chosen]
+
+### Backend
+- **Language:** [e.g., Node.js 18 LTS]
+- **Framework:** [e.g., Express.js 4.18]
+- **API Style:** [e.g., RESTful APIs with OpenAPI 3.0 specification]
+- **Authentication:** [e.g., JWT with OAuth 2.0]
+- **Testing:** [e.g., Jest + Supertest]
+
+**Rationale:** [Why these technologies were chosen]
+
+### Database
+- **Primary Database:** [e.g., PostgreSQL 15]
+  - Use Case: [Transactional data, user records, claims]
+- **Cache:** [e.g., Redis 7.0]
+  - Use Case: [Session storage, frequently accessed data]
+- **Document Store:** [e.g., MongoDB 6.0] (if applicable)
+  - Use Case: [Audit logs, unstructured data]
+
+**Rationale:** [Why these technologies were chosen]
+
+### Infrastructure
+- **Cloud Provider:** [e.g., AWS]
+- **Compute:** [e.g., ECS Fargate for containerized services]
+- **Storage:** [e.g., S3 for file storage]
+- **CDN:** [e.g., CloudFront]
+- **Monitoring:** [e.g., CloudWatch + Datadog]
+- **CI/CD:** [e.g., GitHub Actions + AWS CodePipeline]
+
+### Third-Party Services
+| Service | Purpose | SLA | Cost Model |
+|---------|---------|-----|------------|
+| [Service 1] | [Purpose] | [SLA] | [Cost model] |
+| [Service 2] | [Purpose] | [SLA] | [Cost model] |
+
+## System Components
+
+### Component 1: [Component Name]
+**Purpose:** [What this component does]
+**Technology:** [Tech stack for this component]
+**Responsibilities:**
+- [Responsibility 1]
+- [Responsibility 2]
+
+**Interfaces:**
+- **Inbound:** [What calls this component]
+- **Outbound:** [What this component calls]
+
+**Data Storage:** [Database/tables used]
+
+---
+
+### Component 2: [Component Name]
+[Repeat structure]
+
+## API Design
+
+### API Standards
+- **Protocol:** REST over HTTPS
+- **Authentication:** Bearer token (JWT)
+- **Data Format:** JSON
+- **Versioning:** URI versioning (e.g., /api/v1/claims)
+- **Rate Limiting:** 1000 requests per hour per user
+
+### Key API Endpoints
+| Endpoint | Method | Purpose | Auth Required |
+|----------|--------|---------|---------------|
+| /api/v1/claims | POST | Submit new claim | Yes |
+| /api/v1/claims/{id} | GET | Retrieve claim details | Yes |
+| /api/v1/claims/{id} | PUT | Update claim | Yes |
+| /api/v1/policies/{policyNumber} | GET | Get policy details | Yes |
+
+[Link to detailed API documentation page]
+
+## Data Architecture
+
+### Data Flow Diagram
+```
+User Input → Frontend Validation → API Gateway → Service Layer → Database
+                                                ↓
+                                         Message Queue → Background Jobs
+```
+
+### Data Retention Policy
+| Data Type | Retention Period | Archive Strategy |
+|-----------|------------------|------------------|
+| Transactional Data | 7 years | Move to cold storage after 2 years |
+| Audit Logs | 10 years | Archive annually |
+| User Sessions | 30 days | Auto-delete |
+
+## Security Architecture
+
+### Authentication Flow
+1. User enters credentials
+2. System validates against user database
+3. JWT token generated with 24-hour expiration
+4. Token included in Authorization header for subsequent requests
+5. Token validated on each request
+
+### Authorization Model
+**Role-Based Access Control (RBAC):**
+- **Administrator:** Full system access
+- **Claims Processor:** Submit and approve claims
+- **Reviewer:** View and review claims only
+- **End User:** Submit own claims, view own data
+
+### Security Measures
+- **Data Encryption:** AES-256 at rest, TLS 1.3 in transit
+- **SQL Injection Prevention:** Parameterized queries, ORM usage
+- **XSS Prevention:** Input sanitization, Content Security Policy
+- **CSRF Protection:** CSRF tokens on state-changing operations
+- **DDoS Protection:** AWS Shield, rate limiting
+- **Vulnerability Scanning:** Weekly automated scans with Snyk
+
+## Scalability & Performance
+
+### Scaling Strategy
+- **Horizontal Scaling:** Auto-scaling groups with min 2, max 10 instances
+- **Vertical Scaling:** Database instance can scale from db.t3.medium to db.r5.4xlarge
+- **Caching Strategy:** Redis for session data and frequent queries (95% cache hit rate target)
+- **CDN:** Static assets served via CloudFront (200+ edge locations)
+
+### Performance Targets
+| Metric | Target | Measurement |
+|--------|--------|-------------|
+| Page Load Time | < 2 seconds | 95th percentile |
+| API Response Time | < 500ms | 99th percentile |
+| Database Query Time | < 100ms | Average |
+| Concurrent Users | 5,000 | Peak load |
+
+## Disaster Recovery
+
+### Backup Strategy
+- **Database:** Automated daily backups with 30-day retention
+- **File Storage:** Cross-region replication in S3
+- **Configuration:** Version controlled in Git
+
+### Recovery Procedures
+- **RTO:** 4 hours
+- **RPO:** 1 hour
+- **Failover:** Automated failover to standby region
+
+## Monitoring & Observability
+
+### Monitoring Tools
+- **Application Monitoring:** Datadog APM
+- **Infrastructure Monitoring:** AWS CloudWatch
+- **Log Aggregation:** ELK Stack (Elasticsearch, Logstash, Kibana)
+- **Error Tracking:** Sentry
+
+### Key Metrics
+- API response times (p50, p95, p99)
+- Error rates by endpoint
+- Database query performance
+- Cache hit/miss ratio
+- Server CPU and memory utilization
+- Active user sessions
+
+### Alerting Thresholds
+| Alert | Threshold | Severity | Action |
+|-------|-----------|----------|--------|
+| API Error Rate | > 5% | Critical | Page on-call engineer |
+| Response Time | > 2s (p95) | High | Investigate within 1 hour |
+| Database CPU | > 80% | Medium | Review and optimize queries |
+```
+
+---
+
+### PAGE 5: FEATURE SPECIFICATIONS (Create one page per major feature)
+
+```markdown
+# Feature: [Feature Name]
+
+## Overview
+[2-3 paragraphs describing the feature, its purpose, and business value]
+
+## Related Epics & User Stories
+- **Epic:** [Link to Epic in Azure DevOps]
+- **User Stories:**
+  - [Link to Story #1]
+  - [Link to Story #2]
+  - [Link to Story #3]
+
+## User Experience
+
+### Entry Points
+[Where and how users access this feature]
+
+### User Flow Diagram
+```mermaid
+graph LR
+    A[User Dashboard] --> B[Click New Claim]
+    B --> C[Fill Claim Form]
+    C --> D{Valid?}
+    D -->|Yes| E[Submit]
+    D -->|No| C
+    E --> F[Confirmation]
+```
+
+### Wireframes/Mockups
+[Links to design files or embedded images]
+
+### Detailed User Flow
+1. **Step 1:** [User action and system response]
+2. **Step 2:** [User action and system response]
+3. **Step 3:** [User action and system response]
+[Continue for complete flow]
+
+## Functional Specifications
+
+### Business Rules
+1. **Rule 1:** [Detailed business rule with examples]
+2. **Rule 2:** [Detailed business rule with examples]
+
+### Validation Rules
+| Field | Validation | Error Message |
+|-------|------------|---------------|
+| [Field 1] | [Rule] | "[Error message]" |
+| [Field 2] | [Rule] | "[Error message]" |
+
+### Edge Cases
+1. **Scenario:** [Edge case description]
+   - **Expected Behavior:** [How system should handle it]
+
+2. **Scenario:** [Edge case description]
+   - **Expected Behavior:** [How system should handle it]
+
+## Technical Implementation
+
+### API Endpoints Used
+- POST /api/v1/claims - Submit claim
+- GET /api/v1/policies/{id} - Retrieve policy
+- POST /api/v1/uploads - Upload documents
+
+### Database Tables
+- `claims` - Stores claim records
+- `claim_documents` - Stores uploaded files metadata
+- `audit_logs` - Tracks all claim activities
+
+### Dependencies
+- PolicyService API must be available
+- S3 bucket for file storage must be configured
+- Email service for notifications
+
+## Testing Approach
+
+### Test Scenarios
+1. **Happy Path:** [Description and expected outcome]
+2. **Error Handling:** [Description and expected outcome]
+3. **Edge Cases:** [Description and expected outcome]
+
+### Performance Testing
+- Load test with 500 concurrent users
+- Measure page load time under load
+- Test file upload with maximum file size
+
+## Security Considerations
+- [ ] Authorization check: Only claim owner or admin can access
+- [ ] Input validation: Sanitize all user inputs
+- [ ] File validation: Scan uploaded files for malware
+- [ ] Audit logging: Log all claim submissions
+
+## Rollout Plan
+**Phase 1 (Week 1):** Beta release to 10 internal users
+**Phase 2 (Week 2):** Limited release to 100 external users
+**Phase 3 (Week 3):** Full release to all users
+
+## Success Metrics
+- 80% of claims submitted within 5 minutes
+- <2% error rate during submission
+- 90% user satisfaction score
+
+## Known Limitations
+- [Limitation 1 and workaround]
+- [Limitation 2 and future plan]
+```
+
+---
+
+### PAGE 6: API DOCUMENTATION
+
+```markdown
+# API Documentation
+
+## API Overview
+**Base URL:** `https://api.example.com`
+**Version:** v1
+**Authentication:** Bearer Token (JWT)
+
+## Authentication
+
+### Obtain Access Token
+```http
+POST /api/v1/auth/login
+Content-Type: application/json
+
+{
+  "username": "user@example.com",
+  "password": "securepassword"
+}
+```
+
+**Response:**
+```json
+{
+  "access_token": "eyJhbGciOiJIUzI1NiIs...",
+  "token_type": "Bearer",
+  "expires_in": 86400
+}
+```
+
+## Endpoints
+
+### Submit Claim
+**Endpoint:** `POST /api/v1/claims`
+**Authentication:** Required
+**Rate Limit:** 100 requests per hour
+
+**Request Body:**
+```json
+{
+  "policyNumber": "POL-2024-5678",
+  "claimAmount": 5000,
+  "diagnosisCode": "E11",
+  "claimDate": "2024-11-05",
+  "documents": [
+    {
+      "fileName": "invoice.pdf",
+      "fileType": "invoice",
+      "fileUrl": "https://s3.example.com/..."
+    }
+  ],
+  "notes": "Routine diabetes management visit"
+}
+```
+
+**Response (201 Created):**
+```json
+{
+  "claimId": "CLM-2024-123456",
+  "status": "Under Review",
+  "submittedAt": "2024-11-05T10:30:00Z",
+  "estimatedReviewTime": "3-5 business days"
+}
+```
+
+**Error Responses:**
+- `400 Bad Request` - Invalid request body
+- `401 Unauthorized` - Missing or invalid token
+- `403 Forbidden` - Insufficient permissions
+- `429 Too Many Requests` - Rate limit exceeded
+- `500 Internal Server Error` - Server error
+
+---
+
+### Get Claim Details
+**Endpoint:** `GET /api/v1/claims/{claimId}`
+**Authentication:** Required
+
+**Path Parameters:**
+- `claimId` (string, required) - Unique claim identifier
+
+**Response (200 OK):**
+```json
+{
+  "claimId": "CLM-2024-123456",
+  "policyNumber": "POL-2024-5678",
+  "claimAmount": 5000,
+  "approvedAmount": 4500,
+  "status": "Approved",
+  "submittedAt": "2024-11-05T10:30:00Z",
+  "reviewedAt": "2024-11-07T14:20:00Z",
+  "reviewedBy": "Dr. Smith",
+  "notes": "Approved with deductible applied"
+}
+```
+
+[Continue for all endpoints...]
+
+## Error Codes
+| Code | Message | Description |
+|------|---------|-------------|
+| 1001 | Invalid policy number | Policy not found in system |
+| 1002 | Policy inactive | Policy is expired or cancelled |
+| 1003 | Claim amount exceeds limit | Amount greater than coverage |
+| 2001 | File too large | File exceeds 10MB limit |
+```
+
+---
+
+### PAGE 7: DATA MODELS
+
+```markdown
+# Data Models
+
+## Entity Relationship Diagram
+[Insert ERD diagram]
+
+## Table: claims
+
+**Purpose:** Stores all insurance claims
+
+| Column | Type | Nullable | Default | Description |
+|--------|------|----------|---------|-------------|
+| id | UUID | No | auto | Primary key |
+| claim_number | VARCHAR(20) | No | - | Unique claim identifier (CLM-YYYY-NNNNNN) |
+| policy_id | UUID | No | - | Foreign key to policies table |
+| claimant_id | UUID | No | - | Foreign key to users table |
+| claim_amount | DECIMAL(10,2) | No | - | Requested claim amount |
+| approved_amount | DECIMAL(10,2) | Yes | NULL | Approved amount after review |
+| status | ENUM | No | 'Pending' | Claim status (Pending, Under Review, Approved, Rejected) |
+| diagnosis_codes | TEXT[] | No | - | Array of ICD-10 codes |
+| claim_date | DATE | No | - | Date of service/incident |
+| submitted_at | TIMESTAMP | No | NOW() | Submission timestamp |
+| reviewed_at | TIMESTAMP | Yes | NULL | Review completion timestamp |
+| reviewed_by | UUID | Yes | NULL | Foreign key to users (reviewer) |
+| notes | TEXT | Yes | NULL | Additional claim notes |
+| created_at | TIMESTAMP | No | NOW() | Record creation timestamp |
+| updated_at | TIMESTAMP | No | NOW() | Last update timestamp |
+
+**Indexes:**
+- PRIMARY KEY (id)
+- UNIQUE INDEX (claim_number)
+- INDEX (policy_id)
+- INDEX (claimant_id)
+- INDEX (status)
+- INDEX (submitted_at)
+
+**Constraints:**
+- FOREIGN KEY (policy_id) REFERENCES policies(id) ON DELETE RESTRICT
+- FOREIGN KEY (claimant_id) REFERENCES users(id) ON DELETE RESTRICT
+- CHECK (claim_amount > 0)
+- CHECK (approved_amount <= claim_amount)
+
+---
+
+## Table: claim_documents
+[Repeat structure for each table]
+
+## Enums
+
+### ClaimStatus
+- `Pending` - Claim submitted, awaiting initial review
+- `Under Review` - Claim being reviewed by processor
+- `Additional Info Required` - More information needed from claimant
+- `Approved` - Claim approved for payment
+- `Rejected` - Claim denied
+- `Paid` - Payment processed
+
+### DocumentType
+- `Invoice`
+- `Prescription`
+- `Medical Report`
+- `Lab Results`
+- `Imaging`
+- `Other`
+```
+
+---
+
+### PAGE 8: USER WORKFLOWS
+
+```markdown
+# User Workflows
+
+## Workflow 1: Submit Insurance Claim
+
+**Actors:** Claimant, Claims Processor, Payment System
+
+**Preconditions:**
+- Claimant has active policy
+- Claimant is authenticated
+
+**Steps:**
+1. **Claimant** navigates to Claims section from dashboard
+2. **Claimant** clicks "New Claim" button
+3. **System** displays claim submission form
+4. **Claimant** enters policy number
+5. **System** validates policy and auto-populates policy holder details (2-second SLA)
+6. **Claimant** enters claim amount and diagnosis code
+7. **System** validates amount against policy coverage
+8. **Claimant** uploads supporting documents (drag-and-drop)
+9. **System** uploads files to S3 and scans for viruses
+10. **Claimant** reviews claim summary
+11. **Claimant** submits claim
+12. **System** creates claim record with status "Under Review"
+13. **System** sends confirmation email to claimant
+14. **System** assigns claim to available Claims Processor
+15. **Claims Processor** reviews claim and supporting documents
+16. **Claims Processor** approves/rejects claim
+17. **System** updates claim status
+18. **System** sends notification to claimant
+19. If approved: **System** initiates payment processing
+20. **Payment System** processes payment
+21. **System** updates claim status to "Paid"
+22. **System** sends payment confirmation to claimant
+
+**Alternative Flows:**
+- **3a.** If policy invalid: Display error, return to step 4
+- **7a.** If amount exceeds coverage: Display warning, allow to continue or adjust
+- **9a.** If file upload fails: Display error, allow retry
+- **16a.** If additional info needed: Request more info from claimant, pause workflow
+
+**Postconditions:**
+- Claim record created in database
+- Claimant notified of submission
+- Claim assigned to processor
+
+**Business Rules:**
+- Claim must be submitted within 90 days of service date
+- Policy must be active on service date
+- Minimum 1 supporting document required
+
+[Create similar detailed workflows for each major user journey]
+```
+
+---
+
+### AZURE DEVOPS WIKI FORMATTING
+
+**Format all Wiki pages using Markdown with Azure DevOps-specific syntax:**
+
+```markdown
+# Use proper heading hierarchy (H1 for page title, H2 for sections, etc.)
+
+## Table of Contents
+[[_TOC_]]
+
+## Mermaid Diagrams
+::: mermaid
+graph LR
+    A --> B
+:::
+
+## Links to Work Items
+[User Story #123](/DefaultCollection/ProjectName/_workitems/edit/123)
+
+## Tables
+| Column 1 | Column 2 |
+|----------|----------|
+| Value 1  | Value 2  |
+
+## Code Blocks
+```javascript
+const example = "code";
+```
+
+## Callouts
+> [!NOTE]
+> This is an important note
+
+> [!WARNING]
+> This is a warning
+
+> [!TIP]
+> This is a helpful tip
+
+## Task Lists
+- [ ] Incomplete task
+- [x] Completed task
+
+## Collapsible Sections
+<details>
+<summary>Click to expand</summary>
+
+Hidden content here
+
+</details>
+```
+
+---
+
+### WIKI QUALITY CHECKLIST
+
+Before finalizing Wiki documentation:
+
+**Content Quality:**
+- [ ] All pages have clear purpose and audience
+- [ ] Technical accuracy verified
+- [ ] No placeholder text (all [brackets] filled)
+- [ ] Links to Azure DevOps work items included
+- [ ] Diagrams are clear and readable
+- [ ] Code examples are tested and functional
+
+**Completeness:**
+- [ ] All required pages created (minimum 8 pages)
+- [ ] Each feature has dedicated specification page
+- [ ] API documentation includes all endpoints
+- [ ] All personas documented with sufficient detail
+- [ ] Technical architecture covers all components
+
+**Formatting:**
+- [ ] Consistent heading hierarchy throughout
+- [ ] Tables properly formatted
+- [ ] Code blocks use appropriate syntax highlighting
+- [ ] Lists are properly structured
+- [ ] Line breaks and spacing consistent
+
+**Navigation:**
+- [ ] Table of contents on each major page
+- [ ] Cross-references between related pages
+- [ ] Links to Azure DevOps work items functional
+- [ ] Parent-child page relationships correct
+
+**Maintenance:**
+- [ ] Document owner identified
+- [ ] Last updated date included
+- [ ] Review schedule established
+- [ ] Feedback mechanism provided
+
+---
+
+### OUTPUT FORMAT
+
+Generate Wiki documentation as:
+1. **Single Markdown file** with page delimiters for easy splitting
+2. **Separate files** - one per Wiki page with proper naming (01-Overview.md, 02-Requirements.md, etc.)
+3. **Azure DevOps-ready** with proper formatting and internal links
+
+**File naming convention:**
+```
+01-Overview-and-Vision.md
+02-Business-Requirements.md
+03-User-Personas.md
+04-Technical-Architecture.md
+05-Feature-[FeatureName].md
+06-API-Documentation.md
+07-Data-Models.md
+08-User-Workflows.md
+09-Security-and-Compliance.md
+10-Testing-Strategy.md
+11-Deployment-Guide.md
+12-Glossary-and-References.md
+```
+
+---
+
+**This comprehensive Wiki documentation ensures all stakeholders—technical and non-technical—have a single source of truth for the project, facilitating better collaboration and reducing miscommunication.**

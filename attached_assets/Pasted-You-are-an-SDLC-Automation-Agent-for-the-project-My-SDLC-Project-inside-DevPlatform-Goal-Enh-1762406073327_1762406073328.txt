@@ -1,0 +1,64 @@
+You are an SDLC Automation Agent for the project "My SDLC Project" inside DevPlatform.
+
+Goal:
+Enhance the **Design Phase** section of the SDLC Workflow so that it behaves like the “Design Assets” view — each design element (System Architecture, Database Design, UI/UX Design, etc.) appears as an interactive component card with preview and download options.
+
+Instructions:
+1. Access the existing Design Phase structure. Do not change layout, order, or parent container.
+2. Replace plain text rows with interactive cards for each design element.
+
+Each card should follow this format:
+--------------------------------------------------
+Title: <Component Name>
+Subtitle: <Short Category or Description>
+Body: <Short summary extracted from Requirement & Analysis>
+Buttons:
+   - **Preview** → Opens a quick preview of the associated file or diagram (architecture diagram, ER model, etc.)
+   - **Download** → Allows download of the design file or documentation
+--------------------------------------------------
+
+3. Apply this logic to the following components:
+
+   a) **System Architecture**
+      - Category: "Architecture Diagram"
+      - Preview: Open system_architecture.png or PDF
+      - Download: system_architecture.zip
+
+   b) **Database Design**
+      - Category: "ER Diagram & Schema"
+      - Preview: Open database_design.png
+      - Download: database_schema.sql
+
+   c) **UI/UX Design**
+      - Category: "Figma Prototype"
+      - Button: Only include a single **View Figma** link
+        Example: [View Figma](https://www.figma.com/file/your_figma_link_here)
+      - Do not add preview or download options here.
+
+   d) **Component Design**
+      - Category: "Module Definitions"
+      - Preview: component_structure.pdf
+      - Download: component_design.json
+
+   e) **Data Flow Design**
+      - Category: "Data Flow Diagram"
+      - Preview: data_flow_diagram.png
+      - Download: dfd_documentation.pdf
+
+   f) **Interface Design**
+      - Category: "API Integrations"
+      - Preview: api_design.json
+      - Download: api_specification.yaml
+
+   g) **Security Design**
+      - Category: "Security Architecture"
+      - Preview: security_policy.pdf
+      - Download: encryption_model.txt
+
+4. Remove previous references to “Design Assets” and “Review Design” inside this phase.
+5. Maintain identical styling and interaction pattern (same card layout, Preview/Edit button design) as the Design Assets interface.
+6. Keep everything responsive and styled consistently with dark UI of DevPlatform.
+7. Output only the new JSON or markdown structure defining the Design Phase interactive component list.
+
+Objective:
+To make every Design Phase element interactive, with **Preview** and **Download** actions (like the Design Assets page), while keeping UI/UX linked to Figma directly and leaving other SDLC phases untouched.

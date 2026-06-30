@@ -1,0 +1,553 @@
+Perfect! Now I have all the research context. Let me create a comprehensive prompt for integrating these capabilities into NAT 2.0 for GE Healthcare.
+
+---
+
+# **NAT 2.0 + nRadiVerse Integration - Complete Development Prompt for GE Healthcare**
+
+## **Project Overview**
+
+**Platform:** NAT 2.0 (Nous Autonomous Tester 2.0) - Agentic Testing Platform  
+**New Module:** nRadiVerse Quality Engine  
+**Customer:** GE Healthcare  
+**Target Domain:** Healthcare Web Applications & Medical Imaging Systems  
+**Committed Deliverables:**
+1. Visual Regression Testing for Medical Images
+2. Pixel-to-Pixel Image Comparison
+3. Automated Accessibility Compliance Validation (WCAG 2.1 AA)
+4. Cross-Device Responsive Design Testing
+
+---
+
+## **MODULE 1: VISUAL REGRESSION TESTING FOR MEDICAL IMAGES**
+
+### **Purpose**
+Enable automated detection of unintended visual changes in GE Healthcare's medical imaging interfaces, DICOM viewers, and radiology workstations between software releases.
+
+### **Core Capabilities Required**
+
+**1.1 Baseline Image Capture System**
+- Capture high-fidelity screenshots of medical imaging components at pixel-perfect resolution
+- Support for multiple medical imaging formats: DICOM viewers, 3D reconstruction interfaces, CT/MRI/X-ray display components
+- Baseline image storage with version control and metadata tagging (software version, test environment, timestamp, resolution)
+- Automatic baseline image organization by: Application module, Screen/component name, Test environment (Staging, QA, Production mirror), Browser/device configuration
+
+**1.2 Visual Comparison Engine**
+- Implement pixel-by-pixel image comparison algorithm using advanced image processing libraries (pixelmatch, odiff, or JIMP)
+- Generate visual difference maps with color-coded highlighting:
+  - Red pixels: Structural/layout changes
+  - Yellow pixels: Color/contrast variations
+  - Green pixels: Minor rendering differences
+- Calculate difference percentage with configurable sensitivity thresholds (0.0 to 1.0 scale)
+- Support for multiple comparison modes:
+  - Side-by-side view
+  - Overlay mode with opacity control
+  - Blinking/toggle mode for rapid visual assessment
+  - Difference-only view (shows only changed regions)
+
+**1.3 Medical Imaging-Specific Validation**
+- Region of Interest (ROI) comparison: Focus on critical diagnostic areas while ignoring dynamic elements (timestamps, user names, session IDs)
+- Histogram comparison for intensity distribution analysis
+- Structural Similarity Index (SSIM) calculation for medical image quality assessment
+- Support for grayscale medical images with 12-bit and 16-bit depth
+- Validation of DICOM metadata rendering (patient info, study details, measurement overlays)
+
+**1.4 Automated Test Execution Workflow**
+- Scheduled regression testing after each deployment
+- Parallel execution across multiple viewports and browsers
+- Auto-retry mechanism for network-related failures
+- Integration with NAT 2.0's Test Orchestrator Agent for environment provisioning
+
+**1.5 Reporting and Alerting**
+- Visual regression dashboard showing:
+  - Total tests executed vs. passed vs. failed
+  - Difference percentage trends over time
+  - Critical vs. non-critical visual changes
+- Detailed HTML reports with embedded before/after/diff images
+- Slack/Teams/Email alerts for critical visual regressions
+- Integration with Azure DevOps for automatic work item creation on failures
+
+**Technical Implementation Requirements:**
+- Use Playwright or Puppeteer for screenshot capture with CDP (Chrome DevTools Protocol)
+- Implement comparison library: pixelmatch (fastest), odiff (most accurate), or ResembleJS (feature-rich)
+- Store baseline images in AWS S3/Azure Blob Storage with versioning enabled
+- Database schema for test results: Test ID, Baseline version, Current version, Difference %, Status, Screenshot URLs
+- API endpoints for: Capture baseline, Run comparison, Update baseline, Get test history
+
+---
+
+## **MODULE 2: PIXEL-TO-PIXEL IMAGE COMPARISON**
+
+### **Purpose**
+Provide granular, deterministic comparison of medical images with pixel-level precision for quality assurance of GE Healthcare's imaging software.
+
+### **Core Capabilities Required**
+
+**2.1 Advanced Image Processing Engine**
+- Multi-algorithm comparison support:
+  - Exact pixel matching (RGB/RGBA value comparison)
+  - Perceptual difference detection (structural changes visible to human eye)
+  - Histogram-based analysis for intensity distribution
+  - Feature extraction using Computer Vision techniques (OpenCV integration)
+- Configurable anti-aliasing tolerance to handle browser rendering variations
+- Sub-pixel accuracy for high-DPI displays and medical-grade monitors
+
+**2.2 Medical Imaging Format Support**
+- Native DICOM image handling without conversion loss
+- Support for PNG, JPEG, TIFF, NIfTI formats
+- Lossless image preprocessing: Normalization, Histogram equalization, Noise reduction
+- Preservation of bit depth (8-bit, 12-bit, 16-bit) during comparison
+- Metadata validation: Ensure DICOM tags are correctly rendered
+
+**2.3 Comparison Metrics and Scoring**
+- Pixel-level difference percentage calculation
+- Structural Similarity Index (SSIM) - industry standard for medical imaging (score: -1 to 1, target: >0.95)
+- Mean Squared Error (MSE) - quantifies pixel intensity differences
+- Peak Signal-to-Noise Ratio (PSNR) - image quality metric (higher is better, medical standard: >30 dB)
+- Perceptual Hash (pHash) distance for detecting significant structural changes
+- Custom scoring model weighted for medical imaging priorities:
+  - Critical regions (diagnostic areas): 70% weight
+  - Metadata/overlays: 20% weight
+  - UI chrome/borders: 10% weight
+
+**2.4 Difference Visualization Tools**
+- Heat map generation showing intensity of pixel differences
+- Anatomical region highlighting with confidence scores
+- Interactive zoom and pan for detailed inspection
+- Exportable difference reports in PDF format for clinical review
+- Video playback for temporal image sequence comparisons
+
+**2.5 Batch Processing and Scalability**
+- Process up to 1000 image pairs in parallel
+- GPU acceleration for compute-intensive operations (using CUDA or Metal)
+- Distributed processing using worker queues (Bull, RabbitMQ, or AWS SQS)
+- Progress tracking dashboard for long-running batch jobs
+- Resume capability for interrupted comparisons
+
+**2.6 Quality Assurance Thresholds**
+- Configurable pass/fail thresholds per test type:
+  - Exact match: 0% tolerance (for UI elements)
+  - Minor variations: <0.1% tolerance (for anti-aliasing differences)
+  - Acceptable changes: <1% tolerance (for non-critical regions)
+  - Significant changes: >5% difference triggers alert
+- Automatic categorization: Critical, Major, Minor, Cosmetic
+- Approval workflow for intentional design changes
+
+**Technical Implementation Requirements:**
+- Image processing library: Sharp (Node.js), Pillow (Python), or OpenCV
+- Comparison algorithms: pixelmatch, SSIM.js, or custom OpenCV-based solution
+- DICOM handling: dcmjs, cornerstone.js for web-based DICOM processing
+- Storage: High-performance object storage (S3, Azure Blob) with CDN for fast retrieval
+- Database: PostgreSQL with PostGIS extension for spatial/image metadata queries
+- API design: RESTful endpoints for upload, compare, retrieve results, update thresholds
+
+---
+
+## **MODULE 3: AUTOMATED ACCESSIBILITY COMPLIANCE VALIDATION**
+
+### **Purpose**
+Ensure GE Healthcare's web applications meet WCAG 2.1 Level AA standards for accessibility, complying with ADA, Section 508, and healthcare-specific regulations (Meaningful Access Rule under ACA Section 1557).
+
+### **Core Capabilities Required**
+
+**3.1 Automated Accessibility Scanning Engine**
+- Integration with industry-leading accessibility testing libraries:
+  - **axe-core** (Deque Systems) - Zero false positive promise, 80% issue coverage
+  - **pa11y** - Open-source, WCAG 2.1 AA/AAA validation
+  - **Lighthouse Accessibility** - Google's automated auditing
+- Multi-page scanning capability (crawl entire application)
+- Component-level testing (test individual React/Angular components in isolation)
+- Dynamic content testing (SPAs, lazy-loaded content, modals, tooltips)
+
+**3.2 WCAG 2.1 Level AA Compliance Validation**
+Automated checks for all 50 WCAG 2.1 Level A & AA criteria across 4 principles:
+
+**PERCEIVABLE:**
+- 1.1.1: Non-text content (alt text validation for images, charts, icons)
+- 1.2.1-1.2.5: Time-based media (captions, audio descriptions for video content)
+- 1.3.1-1.3.3: Adaptable content (semantic HTML, proper heading hierarchy, sensory characteristics)
+- 1.4.1-1.4.5: Distinguishable (color contrast ratios, text resizing, images of text)
+- 1.4.10-1.4.13: Reflow, non-text contrast, text spacing, content on hover/focus
+
+**OPERABLE:**
+- 2.1.1-2.1.2: Keyboard accessible (all functions available via keyboard, no keyboard traps)
+- 2.1.4: Character key shortcuts
+- 2.2.1-2.2.2: Enough time (adjustable timing, pause/stop/hide for moving content)
+- 2.3.1: Seizure prevention (no flashing content >3 times per second)
+- 2.4.1-2.4.7: Navigable (bypass blocks, page titles, focus order, link purpose, multiple ways, focus visible)
+- 2.5.1-2.5.4: Input modalities (pointer gestures, pointer cancellation, label in name, motion actuation)
+
+**UNDERSTANDABLE:**
+- 3.1.1-3.1.2: Readable (language of page, language of parts)
+- 3.2.1-3.2.4: Predictable (on focus, on input, consistent navigation, consistent identification)
+- 3.3.1-3.3.4: Input assistance (error identification, labels/instructions, error suggestion, error prevention)
+
+**ROBUST:**
+- 4.1.1-4.1.3: Compatible (parsing, name/role/value, status messages)
+
+**3.3 Healthcare-Specific Accessibility Requirements**
+- **HIPAA-compliant** accessibility: Screen reader compatibility without exposing PHI in page metadata
+- **Medical terminology clarity**: Plain language alternatives for complex medical terms
+- **Form accessibility**: Patient portals, appointment scheduling, test result access
+- **Emergency content**: WCAG AAA for critical health information (medication instructions, emergency procedures)
+- **Assistive technology compatibility**: JAWS, NVDA, VoiceOver, TalkBack, Dragon NaturallySpeaking
+
+**3.4 Detailed Issue Reporting**
+- Issue categorization by severity:
+  - **Critical** (Level A violations): Blocks access for users with disabilities
+  - **Serious** (Level AA violations): Significant barriers to access
+  - **Moderate** (Best practice violations): Usability concerns
+  - **Minor** (Enhancements): Opportunities for improvement
+- For each issue, provide:
+  - WCAG criterion violated (e.g., 1.4.3 Contrast Minimum)
+  - Affected HTML element (selector path, line number)
+  - Current vs. expected behavior
+  - Remediation guidance with code examples
+  - Impact assessment (who is affected, how severely)
+
+**3.5 Keyboard Navigation Testing**
+- Automated keyboard flow testing: Tab order, Skip links, Focus indicators, Modal traps
+- Shortcut key conflict detection
+- Focus management in SPAs (focus restoration after route changes)
+- Validation of ARIA live regions for dynamic content announcements
+
+**3.6 Color Contrast Analysis**
+- Automated contrast ratio calculation for all text elements:
+  - Normal text: Minimum 4.5:1 (WCAG Level AA)
+  - Large text (18pt+ or 14pt bold): Minimum 3:1
+  - Non-text elements (icons, graphs): Minimum 3:1
+- Simulate color blindness (Protanopia, Deuteranopia, Tritanopia) to identify problematic color combinations
+- Suggest accessible color alternatives from GE Healthcare's brand palette
+
+**3.7 Screen Reader Simulation**
+- Automated screen reader output validation
+- Announcement sequence verification for complex interactions
+- Alternative text quality assessment (not just presence, but meaningfulness)
+- ARIA attribute validation (proper role, state, property usage)
+
+**3.8 Compliance Dashboard and Reporting**
+- Real-time accessibility score (0-100 scale based on WCAG conformance)
+- Issue trend analysis: New issues introduced, Issues resolved, Regression rate
+- Compliance certification reports for legal/regulatory review
+- Export formats: PDF (executive summary), HTML (detailed technical report), JSON (API integration)
+
+**3.9 Continuous Monitoring and CI/CD Integration**
+- Pre-commit hooks for accessibility checks on changed components
+- Pull request comments with accessibility impact analysis
+- Staging environment scanning before production deployment
+- Production monitoring for accessibility regressions after release
+
+**Technical Implementation Requirements:**
+- Primary library: axe-core (via @axe-core/playwright or @axe-core/puppeteer)
+- Secondary validation: pa11y-ci for CI/CD pipeline integration
+- Color contrast library: color-contrast-checker or WCAG Color Contrast Checker
+- Screen reader testing: Playwright with NVDA/JAWS automation (Windows) or VoiceOver (macOS)
+- Reporting: Custom HTML/PDF generation with Chart.js for visualizations
+- Database: Store test results with full HTML snapshot for historical comparison
+- API design: RESTful endpoints for: Run scan, Get results, Get issue details, Mark as false positive, Generate report
+
+---
+
+## **MODULE 4: CROSS-DEVICE RESPONSIVE DESIGN TESTING**
+
+### **Purpose**
+Validate that GE Healthcare's web applications render correctly and provide optimal user experience across all device types, screen sizes, and orientations used by healthcare professionals.
+
+### **Core Capabilities Required**
+
+**4.1 Comprehensive Device Emulation**
+- **Mobile Devices** (iOS & Android):
+  - iPhone: SE, 12, 13, 14 Pro, 15 Pro Max
+  - iPad: Mini, Air, Pro (11", 12.9")
+  - Samsung Galaxy: S20, S21, S23, Fold 5
+  - Google Pixel: 5, 6, 7 Pro
+- **Tablets:**
+  - Surface Pro 7/8/9
+  - Lenovo Tab P11
+  - Amazon Fire HD
+- **Desktop/Laptop:**
+  - Standard HD (1366x768)
+  - Full HD (1920x1080)
+  - 2K (2560x1440)
+  - 4K/UHD (3840x2160)
+  - Ultrawide (3440x1440)
+- **Medical-Grade Displays:**
+  - Barco Coronis (3MP, 5MP diagnostic monitors)
+  - EIZO RadiForce (high-resolution radiology displays)
+  - Custom viewport: 1536x2048, 2048x2560 (common in medical imaging)
+
+**4.2 Viewport Testing Strategy**
+- **Breakpoint-based testing** aligned with GE Healthcare's design system:
+  - Mobile portrait: 320px - 480px
+  - Mobile landscape: 481px - 767px
+  - Tablet portrait: 768px - 1024px
+  - Tablet landscape: 1025px - 1280px
+  - Desktop: 1281px - 1920px
+  - Large desktop: 1921px+
+- **Critical viewport testing** for healthcare workflows:
+  - Physician mobile (iPhone 13 Pro): 390x844
+  - Nurse tablet (iPad Air): 820x1180
+  - Workstation (Dell UltraSharp): 2560x1440
+  - Radiology PACS (dual monitor): 3840x1080
+
+**4.3 Responsive Layout Validation**
+- **Automated visual checks:**
+  - Element positioning (alignment, spacing, margins)
+  - Content visibility (no hidden critical information)
+  - Text truncation and overflow detection
+  - Image scaling and aspect ratio preservation
+  - Navigation menu transformations (desktop menu → mobile hamburger)
+  - Form field responsiveness (input widths, button sizes)
+  - Table responsiveness (horizontal scrolling, stacked columns)
+- **Layout shift detection:**
+  - Cumulative Layout Shift (CLS) measurement per Google's Core Web Vitals (target: <0.1)
+  - Identify elements causing layout instability
+  - Font loading impact analysis (FOUT, FOIT prevention)
+
+**4.4 Touch and Gesture Testing**
+- **Touch target validation:**
+  - Minimum size: 44x44 pixels (iOS), 48x48 pixels (Android Material Design)
+  - Spacing between targets: Minimum 8px
+  - Interactive element identification: All clickable elements must be touch-accessible
+- **Gesture support:**
+  - Swipe (left/right/up/down)
+  - Pinch-to-zoom (especially for medical images)
+  - Long press
+  - Multi-touch gestures
+- **Orientation change testing:**
+  - Portrait → Landscape → Portrait transitions
+  - State preservation during orientation change
+  - Layout reflow validation
+
+**4.5 Browser and Device Rendering Consistency**
+- **Cross-browser testing** (real browsers, not just emulation):
+  - **Desktop:** Chrome, Firefox, Safari, Edge
+  - **Mobile:** Chrome Mobile, Safari iOS, Samsung Internet
+- **Rendering engine coverage:**
+  - Chromium/Blink
+  - WebKit (Safari)
+  - Gecko (Firefox)
+- **Device-specific quirks detection:**
+  - iOS Safe Area insets (notch handling)
+  - Android navigation bar overlap
+  - Foldable device screen transitions
+
+**4.6 Performance Testing Across Devices**
+- **Mobile performance metrics:**
+  - First Contentful Paint (FCP): <1.8s on 4G
+  - Largest Contentful Paint (LCP): <2.5s
+  - Time to Interactive (TTI): <3.8s
+  - Total Blocking Time (TBT): <200ms
+- **Network throttling simulation:**
+  - 4G LTE (10 Mbps down, 1.5 Mbps up)
+  - 3G (1.5 Mbps down, 750 Kbps up)
+  - Slow 3G (400 Kbps down, 400 Kbps up)
+  - Offline mode (PWA testing)
+- **Device capability testing:**
+  - Low-end devices (Snapdragon 400 series, 2GB RAM)
+  - Mid-range devices (Snapdragon 700 series, 4GB RAM)
+  - High-end devices (Snapdragon 8 series, 8GB+ RAM)
+
+**4.7 Responsive Design Quality Scoring**
+- **Automated scoring system (0-100):**
+  - Layout consistency: 30 points
+  - Content accessibility: 25 points
+  - Touch target compliance: 20 points
+  - Performance: 15 points
+  - Cross-browser compatibility: 10 points
+- **Breakdown by device category:**
+  - Mobile score
+  - Tablet score
+  - Desktop score
+  - Overall responsive score
+
+**4.8 Visual Regression for Responsive Layouts**
+- Capture screenshots at all tested viewports
+- Compare current vs. baseline for each viewport
+- Highlight viewport-specific regressions
+- Support for responsive image comparison (different image sizes for different viewports)
+
+**4.9 Real Device Testing Integration**
+- **Cloud device lab integration:**
+  - BrowserStack Real Device Cloud
+  - Sauce Labs Real Device Testing
+  - AWS Device Farm
+- **Hybrid approach:** Emulation for rapid feedback + Real devices for critical user journeys
+- **Remote debugging:** Inspect and debug issues on real mobile devices from desktop
+
+**4.10 Responsive Testing Dashboard**
+- **Matrix view:** Device × Browser × Viewport showing pass/fail status
+- **Comparison view:** Side-by-side screenshots across all tested configurations
+- **Issue tracking:** Link detected issues to specific device/browser/viewport combinations
+- **Historical trends:** Track responsive design quality over releases
+
+**Technical Implementation Requirements:**
+- **Primary automation:** Playwright with built-in device emulation
+  - Device registry: `playwright.devices` for 100+ pre-configured devices
+  - Custom viewport support: `page.setViewportSize({ width, height })`
+  - Touch emulation: `{ hasTouch: true }` in device configuration
+  - User agent spoofing: Proper mobile UA strings
+- **Screenshot library:** Playwright's native screenshot API with full-page capture
+- **Visual comparison:** Integrate with Module 1's visual regression engine
+- **Performance measurement:** Playwright's CDP integration for Lighthouse metrics
+- **Network throttling:** Playwright's `page.route()` for request interception and network simulation
+- **Real device integration:** BrowserStack/Sauce Labs APIs for remote test execution
+- **Parallel execution:** Run tests across multiple devices/viewports simultaneously (configurable concurrency)
+- **Database schema:** Store test results per device/viewport/browser combination with screenshot URLs
+- **Reporting:** Interactive HTML report with device matrix, screenshots, and performance metrics
+- **API design:** RESTful endpoints for: Configure devices, Run responsive tests, Get results, Compare across releases
+
+---
+
+## **INTEGRATION WITH NAT 2.0 ARCHITECTURE**
+
+### **Agent Integration Points**
+
+**Test Impact Analyzer Agent:**
+- Detect code changes affecting visual components
+- Trigger visual regression tests for modified UI components
+- Prioritize accessibility scans for changed form elements
+
+**Test Case Generator Agent (Sprint Agent):**
+- Auto-generate responsive design test cases from Figma/design specs
+- Create accessibility test scenarios based on WCAG requirements in user stories
+- Generate image comparison tests for new medical imaging features
+
+**Test Orchestrator Agent:**
+- Provision browsers and viewports for parallel responsive testing
+- Manage execution order: Accessibility → Visual → Responsive
+- Allocate resources for GPU-accelerated image processing
+
+**Defect Investigator Agent:**
+- Analyze visual regression failures to determine root cause (CSS change, JS error, rendering bug)
+- Correlate accessibility violations with recent code commits
+- Generate RCA reports for failed responsive tests
+
+**Self-Healing Agent:**
+- Update baseline images when UI changes are intentional
+- Auto-fix accessibility issues where possible (add missing alt text using AI vision models)
+- Adapt viewport configurations when new device breakpoints are introduced
+
+**Continuous Learning Agent:**
+- Learn which visual changes are acceptable (e.g., timestamp differences)
+- Predict accessibility violations based on historical patterns
+- Optimize responsive test coverage by identifying most problematic devices
+
+---
+
+## **TECHNOLOGY STACK RECOMMENDATIONS**
+
+### **Core Frameworks:**
+- **Browser Automation:** Playwright (v1.40+) with TypeScript
+- **Test Runner:** Playwright Test or Jest
+- **Programming Language:** Node.js (v18+ LTS) or Python (v3.11+)
+
+### **Image Processing:**
+- **Visual Comparison:** pixelmatch, odiff, or ResembleJS
+- **Advanced CV:** OpenCV.js or Sharp for medical imaging
+- **DICOM Handling:** dcmjs, cornerstone.js
+
+### **Accessibility:**
+- **Primary:** axe-core (v4.8+)
+- **Secondary:** pa11y, Lighthouse
+- **Screen Readers:** NVDA automation (Windows), VoiceOver (macOS)
+
+### **Cloud Infrastructure:**
+- **Storage:** AWS S3 or Azure Blob Storage (baseline images, screenshots)
+- **Compute:** AWS Lambda or Azure Functions (image processing jobs)
+- **Database:** PostgreSQL with TimescaleDB (time-series test results)
+- **Queue:** AWS SQS or RabbitMQ (batch job processing)
+- **CDN:** CloudFront or Azure CDN (fast image retrieval)
+
+### **CI/CD Integration:**
+- **Azure DevOps Pipelines** (GE Healthcare's primary tool)
+- **GitHub Actions** (if using GitHub)
+- **Jenkins** (legacy integration support)
+
+### **Reporting:**
+- **Dashboard:** React + Chart.js/D3.js for visualizations
+- **PDF Generation:** Puppeteer or jsPDF
+- **Email/Slack:** SendGrid API + Slack Webhooks
+
+---
+
+## **IMPLEMENTATION PHASES**
+
+### **Phase 1: Foundation (Weeks 1-2)**
+- Set up Playwright test infrastructure
+- Implement basic visual regression for 5 key GE Healthcare pages
+- Integrate axe-core for accessibility scanning
+- Create initial responsive test suite for mobile/tablet/desktop
+
+### **Phase 2: Advanced Features (Weeks 3-4)**
+- Add pixel-to-pixel comparison engine with SSIM/PSNR metrics
+- Implement medical imaging-specific validations (ROI comparison)
+- Expand accessibility coverage to all WCAG 2.1 AA criteria
+- Add real device testing integration (BrowserStack)
+
+### **Phase 3: Reporting and Dashboards (Weeks 5-6)**
+- Build comprehensive test result dashboards
+- Create executive-level accessibility compliance reports
+- Implement historical trend analysis
+- Add Slack/Email alerting for critical failures
+
+### **Phase 4: Integration and Optimization (Weeks 7-8)**
+- Integrate with all 6 NAT 2.0 agents
+- Optimize parallel execution for 100+ test scenarios
+- Add self-healing capabilities for visual regressions
+- Implement continuous learning for test prioritization
+
+---
+
+## **SUCCESS METRICS**
+
+### **Coverage Metrics:**
+- Visual regression coverage: 95% of critical UI components
+- Accessibility compliance: 100% WCAG 2.1 Level AA conformance
+- Responsive testing: 15+ device/viewport combinations
+- Image comparison: <0.1% false positive rate
+
+### **Performance Metrics:**
+- Visual regression suite execution time: <10 minutes for 100 pages
+- Accessibility scan: <5 minutes for entire application
+- Responsive testing: <15 minutes for all device combinations
+- Parallel execution efficiency: 80%+ resource utilization
+
+### **Quality Metrics:**
+- Visual defect detection rate: >98%
+- Accessibility issue detection: 80%+ (automated) + 20% (manual review)
+- Responsive design issues caught before production: >95%
+- False positive rate: <2%
+
+### **Business Impact:**
+- Reduce visual regression bugs in production: 70%
+- Achieve ADA/Section 508 compliance: 100%
+- Accelerate release cycles: 30% faster QA feedback
+- Decrease manual testing effort: 60%
+
+---
+
+## **DELIVERABLES**
+
+1. **nRadiVerse Quality Engine Module** integrated into NAT 2.0
+2. **Visual Regression Testing Framework** with baseline management
+3. **Pixel-to-Pixel Comparison Engine** for medical images
+4. **Accessibility Compliance Automation** with WCAG 2.1 AA coverage
+5. **Responsive Design Testing Suite** for 15+ devices
+6. **Comprehensive Reporting Dashboards** with executive summaries
+7. **CI/CD Pipeline Integration** with Azure DevOps
+8. **Documentation:** Architecture guide, API reference, user manual, best practices
+9. **Training Materials:** Video tutorials, hands-on workshops, troubleshooting guide
+
+---
+
+## **COMPLIANCE AND SECURITY**
+
+- **HIPAA Compliance:** No PHI in screenshots, encrypted storage, access controls
+- **FDA Validation:** Test evidence documentation for 21 CFR Part 11 compliance
+- **Data Residency:** Support for GE Healthcare's data governance policies
+- **Audit Trails:** Complete logging of all test executions and results
+- **Role-Based Access Control:** Restrict sensitive test results to authorized personnel
+
+---
+
+This comprehensive prompt provides NAT 2.0 with all the capabilities needed to deliver world-class visual regression, image comparison, accessibility, and responsive testing for GE Healthcare's mission-critical applications.

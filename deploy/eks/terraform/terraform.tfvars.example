@@ -1,0 +1,38 @@
+# Copy to terraform.tfvars (gitignored) and edit per laptop / AWS account / environment.
+# No account IDs are hardcoded in Terraform — only the credentials you configure locally.
+
+aws_region   = "us-east-1"
+# aws_profile  = "my-sso-profile"   # optional: named profile on this machine
+# use_global_sts_endpoint = true      # default true; set false only if regional STS DNS works and you explicitly want regional STS
+cluster_name = "astra-eks"
+ecr_repository_name = "devx/backend"
+cluster_version = "1.35"
+node_ami_type   = "AL2023_x86_64_STANDARD"
+
+# New VPC + subnets + NAT (default when vpc_id and private_subnet_ids are empty)
+create_vpc   = true
+vpc_cidr     = "10.0.0.0/16"
+vpc_az_count = 2
+
+# Keep these false in orgs with SCP denies on default VPC mutations.
+manage_default_network_acl    = false
+manage_default_route_table    = false
+manage_default_security_group = false
+
+create_eks_cluster = false
+
+# --- Another account or environment (examples) ---
+# aws_region   = "us-east-1"
+# cluster_name = "devx-eks-qa"
+# ecr_repository_name = "devx/backend"
+
+# Use existing network instead (set create_vpc = false):
+# create_vpc         = false
+# vpc_id             = "vpc-xxxxxxxx"
+# private_subnet_ids = ["subnet-aaa", "subnet-bbb"]
+
+# macOS / Linux / CloudShell:
+# precheck_use_bash = true
+
+# Only if AWS CLI is unavailable (do NOT set *_already_exists unless resources exist):
+# run_aws_precheck = false

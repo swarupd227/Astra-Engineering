@@ -1,0 +1,206 @@
+[Azure DevOps] ✅ Completed pushWorkItems
+[Azure DevOps] Created: 34 items, Skipped: 55 items
+[Azure DevOps] Work Item IDs created: [
+  1613, 1614, 1615, 1616, 1617,
+  1618, 1619, 1620, 1621, 1622,
+  1623, 1624, 1625, 1626, 1627,
+  1628, 1629, 1630, 1631, 1632,
+  1633, 1634, 1635, 1636, 1637,
+  1638, 1639, 1640, 1641, 1642,
+  1643, 1644, 1645, 1646
+]
+[Azure DevOps] ⚠️  Skipped items: [
+  'story: "Search by insured name enables locating accounts by implementing name-based query input" (reason: missing_persona)',
+  'story: "Search by account number enables precise account retrieval by implementing numeric input validation" (reason: missing_persona)',
+  'story: "Search by policy number enables account identification by implementing exact match search" (reason: missing_persona)',
+  'story: "Search by SSN/Tax ID enables secure account lookup by implementing sensitive data handling" (reason: missing_persona)',
+  'story: "Real-time validation feedback enables immediate error detection by implementing frontend validation rules" (reason: missing_persona)',
+  'story: "Backend validation enables data integrity by implementing server-side checks and error responses" (reason: missing_persona)',
+  'story: "User notifications enable clear error communication by implementing contextual messages and alerts" (reason: missing_persona)',
+  'story: "Draft save enables data preservation by implementing partial data persistence during entry" (reason: missing_persona)',
+  'story: "Validation error logging enables audit and troubleshooting by implementing centralized error capture" (reason: missing_persona)',
+  'story: "Search results pagination enables manageable data display by implementing page controls and limits" (reason: missing_persona)',
+  'story: "Search results sorting enables customizable data order by implementing column-based sorting" (reason: missing_persona)',
+  'story: "Input sanitization enables security by implementing prevention of injection attacks" (reason: missing_persona)',
+  'story: "Validation rules management enables consistent data quality by implementing centralized rule definitions" (reason: missing_persona)',
+  'story: "Error recovery enables user continuation by implementing retry and rollback mechanisms" (reason: missing_persona)',
+  'story: "Search input validation enables error prevention by implementing client-side and server-side checks" (reason: missing_persona)',
+  'story: "AI Risk Scoring enables real-time risk assessment by implementing automated model inference during clearance" (reason: missing_persona)',
+  'story: "Manual Override enables correction of AI risk flags by implementing user override interface with justification capture" (reason: missing_persona)',
+  'story: "Risk Threshold Configuration enables adaptive risk management by implementing admin settings for scoring parameters" (reason: missing_persona)',
+  'story: "Risk Reporting enables monitoring of clearance risk by implementing dashboards and exportable reports" (reason: missing_persona)',
+  'story: "Insured Data Capture enables onboarding without account by implementing minimal data entry forms" (reason: missing_persona)',
+  'story: "Accountless Onboarding Workflow enables policy initiation by implementing session management and data persistence" (reason: missing_persona)',
+  'story: "Security and Compliance ensures data protection by implementing encryption and consent capture during onboarding" (reason: missing_persona)',
+  'story: "Onboarding Validation enables data quality by implementing comprehensive field validation and error handling" (reason: missing_persona)',
+  'story: "AI Risk Flagging enables automatic identification of high-risk cases by implementing threshold-based alerts" (reason: missing_persona)',
+  'story: "Override Justification Capture enables accountability by implementing mandatory reason input for manual overrides" (reason: missing_persona)',
+  'story: "Onboarding Partial Save enables data persistence by implementing draft save without account creation" (reason: missing_persona)',
+  'story: "Onboarding Policy Initiation enables automatic policy creation by implementing backend integration post onboarding" (reason: missing_persona)',
+  'story: "Onboarding Consent Capture enables regulatory compliance by implementing explicit user consent recording" (reason: missing_persona)',
+  'story: "Onboarding Audit Logging enables traceability by implementing detailed logging of onboarding actions" (reason: missing_persona)',
+  'story: "Onboarding Performance Optimization enables fast user experience by implementing efficient data loading and saving" (reason: missing_persona)',
+  'story: "Individual profile creation enables accurate customer onboarding by implementing mandatory and optional attribute capture" (reason: missing_persona)',
+  'story: "Corporate profile creation enables comprehensive onboarding by implementing mandatory and optional corporate attribute capture" (reason: missing_persona)',
+  'story: "Profile data validation enables improved data quality by implementing real-time and backend validation rules" (reason: missing_persona)',
+  'story: "Profile update enables ongoing data accuracy by implementing editable attributes and audit trails" (reason: missing_persona)',
+  'story: "Risk clearance request enables automated compliance checks by integrating with external risk systems" (reason: missing_persona)',
+  'story: "Risk clearance result management enables compliance by processing and displaying clearance outcomes" (reason: missing_persona)',
+  'story: "External risk system integration enables secure data exchange by implementing API communication and error handling" (reason: missing_persona)',
+  'story: "Risk clearance workflow automation enables efficient processing by implementing status tracking and notifications" (reason: missing_persona)',
+  'story: "Link multiple policies to an account enables consolidated policy management by implementing policy-account association functionality" (reason: missing_persona)',
+  'story: "Manage multiple insureds under one policy enables comprehensive insured coverage by implementing insured-policy association" (reason: missing_persona)',
+  'story: "Create account at insured level enables flexible account management by implementing insured-level account creation" (reason: missing_persona)',
+  'story: "Link insured to account enables accurate relationship management by implementing insured-account association" (reason: missing_persona)',
+  'story: "View all policies linked to an account enables comprehensive account overview by implementing policy listing functionality" (reason: missing_persona)',
+  'story: "Remove insured from a policy enables accurate coverage updates by implementing insured unlinking functionality" (reason: missing_persona)',
+  'story: "View all accounts linked to an insured enables comprehensive insured overview by implementing account listing functionality" (reason: missing_persona)',
+  'story: "Prevent duplicate policy linking enables data integrity by implementing validation rules" (reason: missing_persona)',
+  'story: "Prevent duplicate insured entries enables accurate insured management by implementing validation on insured-policy linking" (reason: missing_persona)',
+  'story: "Allow multiple accounts per insured enables flexible account structures by implementing multi-account support" (reason: missing_persona)',
+  'story: "Unlink a policy from an account enables accurate account updates by implementing policy unlinking functionality" (reason: missing_persona)',
+  'story: "Unlink insured from an account enables accurate relationship management by implementing insured unlinking functionality" (reason: missing_persona)',
+  'story: "Validate account creation at insured level enables error-free account setup by implementing input validation" (reason: missing_persona)',
+  'story: "Audit linking and unlinking actions enables traceability by implementing audit logging" (reason: missing_persona)',
+  'story: "Search policies for linking enables efficient policy selection by implementing search functionality" (reason: missing_persona)',
+  'story: "Search insureds for linking enables efficient insured selection by implementing search functionality" (reason: missing_persona)',
+  'story: "Display account details with linked policies and insureds enables unified view by implementing comprehensive account overview" (reason: missing_persona)'
+]
+[Azure DevOps] Fetching wikis for project: PT-11
+[Azure DevOps] Using wiki: Project-Wiki (ID: 48d9511b-9b1f-4879-b5d0-c6a43fb340f2)
+[Azure DevOps] Wiki home URL: https://dev.azure.com/demohg/PT-11/_wiki/wikis/Project-Wiki
+[Azure DevOps] Attempting to create/update wiki page: SDLC Project - Overview & Vision at path: /SDLC-Project---Overview-Vision
+[Azure DevOps] Page "SDLC Project - Overview & Vision" already exists, fetching eTag for update...
+[Azure DevOps] Updating existing page "SDLC Project - Overview & Vision" with eTag: undefined
+[Azure DevOps] ❌ Failed to create/update wiki page "SDLC Project - Overview & Vision": 400 - {"$id":"1","innerException":null,"message":"Pre-condition `IfMatch` header provided in the request is an invalid page version. Please provide the version of the wiki page as the `IfMatch` header for the request.\r\nParameter name: IfMatch","typeName":"Microsoft.TeamFoundation.SourceControl.WebServer.InvalidArgumentValueException, Microsoft.TeamFoundation.SourceControl.WebServer","typeKey":"InvalidArgumentValueException","errorCode":0,"eventId":0}
+[Azure DevOps] Attempting to create/update wiki page: Feasibility Study at path: /Feasibility-Study
+[Azure DevOps] Page "Feasibility Study" already exists, fetching eTag for update...
+[Azure DevOps] Updating existing page "Feasibility Study" with eTag: undefined
+[Azure DevOps] ❌ Failed to create/update wiki page "Feasibility Study": 400 - {"$id":"1","innerException":null,"message":"Pre-condition `IfMatch` header provided in the request is an invalid page version. Please provide the version of the wiki page as the `IfMatch` header for the request.\r\nParameter name: IfMatch","typeName":"Microsoft.TeamFoundation.SourceControl.WebServer.InvalidArgumentValueException, Microsoft.TeamFoundation.SourceControl.WebServer","typeKey":"InvalidArgumentValueException","errorCode":0,"eventId":0}
+[Azure DevOps] Attempting to create/update wiki page: Risk Assessment Report at path: /Risk-Assessment-Report
+[Azure DevOps] Page "Risk Assessment Report" already exists, fetching eTag for update...
+[Azure DevOps] Updating existing page "Risk Assessment Report" with eTag: undefined
+[Azure DevOps] ❌ Failed to create/update wiki page "Risk Assessment Report": 400 - {"$id":"1","innerException":null,"message":"Pre-condition `IfMatch` header provided in the request is an invalid page version. Please provide the version of the wiki page as the `IfMatch` header for the request.\r\nParameter name: IfMatch","typeName":"Microsoft.TeamFoundation.SourceControl.WebServer.InvalidArgumentValueException, Microsoft.TeamFoundation.SourceControl.WebServer","typeKey":"InvalidArgumentValueException","errorCode":0,"eventId":0}
+[Azure DevOps] Attempting to create/update wiki page: Software Requirements Specification (SRS) at path: /Software-Requirements-Specification-SRS
+[Azure DevOps] Page "Software Requirements Specification (SRS)" already exists, fetching eTag for update...
+[Azure DevOps] Updating existing page "Software Requirements Specification (SRS)" with eTag: undefined
+[Azure DevOps] ❌ Failed to create/update wiki page "Software Requirements Specification (SRS)": 400 - {"$id":"1","innerException":null,"message":"Pre-condition `IfMatch` header provided in the request is an invalid page version. Please provide the version of the wiki page as the `IfMatch` header for the request.\r\nParameter name: IfMatch","typeName":"Microsoft.TeamFoundation.SourceControl.WebServer.InvalidArgumentValueException, Microsoft.TeamFoundation.SourceControl.WebServer","typeKey":"InvalidArgumentValueException","errorCode":0,"eventId":0}
+[Azure DevOps] Attempting to create/update wiki page: Business Requirements at path: /Business-Requirements
+[Azure DevOps] Page "Business Requirements" already exists, fetching eTag for update...
+[Azure DevOps] Updating existing page "Business Requirements" with eTag: undefined
+[Azure DevOps] ❌ Failed to create/update wiki page "Business Requirements": 400 - {"$id":"1","innerException":null,"message":"Pre-condition `IfMatch` header provided in the request is an invalid page version. Please provide the version of the wiki page as the `IfMatch` header for the request.\r\nParameter name: IfMatch","typeName":"Microsoft.TeamFoundation.SourceControl.WebServer.InvalidArgumentValueException, Microsoft.TeamFoundation.SourceControl.WebServer","typeKey":"InvalidArgumentValueException","errorCode":0,"eventId":0}
+[Azure DevOps] Attempting to create/update wiki page: Use Case Specifications at path: /Use-Case-Specifications
+[Azure DevOps] Page "Use Case Specifications" already exists, fetching eTag for update...
+[Azure DevOps] Updating existing page "Use Case Specifications" with eTag: undefined
+[Azure DevOps] ❌ Failed to create/update wiki page "Use Case Specifications": 400 - {"$id":"1","innerException":null,"message":"Pre-condition `IfMatch` header provided in the request is an invalid page version. Please provide the version of the wiki page as the `IfMatch` header for the request.\r\nParameter name: IfMatch","typeName":"Microsoft.TeamFoundation.SourceControl.WebServer.InvalidArgumentValueException, Microsoft.TeamFoundation.SourceControl.WebServer","typeKey":"InvalidArgumentValueException","errorCode":0,"eventId":0}
+[Azure DevOps] Attempting to create/update wiki page: User Personas at path: /User-Personas
+[Azure DevOps] Page "User Personas" already exists, fetching eTag for update...
+[Azure DevOps] Updating existing page "User Personas" with eTag: undefined
+[Azure DevOps] ❌ Failed to create/update wiki page "User Personas": 400 - {"$id":"1","innerException":null,"message":"Pre-condition `IfMatch` header provided in the request is an invalid page version. Please provide the version of the wiki page as the `IfMatch` header for the request.\r\nParameter name: IfMatch","typeName":"Microsoft.TeamFoundation.SourceControl.WebServer.InvalidArgumentValueException, Microsoft.TeamFoundation.SourceControl.WebServer","typeKey":"InvalidArgumentValueException","errorCode":0,"eventId":0}
+[Azure DevOps] Attempting to create/update wiki page: Requirements Traceability Matrix (RTM) at path: /Requirements-Traceability-Matrix-RTM
+[Azure DevOps] Page "Requirements Traceability Matrix (RTM)" already exists, fetching eTag for update...
+[Azure DevOps] Updating existing page "Requirements Traceability Matrix (RTM)" with eTag: undefined
+[Azure DevOps] ❌ Failed to create/update wiki page "Requirements Traceability Matrix (RTM)": 400 - {"$id":"1","innerException":null,"message":"Pre-condition `IfMatch` header provided in the request is an invalid page version. Please provide the version of the wiki page as the `IfMatch` header for the request.\r\nParameter name: IfMatch","typeName":"Microsoft.TeamFoundation.SourceControl.WebServer.InvalidArgumentValueException, Microsoft.TeamFoundation.SourceControl.WebServer","typeKey":"InvalidArgumentValueException","errorCode":0,"eventId":0}
+[Azure DevOps] Attempting to create/update wiki page: User Workflows at path: /User-Workflows
+[Azure DevOps] Page "User Workflows" already exists, fetching eTag for update...
+[Azure DevOps] Updating existing page "User Workflows" with eTag: undefined
+[Azure DevOps] ❌ Failed to create/update wiki page "User Workflows": 400 - {"$id":"1","innerException":null,"message":"Pre-condition `IfMatch` header provided in the request is an invalid page version. Please provide the version of the wiki page as the `IfMatch` header for the request.\r\nParameter name: IfMatch","typeName":"Microsoft.TeamFoundation.SourceControl.WebServer.InvalidArgumentValueException, Microsoft.TeamFoundation.SourceControl.WebServer","typeKey":"InvalidArgumentValueException","errorCode":0,"eventId":0}
+[Azure DevOps] Attempting to create/update wiki page: Use Case Diagrams at path: /Use-Case-Diagrams
+[Azure DevOps] Page "Use Case Diagrams" already exists, fetching eTag for update...
+[Azure DevOps] Updating existing page "Use Case Diagrams" with eTag: undefined
+[Azure DevOps] ❌ Failed to create/update wiki page "Use Case Diagrams": 400 - {"$id":"1","innerException":null,"message":"Pre-condition `IfMatch` header provided in the request is an invalid page version. Please provide the version of the wiki page as the `IfMatch` header for the request.\r\nParameter name: IfMatch","typeName":"Microsoft.TeamFoundation.SourceControl.WebServer.InvalidArgumentValueException, Microsoft.TeamFoundation.SourceControl.WebServer","typeKey":"InvalidArgumentValueException","errorCode":0,"eventId":0}
+[Azure DevOps] Attempting to create/update wiki page: Data Flow Diagrams (DFD) at path: /Data-Flow-Diagrams-DFD
+[Azure DevOps] Page "Data Flow Diagrams (DFD)" already exists, fetching eTag for update...
+[Azure DevOps] Updating existing page "Data Flow Diagrams (DFD)" with eTag: undefined
+[Azure DevOps] ❌ Failed to create/update wiki page "Data Flow Diagrams (DFD)": 400 - {"$id":"1","innerException":null,"message":"Pre-condition `IfMatch` header provided in the request is an invalid page version. Please provide the version of the wiki page as the `IfMatch` header for the request.\r\nParameter name: IfMatch","typeName":"Microsoft.TeamFoundation.SourceControl.WebServer.InvalidArgumentValueException, Microsoft.TeamFoundation.SourceControl.WebServer","typeKey":"InvalidArgumentValueException","errorCode":0,"eventId":0}
+[Azure DevOps] Attempting to create/update wiki page: System Design Document (SDD) at path: /System-Design-Document-SDD
+[Azure DevOps] Page "System Design Document (SDD)" already exists, fetching eTag for update...
+[Azure DevOps] Updating existing page "System Design Document (SDD)" with eTag: undefined
+[Azure DevOps] ❌ Failed to create/update wiki page "System Design Document (SDD)": 400 - {"$id":"1","innerException":null,"message":"Pre-condition `IfMatch` header provided in the request is an invalid page version. Please provide the version of the wiki page as the `IfMatch` header for the request.\r\nParameter name: IfMatch","typeName":"Microsoft.TeamFoundation.SourceControl.WebServer.InvalidArgumentValueException, Microsoft.TeamFoundation.SourceControl.WebServer","typeKey":"InvalidArgumentValueException","errorCode":0,"eventId":0}
+[Azure DevOps] Attempting to create/update wiki page: Technical Architecture at path: /Technical-Architecture
+[Azure DevOps] Page "Technical Architecture" already exists, fetching eTag for update...
+[Azure DevOps] Updating existing page "Technical Architecture" with eTag: undefined
+[Azure DevOps] ❌ Failed to create/update wiki page "Technical Architecture": 400 - {"$id":"1","innerException":null,"message":"Pre-condition `IfMatch` header provided in the request is an invalid page version. Please provide the version of the wiki page as the `IfMatch` header for the request.\r\nParameter name: IfMatch","typeName":"Microsoft.TeamFoundation.SourceControl.WebServer.InvalidArgumentValueException, Microsoft.TeamFoundation.SourceControl.WebServer","typeKey":"InvalidArgumentValueException","errorCode":0,"eventId":0}
+[Azure DevOps] Attempting to create/update wiki page: Data Models at path: /Data-Models
+[Azure DevOps] Page "Data Models" already exists, fetching eTag for update...
+[Azure DevOps] Updating existing page "Data Models" with eTag: undefined
+[Azure DevOps] ❌ Failed to create/update wiki page "Data Models": 400 - {"$id":"1","innerException":null,"message":"Pre-condition `IfMatch` header provided in the request is an invalid page version. Please provide the version of the wiki page as the `IfMatch` header for the request.\r\nParameter name: IfMatch","typeName":"Microsoft.TeamFoundation.SourceControl.WebServer.InvalidArgumentValueException, Microsoft.TeamFoundation.SourceControl.WebServer","typeKey":"InvalidArgumentValueException","errorCode":0,"eventId":0}
+[Azure DevOps] Attempting to create/update wiki page: UI/UX Design Specifications at path: /UIUX-Design-Specifications
+[Azure DevOps] Page "UI/UX Design Specifications" already exists, fetching eTag for update...
+[Azure DevOps] Updating existing page "UI/UX Design Specifications" with eTag: undefined
+[Azure DevOps] ❌ Failed to create/update wiki page "UI/UX Design Specifications": 400 - {"$id":"1","innerException":null,"message":"Pre-condition `IfMatch` header provided in the request is an invalid page version. Please provide the version of the wiki page as the `IfMatch` header for the request.\r\nParameter name: IfMatch","typeName":"Microsoft.TeamFoundation.SourceControl.WebServer.InvalidArgumentValueException, Microsoft.TeamFoundation.SourceControl.WebServer","typeKey":"InvalidArgumentValueException","errorCode":0,"eventId":0}
+[Azure DevOps] Attempting to create/update wiki page: Security & Compliance at path: /Security-Compliance
+[Azure DevOps] Page "Security & Compliance" already exists, fetching eTag for update...
+[Azure DevOps] Updating existing page "Security & Compliance" with eTag: undefined
+[Azure DevOps] ❌ Failed to create/update wiki page "Security & Compliance": 400 - {"$id":"1","innerException":null,"message":"Pre-condition `IfMatch` header provided in the request is an invalid page version. Please provide the version of the wiki page as the `IfMatch` header for the request.\r\nParameter name: IfMatch","typeName":"Microsoft.TeamFoundation.SourceControl.WebServer.InvalidArgumentValueException, Microsoft.TeamFoundation.SourceControl.WebServer","typeKey":"InvalidArgumentValueException","errorCode":0,"eventId":0}
+[Azure DevOps] Attempting to create/update wiki page: Database Design Document at path: /Database-Design-Document
+[Azure DevOps] Page "Database Design Document" already exists, fetching eTag for update...
+[Azure DevOps] Updating existing page "Database Design Document" with eTag: undefined
+[Azure DevOps] ❌ Failed to create/update wiki page "Database Design Document": 400 - {"$id":"1","innerException":null,"message":"Pre-condition `IfMatch` header provided in the request is an invalid page version. Please provide the version of the wiki page as the `IfMatch` header for the request.\r\nParameter name: IfMatch","typeName":"Microsoft.TeamFoundation.SourceControl.WebServer.InvalidArgumentValueException, Microsoft.TeamFoundation.SourceControl.WebServer","typeKey":"InvalidArgumentValueException","errorCode":0,"eventId":0}
+[Azure DevOps] Attempting to create/update wiki page: Class Diagrams at path: /Class-Diagrams
+[Azure DevOps] Page "Class Diagrams" already exists, fetching eTag for update...
+[Azure DevOps] Updating existing page "Class Diagrams" with eTag: undefined
+[Azure DevOps] ❌ Failed to create/update wiki page "Class Diagrams": 400 - {"$id":"1","innerException":null,"message":"Pre-condition `IfMatch` header provided in the request is an invalid page version. Please provide the version of the wiki page as the `IfMatch` header for the request.\r\nParameter name: IfMatch","typeName":"Microsoft.TeamFoundation.SourceControl.WebServer.InvalidArgumentValueException, Microsoft.TeamFoundation.SourceControl.WebServer","typeKey":"InvalidArgumentValueException","errorCode":0,"eventId":0}
+[Azure DevOps] Attempting to create/update wiki page: Sequence Diagrams at path: /Sequence-Diagrams
+[Azure DevOps] Page "Sequence Diagrams" already exists, fetching eTag for update...
+[Azure DevOps] Updating existing page "Sequence Diagrams" with eTag: undefined
+[Azure DevOps] ❌ Failed to create/update wiki page "Sequence Diagrams": 400 - {"$id":"1","innerException":null,"message":"Pre-condition `IfMatch` header provided in the request is an invalid page version. Please provide the version of the wiki page as the `IfMatch` header for the request.\r\nParameter name: IfMatch","typeName":"Microsoft.TeamFoundation.SourceControl.WebServer.InvalidArgumentValueException, Microsoft.TeamFoundation.SourceControl.WebServer","typeKey":"InvalidArgumentValueException","errorCode":0,"eventId":0}
+[Azure DevOps] Attempting to create/update wiki page: Component Diagrams at path: /Component-Diagrams
+[Azure DevOps] Page "Component Diagrams" already exists, fetching eTag for update...
+[Azure DevOps] Updating existing page "Component Diagrams" with eTag: undefined
+[Azure DevOps] ❌ Failed to create/update wiki page "Component Diagrams": 400 - {"$id":"1","innerException":null,"message":"Pre-condition `IfMatch` header provided in the request is an invalid page version. Please provide the version of the wiki page as the `IfMatch` header for the request.\r\nParameter name: IfMatch","typeName":"Microsoft.TeamFoundation.SourceControl.WebServer.InvalidArgumentValueException, Microsoft.TeamFoundation.SourceControl.WebServer","typeKey":"InvalidArgumentValueException","errorCode":0,"eventId":0}
+[Azure DevOps] Attempting to create/update wiki page: Coding Standards & Guidelines at path: /Coding-Standards-Guidelines
+[Azure DevOps] Page "Coding Standards & Guidelines" already exists, fetching eTag for update...
+[Azure DevOps] Updating existing page "Coding Standards & Guidelines" with eTag: undefined
+[Azure DevOps] ❌ Failed to create/update wiki page "Coding Standards & Guidelines": 400 - {"$id":"1","innerException":null,"message":"Pre-condition `IfMatch` header provided in the request is an invalid page version. Please provide the version of the wiki page as the `IfMatch` header for the request.\r\nParameter name: IfMatch","typeName":"Microsoft.TeamFoundation.SourceControl.WebServer.InvalidArgumentValueException, Microsoft.TeamFoundation.SourceControl.WebServer","typeKey":"InvalidArgumentValueException","errorCode":0,"eventId":0}
+[Azure DevOps] Attempting to create/update wiki page: API Documentation at path: /API-Documentation
+[Azure DevOps] Page "API Documentation" already exists, fetching eTag for update...
+[Azure DevOps] Updating existing page "API Documentation" with eTag: undefined
+[Azure DevOps] ❌ Failed to create/update wiki page "API Documentation": 400 - {"$id":"1","innerException":null,"message":"Pre-condition `IfMatch` header provided in the request is an invalid page version. Please provide the version of the wiki page as the `IfMatch` header for the request.\r\nParameter name: IfMatch","typeName":"Microsoft.TeamFoundation.SourceControl.WebServer.InvalidArgumentValueException, Microsoft.TeamFoundation.SourceControl.WebServer","typeKey":"InvalidArgumentValueException","errorCode":0,"eventId":0}
+[Azure DevOps] Attempting to create/update wiki page: Version Control & Git Guidelines at path: /Version-Control-Git-Guidelines
+[Azure DevOps] Page "Version Control & Git Guidelines" already exists, fetching eTag for update...
+[Azure DevOps] Updating existing page "Version Control & Git Guidelines" with eTag: undefined
+[Azure DevOps] ❌ Failed to create/update wiki page "Version Control & Git Guidelines": 400 - {"$id":"1","innerException":null,"message":"Pre-condition `IfMatch` header provided in the request is an invalid page version. Please provide the version of the wiki page as the `IfMatch` header for the request.\r\nParameter name: IfMatch","typeName":"Microsoft.TeamFoundation.SourceControl.WebServer.InvalidArgumentValueException, Microsoft.TeamFoundation.SourceControl.WebServer","typeKey":"InvalidArgumentValueException","errorCode":0,"eventId":0}
+[Azure DevOps] Attempting to create/update wiki page: Infrastructure Diagrams at path: /Infrastructure-Diagrams
+[Azure DevOps] Page "Infrastructure Diagrams" already exists, fetching eTag for update...
+[Azure DevOps] Updating existing page "Infrastructure Diagrams" with eTag: undefined
+[Azure DevOps] ❌ Failed to create/update wiki page "Infrastructure Diagrams": 400 - {"$id":"1","innerException":null,"message":"Pre-condition `IfMatch` header provided in the request is an invalid page version. Please provide the version of the wiki page as the `IfMatch` header for the request.\r\nParameter name: IfMatch","typeName":"Microsoft.TeamFoundation.SourceControl.WebServer.InvalidArgumentValueException, Microsoft.TeamFoundation.SourceControl.WebServer","typeKey":"InvalidArgumentValueException","errorCode":0,"eventId":0}
+[Azure DevOps] Attempting to create/update wiki page: Testing Strategy at path: /Testing-Strategy
+[Azure DevOps] Page "Testing Strategy" already exists, fetching eTag for update...
+[Azure DevOps] Updating existing page "Testing Strategy" with eTag: undefined
+[Azure DevOps] ❌ Failed to create/update wiki page "Testing Strategy": 400 - {"$id":"1","innerException":null,"message":"Pre-condition `IfMatch` header provided in the request is an invalid page version. Please provide the version of the wiki page as the `IfMatch` header for the request.\r\nParameter name: IfMatch","typeName":"Microsoft.TeamFoundation.SourceControl.WebServer.InvalidArgumentValueException, Microsoft.TeamFoundation.SourceControl.WebServer","typeKey":"InvalidArgumentValueException","errorCode":0,"eventId":0}
+[Azure DevOps] Attempting to create/update wiki page: Test Plan at path: /Test-Plan
+[Azure DevOps] Page "Test Plan" already exists, fetching eTag for update...
+[Azure DevOps] Updating existing page "Test Plan" with eTag: undefined
+[Azure DevOps] ❌ Failed to create/update wiki page "Test Plan": 400 - {"$id":"1","innerException":null,"message":"Pre-condition `IfMatch` header provided in the request is an invalid page version. Please provide the version of the wiki page as the `IfMatch` header for the request.\r\nParameter name: IfMatch","typeName":"Microsoft.TeamFoundation.SourceControl.WebServer.InvalidArgumentValueException, Microsoft.TeamFoundation.SourceControl.WebServer","typeKey":"InvalidArgumentValueException","errorCode":0,"eventId":0}
+[Azure DevOps] Attempting to create/update wiki page: Test Cases at path: /Test-Cases
+[Azure DevOps] Page "Test Cases" already exists, fetching eTag for update...
+[Azure DevOps] Updating existing page "Test Cases" with eTag: undefined
+[Azure DevOps] ❌ Failed to create/update wiki page "Test Cases": 400 - {"$id":"1","innerException":null,"message":"Pre-condition `IfMatch` header provided in the request is an invalid page version. Please provide the version of the wiki page as the `IfMatch` header for the request.\r\nParameter name: IfMatch","typeName":"Microsoft.TeamFoundation.SourceControl.WebServer.InvalidArgumentValueException, Microsoft.TeamFoundation.SourceControl.WebServer","typeKey":"InvalidArgumentValueException","errorCode":0,"eventId":0}
+[Azure DevOps] Attempting to create/update wiki page: Test Coverage Matrix at path: /Test-Coverage-Matrix
+[Azure DevOps] Page "Test Coverage Matrix" already exists, fetching eTag for update...
+[Azure DevOps] Updating existing page "Test Coverage Matrix" with eTag: undefined
+[Azure DevOps] ❌ Failed to create/update wiki page "Test Coverage Matrix": 400 - {"$id":"1","innerException":null,"message":"Pre-condition `IfMatch` header provided in the request is an invalid page version. Please provide the version of the wiki page as the `IfMatch` header for the request.\r\nParameter name: IfMatch","typeName":"Microsoft.TeamFoundation.SourceControl.WebServer.InvalidArgumentValueException, Microsoft.TeamFoundation.SourceControl.WebServer","typeKey":"InvalidArgumentValueException","errorCode":0,"eventId":0}
+[Azure DevOps] Attempting to create/update wiki page: Release Notes at path: /Release-Notes
+[Azure DevOps] Page "Release Notes" already exists, fetching eTag for update...
+[Azure DevOps] Updating existing page "Release Notes" with eTag: undefined
+[Azure DevOps] ❌ Failed to create/update wiki page "Release Notes": 400 - {"$id":"1","innerException":null,"message":"Pre-condition `IfMatch` header provided in the request is an invalid page version. Please provide the version of the wiki page as the `IfMatch` header for the request.\r\nParameter name: IfMatch","typeName":"Microsoft.TeamFoundation.SourceControl.WebServer.InvalidArgumentValueException, Microsoft.TeamFoundation.SourceControl.WebServer","typeKey":"InvalidArgumentValueException","errorCode":0,"eventId":0}
+[Azure DevOps] Attempting to create/update wiki page: Deployment Guide at path: /Deployment-Guide
+[Azure DevOps] Page "Deployment Guide" already exists, fetching eTag for update...
+[Azure DevOps] Updating existing page "Deployment Guide" with eTag: undefined
+[Azure DevOps] ❌ Failed to create/update wiki page "Deployment Guide": 400 - {"$id":"1","innerException":null,"message":"Pre-condition `IfMatch` header provided in the request is an invalid page version. Please provide the version of the wiki page as the `IfMatch` header for the request.\r\nParameter name: IfMatch","typeName":"Microsoft.TeamFoundation.SourceControl.WebServer.InvalidArgumentValueException, Microsoft.TeamFoundation.SourceControl.WebServer","typeKey":"InvalidArgumentValueException","errorCode":0,"eventId":0}
+[Azure DevOps] Attempting to create/update wiki page: User Manual at path: /User-Manual
+[Azure DevOps] Page "User Manual" already exists, fetching eTag for update...
+[Azure DevOps] Updating existing page "User Manual" with eTag: undefined
+[Azure DevOps] ❌ Failed to create/update wiki page "User Manual": 400 - {"$id":"1","innerException":null,"message":"Pre-condition `IfMatch` header provided in the request is an invalid page version. Please provide the version of the wiki page as the `IfMatch` header for the request.\r\nParameter name: IfMatch","typeName":"Microsoft.TeamFoundation.SourceControl.WebServer.InvalidArgumentValueException, Microsoft.TeamFoundation.SourceControl.WebServer","typeKey":"InvalidArgumentValueException","errorCode":0,"eventId":0}
+[Azure DevOps] Attempting to create/update wiki page: Maintenance Plan at path: /Maintenance-Plan
+[Azure DevOps] Page "Maintenance Plan" already exists, fetching eTag for update...
+[Azure DevOps] Updating existing page "Maintenance Plan" with eTag: undefined
+[Azure DevOps] ❌ Failed to create/update wiki page "Maintenance Plan": 400 - {"$id":"1","innerException":null,"message":"Pre-condition `IfMatch` header provided in the request is an invalid page version. Please provide the version of the wiki page as the `IfMatch` header for the request.\r\nParameter name: IfMatch","typeName":"Microsoft.TeamFoundation.SourceControl.WebServer.InvalidArgumentValueException, Microsoft.TeamFoundation.SourceControl.WebServer","typeKey":"InvalidArgumentValueException","errorCode":0,"eventId":0}
+[Azure DevOps] Attempting to create/update wiki page: Glossary & References at path: /Glossary-References
+[Azure DevOps] Page "Glossary & References" already exists, fetching eTag for update...
+[Azure DevOps] Updating existing page "Glossary & References" with eTag: undefined
+[Azure DevOps] ❌ Failed to create/update wiki page "Glossary & References": 400 - {"$id":"1","innerException":null,"message":"Pre-condition `IfMatch` header provided in the request is an invalid page version. Please provide the version of the wiki page as the `IfMatch` header for the request.\r\nParameter name: IfMatch","typeName":"Microsoft.TeamFoundation.SourceControl.WebServer.InvalidArgumentValueException, Microsoft.TeamFoundation.SourceControl.WebServer","typeKey":"InvalidArgumentValueException","errorCode":0,"eventId":0}
+[Azure DevOps] ✅ Wiki push complete. 0 pages created/updated successfully.
+[Azure DevOps] 📚 Access all pages at: https://dev.azure.com/demohg/PT-11/_wiki/wikis/Project-Wiki
+[Azure DevOps] ⚠️  33 errors occurred during wiki push

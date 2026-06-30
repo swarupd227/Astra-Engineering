@@ -1,0 +1,565 @@
+## USER STORY QUALITY STANDARDS
+
+When generating user stories, each story must include four critical components: proper format, detailed description, comprehensive acceptance criteria, and granular subtasks. Follow these standards rigorously.
+
+---
+
+### PART 1: USER STORY FORMAT
+
+**Standard Format:**
+"As a [specific persona with context], I want [specific goal with details], so that [clear business value or user benefit]"
+
+**Quality Requirements:**
+✓ Use actual persona names from generated personas (e.g., "As Sarah, the Fitness Enthusiast")
+✓ Include context about the persona's situation when relevant
+✓ Be specific about the goal - avoid vague verbs like "manage", "handle", "process"
+✓ Clearly articulate the "why" - business value or user pain point solved
+
+**Examples:**
+
+❌ Poor: "As a user, I want to submit claims, so that I can get reimbursed"
+
+✓ Good: "As Jennifer (Claims Administrator) working remotely with 50+ claims per day, I want to submit insurance claims with auto-populated policy details and drag-and-drop document uploads, so that I can reduce claim submission time from 15 minutes to 5 minutes and minimize data entry errors"
+
+❌ Poor: "As an admin, I want to manage users"
+
+✓ Good: "As Marcus (System Administrator) responsible for 200+ employee accounts, I want to bulk import users from CSV files with automatic role assignment and welcome email triggers, so that I can onboard new departments in hours instead of days during company growth phases"
+
+---
+
+### PART 2: DESCRIPTION WRITING STANDARDS
+
+The description provides context, clarifies scope, and guides implementation. It should be comprehensive enough that a developer new to the project can understand the story without additional meetings.
+
+**Required Elements in Every Description:**
+
+1. **Context & Background** (2-3 sentences)
+   - Why this story exists
+   - What problem it solves
+   - How it fits into the larger feature/epic
+
+2. **Current State vs. Desired State** (2-4 sentences)
+   - What happens today (if applicable)
+   - What will happen after implementation
+   - Key differences or improvements
+
+3. **Key Functionality** (Bullet points)
+   - Core capabilities to be built
+   - Important workflows or user journeys
+   - Critical business rules
+
+4. **User Interaction Flow** (Numbered steps or paragraph)
+   - Step-by-step description of how user accomplishes their goal
+   - Entry points and exit points
+   - Decision points or branching logic
+
+5. **Technical Considerations** (When applicable)
+   - Data sources or integrations
+   - Performance requirements
+   - Security or compliance needs
+   - Dependencies on other stories/systems
+
+6. **Out of Scope** (When applicable)
+   - What is explicitly NOT included
+   - What will be handled in future stories
+   - Clarifications to prevent scope creep
+
+7. **Success Metrics** (1-2 items)
+   - How we'll measure if this story achieves its goal
+   - Quantifiable outcomes when possible
+
+**Description Template:**
+```
+CONTEXT & BACKGROUND:
+[2-3 sentences explaining why this story exists and what problem it solves]
+
+CURRENT STATE:
+[Describe what happens today, pain points, manual processes, or gaps]
+
+DESIRED STATE:
+[Describe the improved experience after implementation]
+
+KEY FUNCTIONALITY:
+- [Core capability 1 with details]
+- [Core capability 2 with details]
+- [Core capability 3 with details]
+- [Additional capabilities as needed]
+
+USER INTERACTION FLOW:
+1. [User starts at X screen/location]
+2. [User performs action Y with specific inputs]
+3. [System responds with Z]
+4. [User sees result/confirmation]
+5. [Continue through complete workflow]
+
+TECHNICAL CONSIDERATIONS:
+- [Data sources, APIs, or integrations needed]
+- [Performance expectations - "Page load < 2 seconds"]
+- [Security requirements - "HIPAA compliant data storage"]
+- [Dependencies - "Requires completion of Story #123"]
+
+OUT OF SCOPE:
+- [Feature X will be handled in Story #456]
+- [Advanced capability Y is planned for Phase 2]
+- [Integration Z is not included in MVP]
+
+SUCCESS METRICS:
+- [Quantifiable outcome - "Reduce submission time by 60%"]
+- [User satisfaction - "90% of users rate workflow as 'easy' or 'very easy'"]
+```
+
+**Example - Complete Description:**
+```
+Story: As Jennifer (Claims Administrator), I want to submit insurance claims with 
+auto-populated policy details and drag-and-drop document uploads, so that I can 
+reduce claim submission time from 15 minutes to 5 minutes per claim.
+
+DESCRIPTION:
+
+CONTEXT & BACKGROUND:
+Claims administrators currently spend 15+ minutes per claim manually entering 
+policy holder information, typing diagnosis codes, and uploading supporting 
+documents one by one. This manual process leads to data entry errors in 12% of 
+claims and creates bottlenecks during high-volume periods (end of month). This 
+story implements an intelligent claim submission form that reduces manual work 
+through automation and improves data accuracy.
+
+CURRENT STATE:
+Administrators open a blank claim form and manually:
+- Type policy number and wait 3-5 seconds for validation
+- Re-enter policy holder name, DOB, and address from policy documents
+- Look up diagnosis codes in a separate reference document
+- Upload supporting documents individually using file picker (up to 10 documents)
+- Review and submit, often discovering errors requiring re-entry
+- Average time: 15 minutes per claim, error rate: 12%
+
+DESIRED STATE:
+Administrators experience a streamlined workflow:
+- Enter or scan policy number → System auto-populates all policy holder details 
+  from database in < 2 seconds
+- Search diagnosis codes with type-ahead suggestions from ICD-10 database
+- Drag and drop multiple documents at once (or select multiple files), with 
+  automatic type detection (invoice, prescription, medical report)
+- Real-time validation prevents submission errors
+- Average time: 5 minutes per claim, error rate: < 2%
+
+KEY FUNCTIONALITY:
+- Auto-population: When policy number is entered, system retrieves and fills: 
+  policy holder name, DOB, address, policy type, coverage limits, deductible 
+  status from policies database
+- Diagnosis code search: Type-ahead search with minimum 3 characters, returns 
+  top 10 matching ICD-10 codes with descriptions, allows multiple code selection
+- Bulk document upload: Drag-and-drop zone accepts multiple files (PDF, JPG, PNG) 
+  up to 10MB each, maximum 15 files per claim
+- Document type detection: System suggests document type based on filename/content 
+  (e.g., "invoice.pdf" → "Invoice"), administrator can override
+- Real-time validation: Inline validation for required fields, policy coverage 
+  verification, claim amount against policy limits
+- Save as draft: Auto-saves every 60 seconds, manual save button available, 
+  drafts accessible from "My Drafts" section
+
+USER INTERACTION FLOW:
+1. Administrator clicks "New Claim" button from dashboard
+2. Claim form opens with policy number field focused
+3. Administrator enters policy number POL-2024-5678 or scans barcode
+4. Within 2 seconds, form auto-populates: John Doe, DOB: 01/15/1980, 
+   123 Main St, Active Policy, $2,500 deductible remaining
+5. Administrator enters claim amount: $5,000
+6. System validates: Amount within policy limits, shows green checkmark
+7. Administrator clicks "Diagnosis Code" field
+8. Types "diab" → Dropdown shows: "E11 - Type 2 diabetes mellitus", 
+   "E10 - Type 1 diabetes mellitus", etc.
+9. Selects "E11 - Type 2 diabetes mellitus"
+10. Administrator drags 3 files into upload zone: invoice.pdf, prescription.jpg, 
+    lab_results.pdf
+11. System uploads files, shows progress bars, suggests types: Invoice, 
+    Prescription, Medical Report
+12. Administrator confirms document types or adjusts
+13. Administrator adds claim notes: "Routine diabetes management visit"
+14. Clicks "Review Claim" → Summary page shows all details
+15. Clicks "Submit Claim" → Confirmation: "Claim #CLM-2024-123456 submitted 
+    successfully"
+16. Administrator receives email confirmation and returns to dashboard
+
+TECHNICAL CONSIDERATIONS:
+- Policy database: Integration with existing PolicyService API (GET /policies/{policyNumber})
+- ICD-10 codes: Local database table with 70,000+ codes, indexed for fast search
+- File storage: AWS S3 bucket with encryption at rest, files organized by claim ID
+- File upload: Direct browser-to-S3 upload using pre-signed URLs for better performance
+- Validation rules: Policy must be active, claim amount ≤ remaining coverage, 
+  required documents based on claim type
+- Performance: Form auto-population < 2 seconds, file upload progress indicator, 
+  page load < 1.5 seconds
+- Security: HIPAA compliant, encrypted file transfer, audit logging of all claim submissions
+- Dependencies: Requires PolicyService API v2.3+, ICD-10 database updated to 2024 version
+
+OUT OF SCOPE:
+- Optical Character Recognition (OCR) for document data extraction - planned for Phase 2
+- Integration with external medical provider databases - will be separate epic
+- Mobile app version - web responsive design only for MVP
+- Claim status tracking and notifications - covered in separate story #245
+- Payment processing - handled by Story #248
+
+SUCCESS METRICS:
+- Reduce average claim submission time from 15 minutes to ≤ 5 minutes (measured over 100 claims)
+- Reduce data entry errors from 12% to < 2% (measured by validation failures and corrections)
+- 90% of claims administrators rate new workflow as "easier" or "much easier" in post-release survey
+- Zero critical bugs related to data loss or file upload failures in first 30 days
+```
+
+**Description Quality Checklist:**
+- [ ] Explains WHY the story exists (business context)
+- [ ] Describes current pain points or gaps
+- [ ] Clearly articulates desired outcome
+- [ ] Lists all key functionality as bullets
+- [ ] Provides step-by-step user flow (typically 10-20 steps)
+- [ ] Includes technical details relevant for developers
+- [ ] Explicitly states what's out of scope
+- [ ] Defines measurable success criteria
+- [ ] Length: 300-600 words for typical stories
+- [ ] Readable by both technical and non-technical stakeholders
+
+---
+
+### PART 3: ACCEPTANCE CRITERIA WRITING STANDARDS
+
+When generating acceptance criteria for user stories, follow these guidelines to ensure clarity, completeness, and testability.
+
+### FORMAT: Enhanced Given-When-Then with Context
+
+Each acceptance criterion must include:
+1. **Criterion Title**: Brief descriptive name (5-8 words)
+2. **Given (Preconditions)**: Specific, detailed context and system state
+3. **When (Action/Trigger)**: Clear user action or system event with relevant details
+4. **Then (Expected Outcome)**: Concrete, observable, measurable result
+5. **And (Additional Outcomes)**: Secondary effects or validations (when applicable)
+
+### QUALITY REQUIREMENTS FOR EACH COMPONENT:
+
+**Given (Preconditions):**
+✓ Include specific data states, user roles, and system conditions
+✓ Mention relevant permissions, configurations, or prerequisites
+✓ Be concrete - avoid vague terms like "system is operational"
+✗ Don't use: "System is ready", "User is logged in" (too generic)
+✓ Do use: "Claims processor is logged in with 'Approve Claims' permission and viewing claim #12345 in 'Pending Review' status"
+
+**When (Action/Trigger):**
+✓ Describe the exact user action or system event
+✓ Include relevant parameters, inputs, or conditions
+✓ Specify the interface element or API endpoint if applicable
+✗ Don't use: "Claim is submitted", "User clicks button" (too vague)
+✓ Do use: "Claims processor clicks 'Approve' button and enters approval notes 'Medical documentation verified' in the claim details form"
+
+**Then (Expected Outcome):**
+✓ Describe observable, verifiable results
+✓ Include UI changes, data updates, notifications, and system state changes
+✓ Specify timing expectations (immediate, within X seconds, asynchronous)
+✓ Mention all affected entities and their new states
+✗ Don't use: "Workflow progresses", "System updates" (too abstract)
+✓ Do use: "Claim status updates to 'Approved' in database, approval timestamp is recorded, claim appears in 'Approved Claims' dashboard within 2 seconds, and audit log entry is created with processor ID and timestamp"
+
+**And (Additional Outcomes):**
+✓ Cover secondary effects like notifications, integrations, logging
+✓ Include validation rules and error handling
+✓ Mention downstream impacts on related entities
+✓ Example: "And an email notification is sent to the claimant at their registered email address with subject 'Claim #12345 Approved' and expected payment date"
+
+### AVOID THESE COMMON MISTAKES:
+
+❌ **Too Generic:**
+"Given: System is operational
+When: User performs action
+Then: System responds appropriately"
+
+❌ **Lacks Specificity:**
+"Given: Claim exists
+When: Claim is approved
+Then: Payment is processed"
+
+❌ **Missing Observable Outcomes:**
+"Then: Workflow progresses to next stage" (What does "progresses" look like? What changes can be observed?)
+
+❌ **Vague Notifications:**
+"Then: Notifications are sent" (To whom? What content? What channel? When exactly?)
+
+### EXAMPLE TRANSFORMATIONS:
+
+**BEFORE (Poor Quality):**
+```
+Criteria 1:
+Given: System is operational
+When: A claim is submitted
+Then: Workflow progresses automatically to appropriate departments
+```
+
+**AFTER (High Quality):**
+```
+Criteria 1: Automated Claim Routing to Medical Review Department
+Given: 
+  - Insurance portal is accessible and operational
+  - Claimant has active policy #POL-2024-5678
+  - Claim form includes required fields: diagnosis code, provider details, treatment date, and claimed amount
+When: 
+  - Claimant clicks "Submit Claim" button on the claim submission form
+  - Claim amount is $5,000 for outpatient surgery
+Then: 
+  - Claim receives unique ID (format: CLM-YYYY-NNNNNN) and status "Under Review"
+  - Claim automatically routes to Medical Review Department queue within 5 seconds
+  - Claim appears in Medical Reviewer dashboard with priority flag based on amount threshold
+  - Claimant sees confirmation message: "Claim #CLM-2024-123456 submitted successfully. Expected review time: 3-5 business days"
+And:
+  - Email confirmation sent to claimant's registered email with claim number and tracking link
+  - SMS notification sent if claimant opted in for text alerts
+  - Audit log entry created with timestamp, claimant ID, and claim amount
+  - Claim counter in department dashboard increments by 1
+```
+
+**BEFORE (Poor Quality):**
+```
+Criteria 2:
+Given: Automated workflows are in place
+When: Claim status changes
+Then: Notifications are sent to relevant parties
+```
+
+**AFTER (High Quality):**
+```
+Criteria 2: Real-Time Status Change Notifications to Stakeholders
+Given: 
+  - Claim #CLM-2024-123456 exists in system with status "Under Review"
+  - Claimant email: john.doe@email.com is verified
+  - Assigned medical reviewer: Dr. Smith (user ID: MED-456)
+  - Notification preferences: Claimant opted in for email and SMS, Reviewer has email notifications enabled
+When: 
+  - Medical reviewer updates claim status from "Under Review" to "Approved" 
+  - Reviewer adds approval notes: "All documentation verified, treatment covered under policy"
+  - Approved amount: $4,500 (adjusted from claimed $5,000 due to policy deductible)
+Then: 
+  - Within 30 seconds, claimant receives email notification with:
+    * Subject: "Claim #CLM-2024-123456 Status Update: Approved"
+    * Content: Claim number, approved amount, payment timeline (5-7 business days), reason for adjustment
+    * Link to view full claim details in portal
+  - Within 30 seconds, claimant receives SMS (if opted in): "Your claim #CLM-2024-123456 has been approved for $4,500. Payment in 5-7 days. View details: [link]"
+  - Within 60 seconds, assigned reviewer receives email confirmation of status change with audit trail
+And:
+  - Notification delivery status is logged (sent/delivered/failed) in notifications table
+  - If email fails, system retries 3 times over 10 minutes, then logs permanent failure
+  - In-app notification badge appears on claimant's dashboard with unread count
+  - Notification history is accessible in claimant's "Messages" section
+```
+
+**BEFORE (Poor Quality):**
+```
+Criteria 3:
+Given: Workflow automation is active
+When: Claim is approved
+Then: Payment processing is initiated
+```
+
+**AFTER (High Quality):**
+```
+Criteria 3: Automated Payment Processing Upon Claim Approval
+Given: 
+  - Claim #CLM-2024-123456 has been approved with approved amount $4,500
+  - Claimant has active bank account on file: Bank of America ****1234 (verified on 2024-01-15)
+  - Payment processing service (Stripe Connect) is operational and API is responsive
+  - Company bank account has sufficient funds ($50,000+ balance)
+  - No holds or flags on claimant account
+When: 
+  - Claim status changes to "Approved" and approval is saved to database
+  - System runs scheduled payment batch job (executes every 15 minutes during business hours)
+Then: 
+  - Within 15 minutes, payment record is created in payments table with:
+    * Payment ID: PAY-2024-NNNNNN
+    * Status: "Initiated"
+    * Amount: $4,500
+    * Method: ACH Bank Transfer
+    * Expected completion: T+3 business days
+  - API call is made to Stripe Connect to initiate ACH transfer
+  - Payment status updates to "Processing" upon successful API response (HTTP 200)
+  - Claim status updates to "Payment Processing" in claims table
+  - Claimant sees payment status in portal: "Payment of $4,500 initiated on [date]. Expected in your account by [date]"
+And:
+  - Email notification sent to claimant: "Payment initiated for claim #CLM-2024-123456. Amount: $4,500. ETA: [date]"
+  - Payment transaction logged in audit trail with: timestamp, processor ID, amount, payment method, API response code
+  - Finance team dashboard shows payment in "Pending Transfers" section
+  - If API call fails, system logs error, marks payment as "Failed", sends alert to finance team, and retries in next batch cycle
+  - If bank account is invalid/closed, payment status updates to "Returned", claimant receives email requesting updated banking information
+```
+
+### COVERAGE CHECKLIST FOR COMPLETE AC SET:
+
+For each user story, ensure acceptance criteria collectively cover:
+
+✓ **Happy Path:** Standard successful flow
+✓ **Edge Cases:** Boundary conditions, unusual but valid scenarios
+✓ **Error Handling:** Invalid inputs, system failures, timeouts
+✓ **Permissions:** Role-based access, authorization checks
+✓ **Data Validation:** Required fields, format validation, business rules
+✓ **UI/UX:** Visual feedback, loading states, confirmation messages
+✓ **Performance:** Response times, timeout thresholds, concurrency
+✓ **Integration Points:** External systems, APIs, third-party services
+✓ **Notifications:** All communication channels and recipients
+✓ **Audit/Compliance:** Logging, data retention, regulatory requirements
+✓ **Accessibility:** Keyboard navigation, screen reader compatibility (when applicable)
+
+### MINIMUM CRITERIA PER STORY:
+
+- **Simple stories (1-2 points):** 3-5 acceptance criteria
+- **Medium stories (3-4 points):** 5-8 acceptance criteria
+- **Complex stories (5 points):** 8-12 acceptance criteria
+
+### WRITING TONE:
+
+- Use **specific numbers and values** (not "some", "many", "quickly")
+- Use **exact field names, button labels, and UI elements** from the system
+- Use **measurable time periods** ("within 5 seconds", not "quickly")
+- Use **concrete observable outcomes** ("status updates to 'Approved'", not "status changes")
+- Write for **both developers and QA testers** - should be immediately testable
+
+### SELF-CHECK BEFORE FINALIZING:
+
+Ask yourself for each criterion:
+1. Can a QA tester write a test case directly from this AC without asking questions?
+2. Does it specify WHAT changes, not just THAT something changes?
+3. Are all affected systems, users, and data entities mentioned?
+4. Is the timing/performance expectation clear?
+5. Would a developer know exactly what to build from this description?
+
+If any answer is "no", revise the criterion to add missing details.
+
+### PART 4: SUBTASK WRITING STANDARDS
+
+Subtasks break down the story into concrete, actionable development and testing activities. Each subtask should be independently assignable and completable.
+
+**Subtask Categories - Ensure Coverage Across:**
+
+1. **Technical Design & Planning** (1-3 hours)
+2. **Backend/API Development** (2-8 hours per endpoint/service)
+3. **Frontend/UI Development** (2-8 hours per screen/component)
+4. **Database Changes** (1-4 hours per migration/schema change)
+5. **Integration Work** (2-6 hours per external system)
+6. **Testing** (QA, unit tests, integration tests) (2-6 hours)
+7. **Documentation** (1-2 hours)
+8. **Code Review & Refinement** (1-2 hours)
+9. **Deployment & Configuration** (1-3 hours)
+
+**Subtask Naming Convention:**
+[Category] - [Specific deliverable with technical details] - [Estimate in hours]
+
+**Quality Requirements for Each Subtask:**
+
+✓ **Actionable:** Starts with clear verb (Design, Implement, Create, Build, Write, Test, Deploy)
+✓ **Specific:** Includes technical details - API endpoints, component names, table names, etc.
+✓ **Sized appropriately:** 1-8 hours; if larger, break into multiple subtasks
+✓ **Independent:** Can be worked on without waiting for other incomplete subtasks (except clear dependencies)
+✓ **Testable:** Clear definition of "done"
+✓ **Assigned to role:** Implicitly clear which role handles it (Backend Dev, Frontend Dev, QA, DevOps)
+
+**Avoid These Common Mistakes:**
+
+❌ Too vague: "Build backend" (What specifically?)
+❌ Too large: "Implement entire claims module" (Break it down!)
+❌ No technical details: "Create API" (Which endpoints? What operations?)
+❌ Missing estimates: "Add validation" (How long?)
+❌ Redundant: "Code the functionality" (Too obvious, not specific enough)
+
+**Subtask Template Structure:**
+```
+PLANNING & DESIGN:
+□ Technical Design - Review requirements and create technical design document including data models, API contracts, and component architecture - 2 hours
+□ Database Design - Design schema for [table names] including indexes, foreign keys, and migration script - 2 hours
+□ UI/UX Design Review - Review mockups with design team and document component breakdown and state management approach - 1 hour
+
+BACKEND DEVELOPMENT:
+□ Backend - Create database migration for [specific tables] with fields [list key fields] - 1 hour
+□ Backend - Implement PolicyService API integration: GET /policies/{policyNumber} with caching and error handling - 3 hours
+□ Backend - Build ClaimsController with POST /api/claims endpoint accepting multipart form data - 4 hours
+□ Backend - Implement claim validation service: policy status check, coverage limit verification, required fields validation - 3 hours
+□ Backend - Create file upload service using AWS S3 pre-signed URLs with virus scanning integration - 4 hours
+□ Backend - Build ICD-10 code search endpoint: GET /api/diagnosis-codes/search?q={query}&limit=10 with full-text search - 3 hours
+□ Backend - Implement auto-save functionality with optimistic locking and conflict resolution - 3 hours
+□ Backend - Write unit tests for claim validation logic covering all business rules (80%+ coverage) - 3 hours
+
+FRONTEND DEVELOPMENT:
+□ Frontend - Create ClaimForm component with form state management using React Hook Form - 4 hours
+□ Frontend - Implement PolicyNumberInput component with auto-population logic and loading states - 3 hours
+□ Frontend - Build DiagnosisCodeSearch component with type-ahead dropdown and multi-select functionality - 4 hours
+□ Frontend - Create FileUploadZone component with drag-and-drop, multi-file support, progress indicators, and file type detection - 5 hours
+□ Frontend - Implement real-time validation with inline error messages for all form fields - 3 hours
+□ Frontend - Build claim review/summary page with editable sections and submit confirmation modal - 3 hours
+□ Frontend - Add auto-save indicator and draft recovery functionality with local storage fallback - 3 hours
+□ Frontend - Implement responsive design for tablet and mobile viewports (768px and below) - 3 hours
+□ Frontend - Write component unit tests with React Testing Library (70%+ coverage) - 4 hours
+
+DATABASE:
+□ Database - Create claims table: id, policy_id, claimant_info (JSON), diagnosis_codes (array), amount, status, created_at, updated_at - 1 hour
+□ Database - Create claim_documents table: id, claim_id, file_path, file_type, file_size, uploaded_at with foreign key constraints - 1 hour
+□ Database - Create claim_drafts table for auto-save: id, user_id, draft_data (JSON), last_saved_at with auto-cleanup trigger - 2 hours
+□ Database - Add indexes on claims.policy_id, claims.status, claim_documents.claim_id for query performance - 1 hour
+□ Database - Create audit_log table for claim submissions: id, claim_id, user_id, action, timestamp, ip_address - 1 hour
+
+INTEGRATION:
+□ Integration - Set up AWS S3 bucket with encryption, CORS configuration, and lifecycle policies for document storage - 2 hours
+□ Integration - Integrate virus scanning service (ClamAV) for uploaded documents with async processing - 3 hours
+□ Integration - Implement email notification service integration for claim submission confirmations - 2 hours
+□ Integration - Set up audit logging integration with centralized logging system (ELK/CloudWatch) - 2 hours
+
+TESTING:
+□ QA - Write test plan covering happy path, edge cases, error scenarios, and security tests - 2 hours
+□ QA - Execute manual testing: form validation, file upload scenarios, error handling, cross-browser testing (Chrome, Firefox, Safari) - 4 hours
+□ QA - Perform performance testing: measure form load time, auto-population speed, file upload speed with 10MB files - 2 hours
+□ QA - Execute security testing: SQL injection, XSS, file upload vulnerabilities, authentication/authorization - 3 hours
+□ QA - Test accessibility: keyboard navigation, screen reader compatibility, WCAG 2.1 AA compliance - 2 hours
+□ QA - Perform integration testing with PolicyService API using test policy data - 2 hours
+
+DOCUMENTATION:
+□ Documentation - Write API documentation for new endpoints: request/response schemas, error codes, authentication requirements - 2 hours
+□ Documentation - Create user guide with screenshots: claim submission process, file upload instructions, troubleshooting tips - 2 hours
+□ Documentation - Update technical documentation: architecture diagrams, data models, deployment procedures - 1 hour
+
+CODE REVIEW & REFINEMENT:
+□ Code Review - Backend peer review: code quality, security, performance, test coverage - 1 hour
+□ Code Review - Frontend peer review: component structure, state management, accessibility, responsiveness - 1 hour
+□ Refinement - Address code review feedback and refactor as needed - 2 hours
+
+DEPLOYMENT:
+□ DevOps - Create deployment pipeline configuration for staging environment - 2 hours
+□ DevOps - Deploy to staging environment and run smoke tests - 1 hour
+□ DevOps - Configure production environment variables, S3 bucket, database migrations - 2 hours
+□ DevOps - Deploy to production with zero-downtime deployment strategy and rollback plan - 2 hours
+□ DevOps - Monitor production deployment: check error logs, performance metrics, user activity for first 24 hours - 1 hour
+```
+
+**Subtask Estimation Guidelines:**
+
+- **Simple tasks:** 1-2 hours (e.g., add single form field, write one unit test)
+- **Moderate tasks:** 3-4 hours (e.g., create CRUD API endpoint, build interactive component)
+- **Complex tasks:** 5-8 hours (e.g., multi-step workflow, complex integration, comprehensive testing)
+- **If task > 8 hours:** Break it down further into smaller subtasks
+
+**Total Subtask Hours Should Match Story Points:**
+- 1 story point = 1 ideal day = 6-8 hours of subtasks
+- 2 story points = 12-16 hours of subtasks
+- 3 story points = 18-24 hours of subtasks
+- 5 story points = 30-40 hours of subtasks
+
+**Subtask Dependency Management:**
+
+When subtasks have dependencies, note them:
+```
+□ Backend - Implement claim validation service - 3 hours [DEPENDS ON: Database migration completion]
+□ Frontend - Build claim form component - 4 hours [DEPENDS ON: Backend API endpoints]
+□ QA - Execute integration testing - 2 hours [DEPENDS ON: All development subtasks complete]
+```
+
+**Subtask Quality Checklist:**
+- [ ] Every major component of the story has corresponding subtasks
+- [ ] Mix of backend, frontend, testing, and documentation tasks
+- [ ] Each subtask is 1-8 hours (none larger)
+- [ ] Total hours align with story point estimate (±20%)
+- [ ] Technical details included (API endpoints, component names, table names)
+- [ ] Testing subtasks cover unit, integration, and manual QA
+- [ ] Dependencies are noted when they exist
+- [ ] Each subtask has a clear "done" state
+- [ ] Subtasks can be assigned to appropriate team members
