@@ -3,7 +3,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Play, ArrowLeft, Share2, Copy, Check } from "lucide-react";
 import { Link } from "wouter";
-import productTourVideo from "@assets/Introducing_NAT_2.0__The_Next_Generation_of_Autonomous_Testing_1767190448585.mp4";
+// Demo video is not bundled in the repo (kept out of source control for size).
+// Drop a file at client/public/product-tour.mp4 to enable it, or set a CDN URL.
+const productTourVideo = "/product-tour.mp4";
 
 const playbackSpeeds = [
   { value: 1, label: '1x' },

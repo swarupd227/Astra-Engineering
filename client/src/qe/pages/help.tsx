@@ -15,7 +15,9 @@ import {
   ArrowRight, FileText, Globe, Settings, Shield, Code2, Layers, GitBranch,
   Upload, Download, Sparkles, Clock, Users, X, List, Hash
 } from "lucide-react";
-import productTourVideo from "@assets/Introducing_NAT_2.0__The_Next_Generation_of_Autonomous_Testing_1767190448585.mp4";
+// Demo video is not bundled in the repo (kept out of source control for size).
+// Drop a file at client/public/product-tour.mp4 to enable it, or set a CDN URL.
+const productTourVideo = "/product-tour.mp4";
 
 /* ─────────────────── DOCUMENTATION CONTENT ─────────────────── */
 
